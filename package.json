@@ -22,5 +22,8 @@
     "overrides": {
       "vite": "npm:rolldown-vite@7.1.14"
     }
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
   }
 }
