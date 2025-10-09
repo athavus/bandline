@@ -1,0 +1,21 @@
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+import taylorSwift from './routes/artists.ts';
+// Configurando variáveis de ambiente
+dotenv.config();
+
+// Instanciando express e configurando a porta do servidor
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middlewares
+app.use(cors());
+app.use(express.json());
+app.use('/taylorSwift', taylorSwift);
+
+// Criando o servidor https
+app.listen(PORT, () => {
+  console.log(`O servidor está rodando em: http://localhost:${PORT}`);
+});
