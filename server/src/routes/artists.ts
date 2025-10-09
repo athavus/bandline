@@ -1,28 +1,44 @@
-import { Router } from "express";
 import fetch from 'node-fetch';
-import dotenv from 'dotenv';
+import token from '../api/token.ts';
+import { Router } from 'express';
 
-import token from '../token.ts';
+import type { SpotifyArtist } from '../types/artists.ts';
 
-dotenv.config();
+async function getArtistData(artistId: string) {
+  const artistDataRequest = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  });
+
+  const artistData: SpotifyArtist = await artistDataRequest.json() as SpotifyArtist;
+
+  return artistData;
+}
 
 const router = Router();
 
-router.get('/', async (_req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const response = await fetch("https://api.spotify.com/v1/artists/06HL4z0CvFAxyc27GXpf02", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-    });
+    const { id } = req.params;
+    console.log(id);
 
-    const data = await response.json();
+    const rawArtist = await getArtistData(id);
 
-    res.json(data);
+    const filteredArtist = {
+      id: rawArtist.id,
+      name: rawArtist.name,
+      total_followers: rawArtist.followers.total,
+      popularity: rawArtist.popularity,
+      image: rawArtist.images[0]?.url,
+      genres: rawArtist.genres
+    }
+
+    res.json(filteredArtist);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Não foi possível conseguir o artista do spotify" });
+    res.status(500).json({ error: "Não foi possível conseguir o artista do spotify completo" })
   }
 });
 

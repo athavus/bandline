@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-import taylorSwift from './routes/artists.ts';
+import artistsRouter from './routes/artists.ts';
+
 // Configurando variáveis de ambiente
 dotenv.config();
 
@@ -13,7 +14,9 @@ const PORT = process.env.PORT || 3000;
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use('/taylorSwift', taylorSwift);
+
+// Rotas configuradas
+app.use('/artists', artistsRouter);
 
 // Criando o servidor https
 app.listen(PORT, () => {
