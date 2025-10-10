@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNEXT",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "types": ["node"],
     "esModuleInterop": true,
@@ -11,5 +11,9 @@
     "rootDir": "src",
     "allowImportingTsExtensions": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }
