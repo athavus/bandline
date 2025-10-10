@@ -9,7 +9,7 @@ async function getArtistData(artistId: string) {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`
-    },
+    }
   });
 
   const artistData: SpotifyArtist = await artistDataRequest.json() as SpotifyArtist;
