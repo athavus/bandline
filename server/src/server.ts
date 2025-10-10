@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 import artistsRouter from './routes/artists.ts';
 import searchArtistsRouter from './routes/search.ts';
+import artistAlbums from './routes/albums.ts';
 
 // Configurando variáveis de ambiente
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(express.json());
 // Rotas configuradas
 app.use('/artists', artistsRouter);
 app.use('/searchArtists', searchArtistsRouter);
+app.use('/artists', artistAlbums);
 
 // Criando o servidor https
 app.listen(PORT, () => {
