@@ -5,7 +5,7 @@ import type { SpotifyArtist, SpotifyArtistsSearchResponse } from '../artists/typ
 
 const router = Router();
 
-export default router.get('', async (req, res) => {
+router.get('', async (req, res) => {
   try {
     const query = String(req.query.q);
 
@@ -45,3 +45,5 @@ export default router.get('', async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar artistas" });
   }
 })
+
+export default router;

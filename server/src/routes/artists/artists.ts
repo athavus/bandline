@@ -19,7 +19,7 @@ async function getArtistData(artistId: string) {
 
 const router = Router();
 
-export default router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const rawArtist = await getArtistData(id);
@@ -39,3 +39,5 @@ export default router.get('/:id', async (req, res) => {
     res.status(500).json({ error: "Não foi possível conseguir o artista do spotify" })
   }
 });
+
+export default router;

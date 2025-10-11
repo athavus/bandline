@@ -3,7 +3,7 @@ import token from '../../api/token/token.ts';
 import { Router } from 'express';
 import type { SpotifyAlbums } from './types.ts';
 
-export async function getArtistAlbums(artistId: string) {
+async function getArtistAlbums(artistId: string) {
   const url = new URL(`https://api.spotify.com/v1/artists/${artistId}/albums`);
   url.searchParams.append('limit', '50');
 
@@ -20,7 +20,7 @@ export async function getArtistAlbums(artistId: string) {
 
 const router = Router();
 
-export default router.get('/:id/albums', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const rawAlbums: SpotifyAlbums = (await getArtistAlbums(id)) as SpotifyAlbums;
@@ -37,7 +37,15 @@ export default router.get('/:id/albums', async (req, res) => {
         id: artist.id,
         name: artist.name
       }))
-    }));
+    })).sort((a, b) => {
+      const dateA = a.release_date.length === 4 ? `${a.release_date}-01-01` :
+        a.release_date.length === 7 ? `${a.release_date}-01` :
+          a.release_date;
+      const dateB = b.release_date.length === 4 ? `${b.release_date}-01-01` :
+        b.release_date.length === 7 ? `${b.release_date}-01` :
+          b.release_date;
+      return new Date(dateA).getTime() - new Date(dateB).getTime();
+    });
 
     const filteredAlbums = {
       total_amount: rawAlbums.total,
@@ -50,3 +58,5 @@ export default router.get('/:id/albums', async (req, res) => {
     res.status(500).json({ error: "Não foi possível conseguir os álbuns dos artistas." })
   }
 })
+
+export default router;
