@@ -77,17 +77,18 @@
   {#if loading}
     <Loading message="Carregando dados do artista..." />
   {:else if selectedArtist && !showTimeline}
-    <ArtistDetails 
-      artist={selectedArtist} 
-      on:showTimeline={handleShowTimeline}
-    />
+    <div class="artist-details">
+      <ArtistDetails 
+        artist={selectedArtist} 
+        on:showTimeline={handleShowTimeline}
+      />
+    </div>
     <Timeline artistId={selectedArtist.id} />
   {/if}
 </main>
 
 <style>
   main {
-    max-width: 800px;
     margin: 0 auto;
     padding: 40px 20px;
   }
@@ -95,6 +96,9 @@
   .search-container {
     position: relative;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .timeline-header {
@@ -121,5 +125,12 @@
   
   .back-button:active {
     transform: translateY(0);
+  }
+
+  .artist-details {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    width: 100%;    
   }
 </style>

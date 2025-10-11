@@ -2,102 +2,92 @@
   import { createEventDispatcher } from 'svelte';
   import type { SpotifyAlbums } from '../types/album.ts';
   import type { SpotifyAlbumTracks } from '../types/tracks.ts';
-  
+
   export let artistId: string = '';
-  
+
   let albums: SpotifyAlbums | null = null;
   let selectedAlbum: any = null;
   let albumTracks: SpotifyAlbumTracks | null = null;
   let loading = false;
   let tracksLoading = false;
   let error: string | null = null;
-  
+  let sliderElement: HTMLElement;
+
   const dispatch = createEventDispatcher();
-  
+
+  function scroll(amount: number) {
+    sliderElement?.scrollBy({ left: amount, behavior: 'smooth' });
+  }
+
   async function loadAlbums() {
-    if (!artistId) {
-      console.log('Timeline: artistId não definido');
-      return;
-    }
-    
-    console.log('Timeline: Carregando álbuns para artistId:', artistId);
+    if (!artistId) return;
     loading = true;
     error = null;
     albums = null;
-    
     try {
-      const response = await fetch(`http://localhost:3000/artistAlbums/${artistId}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      console.log('Timeline: Álbuns recebidos:', data);
-      albums = data;
-      
-      if (!albums?.items || albums.items.length === 0) {
-        console.log('Timeline: Nenhum álbum encontrado');
-      }
+      const res = await fetch(`http://localhost:3000/artistAlbums/${artistId}`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      albums = await res.json();
     } catch (err) {
-      console.error('Timeline: Erro ao carregar álbuns:', err);
       error = err instanceof Error ? err.message : 'Erro desconhecido';
     } finally {
       loading = false;
     }
   }
-  
+
   async function loadAlbumTracks(albumId: string) {
     tracksLoading = true;
     try {
-      const response = await fetch(`http://localhost:3000/albumTracks/${albumId}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      albumTracks = data;
-    } catch (error) {
-      console.error('Erro ao carregar faixas:', error);
+      const res = await fetch(`http://localhost:3000/albumTracks/${albumId}`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      albumTracks = await res.json();
+    } catch {
+      albumTracks = null;
     } finally {
       tracksLoading = false;
     }
   }
-  
+
   function handleAlbumClick(album: any) {
     if (selectedAlbum?.id === album.id) {
       selectedAlbum = null;
       albumTracks = null;
+      sliderElement.classList.remove('noise');
     } else {
       selectedAlbum = album;
       loadAlbumTracks(album.id);
+      sliderElement.classList.add('noise');
     }
   }
-  
+
   function formatDate(dateString: string) {
-    const date = new Date(dateString.length === 4 ? `${dateString}-01-01` : 
-                         dateString.length === 7 ? `${dateString}-01` : dateString);
-    return date.toLocaleDateString('pt-BR', { 
-      year: 'numeric', 
+    const date = new Date(
+      dateString.length === 4 ? `${dateString}-01-01` :
+      dateString.length === 7 ? `${dateString}-01` :
+      dateString
+    );
+    return date.toLocaleDateString('pt-BR', {
+      year: 'numeric',
       month: dateString.length === 4 ? undefined : 'long',
       day: dateString.length > 7 ? 'numeric' : undefined
     });
   }
-  
+
   function formatDuration(ms: number) {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    const m = Math.floor(ms / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    return `${m}:${s.toString().padStart(2, '0')}`;
   }
-  
-  // Reativo: carrega álbuns quando artistId mudar
-  $: {
-    console.log('Timeline: artistId mudou para:', artistId);
-    if (artistId) {
-      loadAlbums();
-    }
+
+  function getTimelineX(i: number) {
+    return 200 + i * 300;
   }
+
+  function getTotalWidth() {
+    return albums?.items ? getTimelineX(albums.items.length - 1) + 200 : 0;
+  }
+
+  $: artistId && loadAlbums();
 </script>
 
 {#if loading}
@@ -110,433 +100,330 @@
     <p>❌ Erro ao carregar discografia: {error}</p>
     <button on:click={loadAlbums}>Tentar novamente</button>
   </div>
-{:else if albums && albums.items && albums.items.length > 0}
+{:else if albums?.items?.length}
   <div class="timeline-container">
-    <h2 class="timeline-title">Discografia</h2>
-    
-    <div class="timeline">
-      {#each albums.items as album, index}
-        <div 
-          class="timeline-item {index % 2 === 0 ? 'left' : 'right'} {selectedAlbum?.id === album.id ? 'active' : ''}"
-          on:click={() => handleAlbumClick(album)}
-          on:keydown={(e) => e.key === 'Enter' && handleAlbumClick(album)}
-          role="button"
-          tabindex="0"
-        >
-          <div class="timeline-marker">
-            <div class="timeline-dot"></div>
-          </div>
-          
-          <div class="timeline-content">
-            <div class="album-card">
-              <div class="album-image">
-                {#if album.images && album.images.length > 0}
-                  <img src={album.images[0].url} alt={album.name} />
+    <h2 class="timeline-title">DISCOGRAFIA</h2>
+    <div class="timeline-wrapper">
+      <button class="nav-button prev" on:click={() => scroll(-400)} aria-label="Anterior">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="timeline-slider" bind:this={sliderElement}>
+        <div class="timeline-line"></div>
+        <div class="timeline-track" style="width: {getTotalWidth()}px">
+          {#each albums.items as album, i (album.id)}
+            <div
+              class="album-item {selectedAlbum?.id === album.id ? 'active' : ''}"
+              style="left: {getTimelineX(i) - 90}px"
+              on:click={() => handleAlbumClick(album)}
+              role="button"
+              tabindex="0"
+            >
+              <div class="album-cover">
+                {#if album.images?.length}
+                  <img src={album.images[0].url} alt={album.name} loading="lazy" />
                 {:else}
                   <div class="no-image">♫</div>
                 {/if}
               </div>
-              
-              <div class="album-info">
-                <h3 class="album-title">{album.name}</h3>
-                <p class="album-date">{formatDate(album.release_date)}</p>
-                <p class="album-tracks">{album.total_tracks} faixas</p>
+              <div class="album-details">
+                <h3 class="album-name">{album.name}</h3>
+                <p class="album-year">{formatDate(album.release_date)}</p>
+                <span class="album-badge">{album.total_tracks} faixas</span>
               </div>
             </div>
-            
-            {#if selectedAlbum?.id === album.id}
-              <div class="tracks-container">
-                {#if tracksLoading}
-                  <div class="tracks-loading">
-                    <div class="loading-spinner small"></div>
-                    <p>Carregando faixas...</p>
-                  </div>
-                {:else if albumTracks}
-                  <div class="tracks-list">
-                    <h4>Faixas do álbum:</h4>
-                    {#each albumTracks.items as track}
-                      <div class="track-item">
-                        <span class="track-number">{track.track_number}</span>
-                        <span class="track-name">{track.name}</span>
-                        <span class="track-duration">{formatDuration(track.duration_ms)}</span>
-                      </div>
-                    {/each}
-                  </div>
-                {/if}
-              </div>
-            {/if}
-          </div>
+          {/each}
         </div>
-      {/each}
+      </div>
+
+      <button class="nav-button next" on:click={() => scroll(400)} aria-label="Próximo">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
     </div>
-  </div>
-{:else if albums}
-  <div class="no-albums">
-    <p>Nenhum álbum encontrado para este artista.</p>
+
+    {#if selectedAlbum}
+      <div class="tracks-panel">
+        {#if tracksLoading}
+          <div class="tracks-loading">
+            <div class="loading-spinner small"></div>
+            <p>Carregando faixas...</p>
+          </div>
+        {:else if albumTracks?.items}
+          <div class="tracks-header">
+            <h3>{selectedAlbum.name}</h3>
+            <button class="close-btn" on:click={() => handleAlbumClick(selectedAlbum)}>✕</button>
+          </div>
+          <div class="tracks-grid">
+            {#each albumTracks.items as track}
+              <div class="track-card">
+                <div class="track-info">
+                  <span class="track-num">{track.track_number}</span>
+                  <span class="track-title">{track.name}</span>
+                </div>
+                <span class="track-time">{formatDuration(track.duration_ms)}</span>
+              </div>
+            {/each}
+          </div>
+        {/if}
+      </div>
+    {/if}
   </div>
 {:else}
   <div class="no-albums">
-    <p>Aguardando seleção de artista...</p>
+    <p>Nenhum álbum encontrado para este artista.</p>
   </div>
 {/if}
 
 <style>
   .timeline-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
+    position: relative;
+    width: 100%;
+    padding: 60px 0;
+    background: linear-gradient(180deg,#fff 0%,#f8f9fa 100%);
+    min-height: 500px;
   }
-  
+
   .timeline-title {
     text-align: center;
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 3rem;
-    color: #1a1a1a;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg,#1a1a1a 0%,#4a4a4a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
+    margin-bottom: 4rem;
+    letter-spacing: -2px;
+    text-transform: uppercase;
   }
-  
-  .timeline {
+
+  .timeline-wrapper {
     position: relative;
-    padding: 20px 0;
-  }
-  
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(to bottom, #667eea, #764ba2);
-    transform: translateX(-50%);
-    border-radius: 2px;
-  }
-  
-  .timeline-item {
-    position: relative;
-    margin: 40px 0;
-    display: flex;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .timeline-item:hover {
-    transform: translateY(-2px);
-  }
-  
-  .timeline-item.left {
-    justify-content: flex-end;
-    padding-right: calc(50% + 30px);
-  }
-  
-  .timeline-item.right {
-    justify-content: flex-start;
-    padding-left: calc(50% + 30px);
-  }
-  
-  .timeline-marker {
-    position: absolute;
-    left: 50%;
-    top: 20px;
-    transform: translateX(-50%);
-    z-index: 2;
-  }
-  
-  .timeline-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: 4px solid white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .timeline-item:hover .timeline-dot,
-  .timeline-item.active .timeline-dot {
-    transform: scale(1.3);
-    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
-  }
-  
-  .timeline-content {
-    width: 100%;
-    max-width: 500px;
-  }
-  
-  .album-card {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-  }
-  
-  .timeline-item:hover .album-card {
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-    border-color: #667eea;
-  }
-  
-  .timeline-item.active .album-card {
-    border-color: #667eea;
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
-  }
-  
-  .album-image {
-    flex-shrink: 0;
-    width: 80px;
-    height: 80px;
-    border-radius: 12px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  }
-  
-  .album-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .no-image {
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 2rem;
-    font-weight: bold;
+    padding: 0 80px;
+    gap: 30px;
   }
-  
-  .album-info {
-    flex: 1;
-    min-width: 0;
+
+  .nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);
+    border: none; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: transform .3s ease, box-shadow .3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,.2);
+    z-index: 5;
   }
-  
-  .album-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 0 0 5px 0;
-    color: #1a1a1a;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .nav-button.prev { left: 0 }
+  .nav-button.next { right: 0 }
+  .nav-button:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 12px 35px rgba(0,0,0,.3);
   }
-  
-  .album-date {
-    font-size: 0.9rem;
-    color: #667eea;
-    margin: 0 0 5px 0;
-    font-weight: 600;
+
+  .timeline-slider {
+    position: relative;
+    width: 100%;
+    overflow-x: auto; overflow-y: visible;
+    scroll-behavior: smooth;
+    padding: 80px 0;
+    scrollbar-width: none; -ms-overflow-style: none;
   }
-  
-  .album-tracks {
-    font-size: 0.8rem;
-    color: #666;
-    margin: 0;
+  .timeline-slider::-webkit-scrollbar { display: none }
+
+  /* Linha centralizada no meio das capas dos álbuns */
+  .timeline-line {
+    position: absolute;
+    top: 165px; /* Ajustado para ficar no centro das capas (85px de altura da capa = 170/2) */
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(26,26,26,.2);
+    border-radius: 2px;
+    z-index: 1;
   }
-  
-  .tracks-container {
+
+  .timeline-track {
+    position: relative;
+    height: 300px;
     margin-top: 20px;
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    border-left: 4px solid #667eea;
-    animation: slideDown 0.3s ease;
+    z-index: 2;
   }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .tracks-list h4 {
-    margin: 0 0 15px 0;
-    color: #1a1a1a;
-    font-size: 1.1rem;
-  }
-  
-  .track-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 8px 0;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  .track-item:last-child {
-    border-bottom: none;
-  }
-  
-  .track-number {
-    font-weight: bold;
-    color: #667eea;
-    min-width: 25px;
-    text-align: center;
-  }
-  
-  .track-name {
-    flex: 1;
-    color: #1a1a1a;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  .track-duration {
-    color: #666;
-    font-size: 0.9rem;
-    font-family: monospace;
-  }
-  
-  .loading,
-  .tracks-loading {
+
+  .album-item {
+    position: absolute;
+    top: 0;
+    width: 180px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 40px;
-    color: #667eea;
-  }
-  
-  .tracks-loading {
-    padding: 20px;
-  }
-  
-  .loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #667eea;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-  }
-  
-  .loading-spinner.small {
-    width: 20px;
-    height: 20px;
-    border-width: 2px;
-    margin-bottom: 10px;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .error {
-    text-align: center;
-    padding: 40px;
-    color: #e74c3c;
-  }
-  
-  .error button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
+    transition: transform .4s cubic-bezier(.4,0,.2,1);
+    z-index: 3;
   }
-  
-  .error button:hover {
-    background: #5568d3;
+  .album-item:hover,
+  .album-item.active { transform: translateY(-15px) scale(1.08) }
+
+  .album-cover {
+    width: 170px; height: 170px;
+    border-radius: 20px;
+    background: linear-gradient(135deg,#f5f5f5 0%,#e8e8e8 100%);
+    box-shadow: 0 10px 30px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.08);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform .4s cubic-bezier(.4,0,.2,1), box-shadow .4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  
+  .album-item:hover .album-cover img {
+    transform: scale(1.15);
+  }
+  .album-cover img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .4s ease;
+  }
+  .no-image {
+    font-size: 3rem;
+    color: #999;
+    font-weight: 900;
+  }
+
+  .album-details {
+    text-align: center; width: 150px;
+  }
+  .album-name {
+    font-size: 1.1rem; font-weight: 800;
+    color: #1a1a1a; margin: 0 0 8px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .album-year { font-size: .95rem; color: #666; margin: 0 0 10px; font-weight: 600 }
+  .album-badge {
+    font-size: .75rem; font-weight: 700;
+    background: linear-gradient(135deg,#1a1a1a 0%,#333 100%);
+    color: #fff; border-radius: 20px; padding: 6px 14px;
+    text-transform: uppercase; letter-spacing:.5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    display: inline-block;
+  }
+
+  /* Efeito de ruído corrigido */
+  @keyframes noise {
+    0% { background: rgba(26,26,26,.2); }
+    5% { background: linear-gradient(90deg, rgba(26,26,26,.2) 0%, rgba(255,255,255,.4) 10%, rgba(26,26,26,.2) 20%); }
+    15% { background: rgba(26,26,26,.2); }
+    25% { background: linear-gradient(90deg, rgba(26,26,26,.2) 30%, rgba(255,255,255,.3) 40%, rgba(26,26,26,.2) 50%); }
+    35% { background: rgba(26,26,26,.2); }
+    45% { background: linear-gradient(90deg, rgba(26,26,26,.2) 60%, rgba(255,255,255,.5) 70%, rgba(26,26,26,.2) 80%); }
+    55% { background: rgba(26,26,26,.2); }
+    65% { background: linear-gradient(90deg, rgba(26,26,26,.2) 20%, rgba(255,255,255,.2) 30%, rgba(26,26,26,.2) 40%); }
+    75% { background: rgba(26,26,26,.2); }
+    85% { background: linear-gradient(90deg, rgba(26,26,26,.2) 50%, rgba(255,255,255,.4) 60%, rgba(26,26,26,.2) 70%); }
+    100% { background: rgba(26,26,26,.2); }
+  }
+  .timeline-slider.noise .timeline-line {
+    animation: noise 0.8s infinite ease-in-out;
+  }
+
+  /* Tracks Panel */
+  .tracks-panel {
+    margin: 60px 80px 0;
+    background: #fff; border-radius: 30px;
+    padding: 50px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.08);
+    animation: slideUp .5s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes slideUp {
+    from { opacity:0; transform:translateY(40px) }
+    to { opacity:1; transform:translateY(0) }
+  }
+  .tracks-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:35px; padding-bottom:25px; border-bottom:3px solid #f5f5f5
+  }
+  .tracks-header h3 { font-size:2rem; font-weight:900; margin:0; color:#1a1a1a }
+  .close-btn {
+    width:45px;height:45px;border-radius:50%;background:#f5f5f5;
+    border:none;color:#666;font-size:1.4rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .3s ease
+  }
+  .close-btn:hover { background:#1a1a1a;color:#fff;transform:rotate(90deg) }
+
+  .tracks-grid {
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:16px
+  }
+  .track-card {
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 24px;background:#f8f8f8;border-radius:15px;
+    border-left:4px solid transparent;transition:all .3s ease
+  }
+  .track-card:hover { background:#f0f0f0;border-left-color:#1a1a1a;transform:translateX(8px) }
+  .track-info { display:flex;align-items:center;gap:20px;flex:1;min-width:0 }
+  .track-num {
+    width:35px;height:35px;border-radius:50%;background:#e5e5e5;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;color:#1a1a1a;font-size:1rem
+  }
+  .track-title { font-weight:600;color:#1a1a1a;font-size:1rem;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+  }
+  .track-time { font-family:'Courier New',monospace;color:#666;font-weight:700;font-size:1rem }
+
+  /* Loaders, Errors, No Albums */
+  .loading,.tracks-loading {
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:80px;color:#1a1a1a
+  }
+  .tracks-loading { padding:50px }
+  .loading-spinner {
+    width:50px;height:50px;border:6px solid #e5e5e5;border-top:6px solid #1a1a1a;
+    border-radius:50%;animation:spin 1s linear infinite;margin-bottom:25px
+  }
+  .loading-spinner.small {
+    width:30px;height:30px;border-width:4px;margin-bottom:15px
+  }
+  @keyframes spin {0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+  .error {
+    text-align:center;padding:80px;color:#e74c3c
+  }
+  .error button {
+    margin-top:25px;padding:15px 35px;
+    background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);
+    color:#fff;border:none;border-radius:30px;
+    font-size:1.1rem;font-weight:700;cursor:pointer;
+    box-shadow:0 8px 25px rgba(0,0,0,.2);transition:all .3s ease
+  }
+  .error button:hover { transform:translateY(-3px);box-shadow:0 12px 35px rgba(0,0,0,.3) }
+
   .no-albums {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-    font-size: 1.1rem;
+    text-align:center;padding:80px;color:#999;font-size:1.3rem
   }
-  
-  /* Responsividade */
-  @media (max-width: 768px) {
-    .timeline::before {
-      left: 30px;
-    }
-    
-    .timeline-item {
-      padding-left: 70px !important;
-      padding-right: 20px !important;
-    }
-    
-    .timeline-item.left,
-    .timeline-item.right {
-      justify-content: flex-start;
-    }
-    
-    .timeline-marker {
-      left: 30px;
-      transform: translateX(-50%);
-    }
-    
-    .timeline-content {
-      max-width: none;
-    }
-    
-    .album-card {
-      flex-direction: column;
-      text-align: center;
-    }
-    
-    .album-image {
-      width: 120px;
-      height: 120px;
-    }
-    
-    .album-title {
-      white-space: normal;
-      overflow: visible;
-      text-overflow: initial;
-    }
-    
-    .timeline-title {
-      font-size: 2rem;
-    }
-    
-    .track-item {
-      gap: 10px;
-    }
-    
-    .track-name {
-      font-size: 0.9rem;
-    }
+
+  @media (max-width:1024px) {
+    .timeline-wrapper { padding:0 40px }
+    .tracks-panel { margin:40px 20px 0;padding:30px }
+    .timeline-title { font-size:2.5rem }
+    .album-item { width:150px }
+    .album-cover { width:140px;height:140px }
+    .timeline-line { top: 150px; } /* Ajuste responsivo */
   }
-  
-  @media (max-width: 480px) {
-    .timeline-container {
-      padding: 20px 10px;
-    }
-    
-    .timeline-title {
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
-    }
-    
-    .album-card {
-      padding: 15px;
-    }
-    
-    .tracks-container {
-      padding: 15px;
-    }
+  @media (max-width:768px) {
+    .timeline-wrapper { padding:0 20px;gap:15px }
+    .timeline-title { font-size:2rem;margin-bottom:2rem }
+    .nav-button { width:50px;height:50px }
+    .album-item { width:120px }
+    .album-cover { width:110px;height:110px }
+    .tracks-grid { grid-template-columns:1fr }
+    .timeline-line { top: 135px; } /* Ajuste responsivo */
   }
 </style>

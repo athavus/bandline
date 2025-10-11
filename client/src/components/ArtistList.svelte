@@ -25,8 +25,9 @@
   .overlay {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 30%;
     right: 0;
+    width: 40%;
     background: white;
     border: 1px solid #ccc;
     border-radius: 5px;
