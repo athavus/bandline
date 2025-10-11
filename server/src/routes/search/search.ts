@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { Router } from 'express';
-import token from '../api/token.ts';
-import type { SpotifyArtist, SpotifyArtistsSearchResponse } from '../types/artists.ts';
+import token from '../../api/token/token.ts';
+import type { SpotifyArtist, SpotifyArtistsSearchResponse } from '../artists/types.ts';
 
 const router = Router();
 

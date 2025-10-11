@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
-import token from '../api/token.ts';
+import token from '../../api/token/token.ts';
 import { Router } from 'express';
 
-import type { SpotifyArtist } from '../types/artists.ts';
+import type { SpotifyArtist } from './types.ts';
 
 async function getArtistData(artistId: string) {
   const artistDataRequest = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
@@ -22,8 +22,6 @@ const router = Router();
 export default router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
-
     const rawArtist = await getArtistData(id);
 
     const filteredArtist = {

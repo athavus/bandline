@@ -2,9 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-import artistsRouter from './routes/artists.ts';
-import searchArtistsRouter from './routes/search.ts';
-import artistAlbums from './routes/albums.ts';
+import artistsRouter from './routes/artists/artists.ts';
+import searchArtistsRouter from './routes/search/search.ts';
+import artistAlbums from './routes/albums/albums.ts';
 
 // Configurando variáveis de ambiente
 dotenv.config();
