@@ -2,12 +2,12 @@
   import { createEventDispatcher } from "svelte";
   import ArtistItem from "./ArtistItem.svelte";
   import type { SearchArtistResult } from "../types/artist";
-
+  
   export let artists: SearchArtistResult[] = []
   export let show = false;
-
+  
   const dispatch = createEventDispatcher();
-
+  
   function handleSelect(artist: SearchArtistResult) {
     dispatch('select', artist);
   }
@@ -28,13 +28,33 @@
     left: 30%;
     right: 0;
     width: 40%;
-    background: white;
-    border: 1px solid #ccc;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
     border-radius: 5px;
     margin-top: 5px;
     max-height: 300px;
     overflow-y: auto;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-md);
     z-index: 1000;
+    transition: all 0.3s ease;
+  }
+  
+  /* Scrollbar customizada */
+  .overlay::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .overlay::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+  }
+  
+  .overlay::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+  }
+  
+  .overlay::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
   }
 </style>

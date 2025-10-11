@@ -26,7 +26,6 @@
       <span class="value">{artist.total_followers.toLocaleString('pt-BR')}</span>
     </div>
 
-
     {#if artist.genres.length > 0}
      <div class="info-item full-width">
       <span class="label">Gêneros:</span>
@@ -40,16 +39,17 @@
   .artist-data {
     width: 50%; 
     margin-top: 30px;
-    margin-bottom: 30px;
     padding: 20px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
     border-radius: 10px;
-    background: #fafafa;
+    background: var(--bg-card);
+    transition: all 0.3s ease;
   }
   
   h2 {
     margin: 0 0 20px 0;
-    color: #333;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
   }
   
   .artist-image {
@@ -78,12 +78,14 @@
   
   .label {
     font-size: 14px;
-    color: #666;
+    color: var(--text-secondary);
     font-weight: 500;
+    transition: color 0.3s ease;
   }
   
   .value {
     font-size: 16px;
-    color: #333;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
   }
 </style>

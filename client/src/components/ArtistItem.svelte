@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SearchArtistResult } from '../types/artist.ts';
-
+  
   export let artist: SearchArtistResult;
 </script>
 
@@ -10,7 +10,7 @@
   {:else}
     <div class="no-image">?</div>
   {/if}
-
+  
   <div class="artist-info">
     <div class="artist-name">{artist.name}</div>
     <div class="artist-details">
@@ -23,20 +23,21 @@
 </button>
 
 <style>
-.artist-item {
+  .artist-item {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px;
     width: 100%;
     border: none;
-    background: white;
+    background: var(--bg-card);
     cursor: pointer;
     text-align: left;
+    transition: all 0.3s ease;
   }
   
   .artist-item:hover {
-    background: #f5f5f5;
+    background: var(--bg-hover);
   }
   
   .artist-item img,
@@ -52,8 +53,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ddd;
+    background: var(--border-color);
+    color: var(--text-tertiary);
     font-size: 24px;
+    transition: all 0.3s ease;
   }
   
   .artist-info {
@@ -63,10 +66,13 @@
   .artist-name {
     font-weight: 600;
     margin-bottom: 3px;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
   }
   
   .artist-details {
     font-size: 14px;
-    color: #666;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
   }
 </style>

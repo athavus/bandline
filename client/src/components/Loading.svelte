@@ -19,8 +19,8 @@
   .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #1db954;
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--accent-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
@@ -32,7 +32,8 @@
   
   p {
     margin: 0;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 16px;
+    transition: color 0.3s ease;
   }
 </style>
