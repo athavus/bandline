@@ -14,6 +14,7 @@ export async function getArtistData(id: string): Promise<SpotifyArtist> {
 }
 
 let debounceTimer: number;
+
 export async function searchArtists(query: string): Promise<{ artists: SearchArtistResult[] }> {
   return new Promise((resolve) => {
     clearTimeout(debounceTimer);
