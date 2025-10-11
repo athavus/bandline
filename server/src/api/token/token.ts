@@ -25,5 +25,6 @@ const spotifyTokenResponse = await fetch('https://accounts.spotify.com/api/token
 
 const spotifyTokenData: SpotifyTokenResponse = await spotifyTokenResponse.json() as SpotifyTokenResponse;
 const accessToken = spotifyTokenData.access_token;
+console.log(accessToken);
 
 export default accessToken;
