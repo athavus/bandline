@@ -36,3 +36,29 @@ export async function searchArtists(query: string): Promise<{ artists: SearchArt
     }, 300);
   });
 }
+
+export async function getArtistAlbums(artistId: string) {
+  try {
+    const response = await fetch(`http://localhost:3000/artistAlbums/${artistId}`);
+    if (!response.ok) {
+      throw new Error('Falha ao buscar álbuns do artista');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Erro ao buscar álbuns:', error);
+    throw error;
+  }
+}
+
+export async function getAlbumTracks(albumId: string) {
+  try {
+    const response = await fetch(`http://localhost:3000/albumTracks/${albumId}`);
+    if (!response.ok) {
+      throw new Error('Falha ao buscar faixas do álbum');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Erro ao buscar faixas:', error);
+    throw error;
+  }
+}

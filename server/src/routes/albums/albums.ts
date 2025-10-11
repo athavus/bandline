@@ -26,9 +26,9 @@ router.get('/:id', async (req, res) => {
     const rawAlbums: SpotifyAlbums = (await getArtistAlbums(id)) as SpotifyAlbums;
 
     const filteredItems = rawAlbums.items.map(item => ({
+      id: item.id,
       total_tracks: item.total_tracks,
       href: item.href,
-      id: item.id,
       images: item.images,
       name: item.name,
       release_date: item.release_date,

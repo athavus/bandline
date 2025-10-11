@@ -25,17 +25,15 @@ router.get('/:id', async (req, res) => {
 
     const filteredTracks = rawTracks.items.map(track => ({
       id: track.id,
-      name: track.name,
-      track_number: track.track_number,
-      duration_ms: track.duration_ms,
-      explicit: track.explicit,
-      href: track.href,
-      preview_url: track.preview_url,
       artists: track.artists.map(artist => ({
         id: artist.id,
         name: artist.name,
         href: artist.href
-      }))
+      })),
+      name: track.name,
+      track_number: track.track_number,
+      duration_ms: track.duration_ms,
+      href: track.href
     }));
 
     const response = {
