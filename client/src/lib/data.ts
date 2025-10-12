@@ -27,6 +27,21 @@ export async function searchArtists(query: string): Promise<{ artists: SearchArt
     debounceTimer = setTimeout(async () => {
       try {
         const response = await fetch(`${API_URL}/searchArtists?q=${encodeURIComponent(query)}`);
+
+        if (!response.ok) {
+          console.error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+          resolve({ artists: [] });
+          return;
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          const text = await response.text();
+          console.error('Resposta não é JSON:', text);
+          resolve({ artists: [] });
+          return;
+        }
+
         const data = await response.json();
         resolve(data);
       } catch (error) {

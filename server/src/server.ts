@@ -36,7 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/artists', artistsRouter);
-app.use('/search', searchArtistsRouter);
+app.use('/searchArtists', searchArtistsRouter);
 app.use('/artistAlbums', artistAlbumsRouter);
 app.use('/albumTracks', albumTracksRouter);
 app.use('/auth', authRouter);
