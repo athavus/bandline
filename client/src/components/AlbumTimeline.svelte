@@ -1,9 +1,7 @@
-<!-- Timeline.svelte -->
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import type { SpotifyAlbums } from '../types/album.ts';
   import type { SpotifyAlbumTracks } from '../types/tracks.ts';
-
   import AlbumCard from './AlbumCard.svelte';
   import TracksPanel from './TracksPanel.svelte';
   import LoadingSpinner from './LoadingSpinner.svelte';
@@ -90,6 +88,7 @@
         on:click={() => scroll(-400)}
         aria-label="Anterior"
       />
+      
       <div class="timeline-slider" bind:this={sliderElement}>
         <div class="timeline-track" style="width: {getTotalWidth()}px">
           {#each albums.items as album, i (album.id)}
@@ -102,6 +101,7 @@
           {/each}
         </div>
       </div>
+
       <NavigationButton
         direction="next"
         on:click={() => scroll(400)}
@@ -112,7 +112,7 @@
     {#if selectedAlbum}
       <TracksPanel
         album={selectedAlbum}
-        albumTracks={albumTracks}
+        {albumTracks}
         loading={tracksLoading}
         on:close={() => handleAlbumClick(selectedAlbum)}
       />
