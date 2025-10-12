@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import SearchInput from "./components/SearchInput.svelte";
   import ArtistList from "./components/ArtistList.svelte";
   import ArtistDetails from "./components/ArtistDetails.svelte";
@@ -7,7 +8,9 @@
   import ThemeButton from "./components/ThemeButton.svelte";
   import Modal from "./components/Modal.svelte";
   import Sidebar from "./components/Sidebar.svelte";
+  import AuthModal from "./components/AuthModal.svelte";
   import { searchArtists, getArtistData } from "./lib/data.ts";
+  import { auth } from "./lib/stores/auth.ts";
   import type { SearchArtistResult, SpotifyArtist } from "./types/artist";
 
   let query = "";
@@ -18,14 +21,36 @@
   let showTimeline = false;
   let showModal = false;
   let sidebarOpen = false;
+  let showAuthModal = false;
+  let authMode: 'login' | 'register' = 'login';
+
+  // Reativo para o estado de autenticação
+  $: authState = $auth;
+
+  onMount(async () => {
+    // Verificar se o usuário já está autenticado
+    await auth.checkAuth();
+  });
 
   async function handleInput() {
+    if (!authState.isAuthenticated) {
+      showAuthModal = true;
+      authMode = 'login';
+      return;
+    }
+    
     const result = await searchArtists(query);
     artists = result.artists || [];
     showOverlay = artists.length > 0;
   }
 
   async function handleSelectArtist(event: CustomEvent<SearchArtistResult>) {
+    if (!authState.isAuthenticated) {
+      showAuthModal = true;
+      authMode = 'login';
+      return;
+    }
+
     const artist = event.detail;
     query = artist.name;
     showOverlay = false;
@@ -42,6 +67,11 @@
   }
 
   function handleShowTimeline() {
+    if (!authState.isAuthenticated) {
+      showAuthModal = true;
+      authMode = 'login';
+      return;
+    }
     showTimeline = true;
   }
 
@@ -62,6 +92,11 @@
   }
 
   function openDetailsModal() {
+    if (!authState.isAuthenticated) {
+      showAuthModal = true;
+      authMode = 'login';
+      return;
+    }
     showModal = true;
   }
 
@@ -75,7 +110,35 @@
 
   function handleSidebarAction(event: CustomEvent<string>) {
     const action = event.detail;
+    
+    if (action === 'login') {
+      showAuthModal = true;
+      authMode = 'login';
+    } else if (action === 'register') {
+      showAuthModal = true;
+      authMode = 'register';
+    } else if (action === 'logout') {
+      auth.logout();
+      selectedArtist = null;
+      showTimeline = false;
+      query = '';
+      artists = [];
+    }
+    
+    sidebarOpen = false;
     console.log("Ação da sidebar:", action);
+  }
+
+  function handleAuthModalClose() {
+    showAuthModal = false;
+  }
+
+  function handleLoginSuccess() {
+    showAuthModal = false;
+    // Se havia uma pesquisa pendente, executá-la após o login
+    if (query) {
+      handleInput();
+    }
   }
 </script>
 
@@ -95,17 +158,47 @@
 
   <ThemeButton />
 
+  <!-- Indicador de usuário logado -->
+  {#if authState.isAuthenticated}
+    <div class="user-indicator">
+      <span class="user-welcome">Olá, {authState.user?.username || 'Usuário'}!</span>
+      <button class="logout-btn" on:click={() => auth.logout()}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="16,17 21,12 16,7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  {/if}
+
   <div class="search-container">
     <SearchInput
       bind:value={query}
       on:input={handleInput}
       on:focus={handleFocus}
       on:blur={handleBlur}
+      placeholder={authState.isAuthenticated ? "Buscar artistas..." : "Faça login para buscar artistas"}
+      disabled={!authState.isAuthenticated}
     />
     <ArtistList {artists} show={showOverlay} on:select={handleSelectArtist} />
   </div>
 
-  {#if loading}
+  <!-- Mensagem de boas-vindas para usuários não autenticados -->
+  {#if !authState.isAuthenticated}
+    <div class="welcome-section">
+      <h2>Descubra seus artistas favoritos</h2>
+      <p>Faça login ou crie uma conta para acessar nossa plataforma de descoberta musical</p>
+      <div class="welcome-buttons">
+        <button class="primary-btn" on:click={() => { showAuthModal = true; authMode = 'login'; }}>
+          Fazer Login
+        </button>
+        <button class="secondary-btn" on:click={() => { showAuthModal = true; authMode = 'register'; }}>
+          Criar Conta
+        </button>
+      </div>
+    </div>
+  {:else if loading}
     <Loading message="Carregando dados do artista..." />
   {:else if selectedArtist}
     <div class="actions">
@@ -134,6 +227,14 @@
     </Modal>
   {/if}
 </main>
+
+<!-- Modal de Autenticação -->
+<AuthModal 
+  bind:open={showAuthModal}
+  {authMode}
+  on:close={handleAuthModalClose}
+  on:loginSuccess={handleLoginSuccess}
+/>
 
 <style>
   main {
@@ -171,12 +272,116 @@
     background: var(--bg-hover);
   }
 
+  .user-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 16px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .user-welcome {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .logout-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .logout-btn:hover {
+    color: var(--error-color);
+    background: var(--bg-hover);
+  }
+
   .search-container {
     position: relative;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .welcome-section {
+    text-align: center;
+    max-width: 600px;
+    margin: 60px auto 0;
+    padding: 40px 20px;
+  }
+
+  .welcome-section h2 {
+    color: var(--text-primary);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .welcome-section p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0 0 32px 0;
+  }
+
+  .welcome-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .primary-btn, .secondary-btn {
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1.5px solid;
+  }
+
+  .primary-btn {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: #ffffff;
+  }
+
+  .primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .secondary-btn {
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .secondary-btn:hover {
+    border-color: var(--primary-color);
+    background: var(--bg-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
   }
 
   .actions {
@@ -223,6 +428,32 @@
   @media (max-width: 768px) {
     main.sidebar-open {
       margin-left: 0;
+    }
+
+    .user-indicator {
+      position: relative;
+      top: auto;
+      right: auto;
+      justify-content: center;
+      margin: 0 0 20px 0;
+    }
+
+    .welcome-section {
+      margin-top: 40px;
+      padding: 20px;
+    }
+
+    .welcome-section h2 {
+      font-size: 1.8rem;
+    }
+
+    .welcome-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .primary-btn, .secondary-btn {
+      width: 200px;
     }
   }
 </style>

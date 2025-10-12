@@ -2,40 +2,48 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import session from 'express-session';
+import passport from './config/passport/passport';  // ajuste de import
+import artistsRouter from './routes/artists/artists';
+import searchArtistsRouter from './routes/search/search';
+import artistAlbumsRouter from './routes/albums/albums';
+import albumTracksRouter from './routes/tracks/tracks';
+import authRouter from './routes/auth/auth';
 
-import artistsRouter from '@routes/artists/artists.ts';
-import searchArtistsRouter from '@routes/search/search.ts';
-import artistAlbumsRouter from '@routes/albums/albums.ts';
-import albumTracksRouter from '@routes/tracks/tracks.ts';
-import authRouter from "@routes/auth/auth.ts";
-
-// Configurando variáveis de ambiente
 dotenv.config();
-
-// Instanciando express e configurando a porta do servidor
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
-app.use(cors());
+// CORS
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+
 app.use(express.json());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET!,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
 
+// Sessão
+app.use(session({
+  secret: process.env.SESSION_SECRET!,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false,      // mudar para true em HTTPS
+    sameSite: 'lax'     // ou 'none' + secure:true
+  }
+}));
 
-// Rotas configuradas
-app.use('/artistAlbums', artistAlbumsRouter);
-app.use('/searchArtists', searchArtistsRouter);
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Rotas
 app.use('/artists', artistsRouter);
+app.use('/search', searchArtistsRouter);
+app.use('/artistAlbums', artistAlbumsRouter);
 app.use('/albumTracks', albumTracksRouter);
-app.use('', authRouter);
+app.use('/auth', authRouter);
 
-// Criando o servidor https
 app.listen(PORT, () => {
-  console.log(`O servidor está rodando em: http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
