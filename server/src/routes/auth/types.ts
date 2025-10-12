@@ -1,7 +1,6 @@
 // routes/auth/types.ts
 import { User as PrismaUser } from '@prisma/client';
 
-// Todos os tipos da rota auth
 export interface LoginRequest {
   username: string;
   password: string;
@@ -13,15 +12,17 @@ export interface RegisterRequest {
   password: string;
 }
 
-export interface AuthResponse {
-  message: string;
-  user?: PublicUser;
-}
-
 export interface PublicUser {
   id: number;
   username: string;
   email: string;
+  avatarUrl?: string | null; // Adiciona avatarUrl
+}
+
+export interface AuthResponse {
+  message?: string;
+  user?: PublicUser;
+  error?: string;
 }
 
 // Extensão global do Express

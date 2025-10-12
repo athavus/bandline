@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount } from "svelte";
   import SearchInput from "./components/SearchInput.svelte";
   import ArtistList from "./components/ArtistList.svelte";
   import ArtistDetails from "./components/ArtistDetails.svelte";
@@ -22,23 +22,21 @@
   let showModal = false;
   let sidebarOpen = false;
   let showAuthModal = false;
-  let authMode: 'login' | 'register' = 'login';
+  let authMode: "login" | "register" = "login";
 
-  // Reativo para o estado de autenticação
   $: authState = $auth;
 
   onMount(async () => {
-    // Verificar se o usuário já está autenticado
     await auth.checkAuth();
   });
 
   async function handleInput() {
     if (!authState.isAuthenticated) {
       showAuthModal = true;
-      authMode = 'login';
+      authMode = "login";
       return;
     }
-    
+
     const result = await searchArtists(query);
     artists = result.artists || [];
     showOverlay = artists.length > 0;
@@ -47,7 +45,7 @@
   async function handleSelectArtist(event: CustomEvent<SearchArtistResult>) {
     if (!authState.isAuthenticated) {
       showAuthModal = true;
-      authMode = 'login';
+      authMode = "login";
       return;
     }
 
@@ -69,7 +67,7 @@
   function handleShowTimeline() {
     if (!authState.isAuthenticated) {
       showAuthModal = true;
-      authMode = 'login';
+      authMode = "login";
       return;
     }
     showTimeline = true;
@@ -94,7 +92,7 @@
   function openDetailsModal() {
     if (!authState.isAuthenticated) {
       showAuthModal = true;
-      authMode = 'login';
+      authMode = "login";
       return;
     }
     showModal = true;
@@ -110,21 +108,21 @@
 
   function handleSidebarAction(event: CustomEvent<string>) {
     const action = event.detail;
-    
-    if (action === 'login') {
+
+    if (action === "login") {
       showAuthModal = true;
-      authMode = 'login';
-    } else if (action === 'register') {
+      authMode = "login";
+    } else if (action === "register") {
       showAuthModal = true;
-      authMode = 'register';
-    } else if (action === 'logout') {
+      authMode = "register";
+    } else if (action === "logout") {
       auth.logout();
       selectedArtist = null;
       showTimeline = false;
-      query = '';
+      query = "";
       artists = [];
     }
-    
+
     sidebarOpen = false;
     console.log("Ação da sidebar:", action);
   }
@@ -145,28 +143,56 @@
 <Sidebar bind:open={sidebarOpen} on:action={handleSidebarAction} />
 
 <main class:sidebar-open={sidebarOpen}>
-  <button class="menu-toggle" on:click={toggleSidebar} aria-label="Toggle menu">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M3 12H21M3 6H21M3 18H21"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-    </svg>
-  </button>
-
+  {#if !sidebarOpen}
+    <button
+      class="menu-toggle"
+      on:click={toggleSidebar}
+      aria-label="Toggle menu"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M3 12H21M3 6H21M3 18H21"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+  {/if}
   <ThemeButton />
 
   <!-- Indicador de usuário logado -->
   {#if authState.isAuthenticated}
     <div class="user-indicator">
-      <span class="user-welcome">Olá, {authState.user?.username || 'Usuário'}!</span>
+      <span class="user-welcome"
+        >Olá, {authState.user?.username || "Usuário"}!</span
+      >
       <button class="logout-btn" on:click={() => auth.logout()}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <polyline points="16,17 21,12 16,7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path
+            d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <polyline
+            points="16,17 21,12 16,7"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <line
+            x1="21"
+            y1="12"
+            x2="9"
+            y2="12"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </button>
     </div>
@@ -178,7 +204,9 @@
       on:input={handleInput}
       on:focus={handleFocus}
       on:blur={handleBlur}
-      placeholder={authState.isAuthenticated ? "Buscar artistas..." : "Faça login para buscar artistas"}
+      placeholder={authState.isAuthenticated
+        ? "Buscar artistas..."
+        : "Faça login para buscar artistas"}
       disabled={!authState.isAuthenticated}
     />
     <ArtistList {artists} show={showOverlay} on:select={handleSelectArtist} />
@@ -188,12 +216,27 @@
   {#if !authState.isAuthenticated}
     <div class="welcome-section">
       <h2>Descubra seus artistas favoritos</h2>
-      <p>Faça login ou crie uma conta para acessar nossa plataforma de descoberta musical</p>
+      <p>
+        Faça login ou crie uma conta para acessar nossa plataforma de descoberta
+        musical
+      </p>
       <div class="welcome-buttons">
-        <button class="primary-btn" on:click={() => { showAuthModal = true; authMode = 'login'; }}>
+        <button
+          class="primary-btn"
+          on:click={() => {
+            showAuthModal = true;
+            authMode = "login";
+          }}
+        >
           Fazer Login
         </button>
-        <button class="secondary-btn" on:click={() => { showAuthModal = true; authMode = 'register'; }}>
+        <button
+          class="secondary-btn"
+          on:click={() => {
+            showAuthModal = true;
+            authMode = "register";
+          }}
+        >
           Criar Conta
         </button>
       </div>
@@ -229,7 +272,7 @@
 </main>
 
 <!-- Modal de Autenticação -->
-<AuthModal 
+<AuthModal
   bind:open={showAuthModal}
   {authMode}
   on:close={handleAuthModalClose}
@@ -249,7 +292,7 @@
 
   .menu-toggle {
     position: fixed;
-    top: 20px;
+    top: 52px;
     left: 20px;
     z-index: 999;
     background: var(--bg-card);
@@ -274,8 +317,8 @@
 
   .user-indicator {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 50px;
+    right: 30px;
     z-index: 999;
     display: flex;
     align-items: center;
@@ -350,7 +393,8 @@
     flex-wrap: wrap;
   }
 
-  .primary-btn, .secondary-btn {
+  .primary-btn,
+  .secondary-btn {
     padding: 12px 32px;
     border-radius: 8px;
     font-size: 0.95rem;
@@ -452,7 +496,8 @@
       align-items: center;
     }
 
-    .primary-btn, .secondary-btn {
+    .primary-btn,
+    .secondary-btn {
       width: 200px;
     }
   }

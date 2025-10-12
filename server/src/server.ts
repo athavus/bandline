@@ -13,7 +13,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
@@ -21,7 +20,6 @@ app.use(cors({
 
 app.use(express.json());
 
-// Sessão
 app.use(session({
   secret: process.env.SESSION_SECRET!,
   resave: false,
@@ -33,11 +31,10 @@ app.use(session({
   }
 }));
 
-// Passport
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Rotas
 app.use('/artists', artistsRouter);
 app.use('/search', searchArtistsRouter);
 app.use('/artistAlbums', artistAlbumsRouter);
