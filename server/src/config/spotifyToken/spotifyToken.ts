@@ -27,4 +27,5 @@ const spotifyTokenData: SpotifyTokenResponse = await spotifyTokenResponse.json()
 const accessToken = spotifyTokenData.access_token;
 console.log(accessToken);
 
+
 export default accessToken;
