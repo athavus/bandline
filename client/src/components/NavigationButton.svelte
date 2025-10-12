@@ -34,7 +34,7 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: var(--bg-secondary);
+    background: var(--bg-card);
     border: 2px solid var(--border-color);
     color: var(--text-primary);
     display: flex;
@@ -43,21 +43,53 @@
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 5;
+    box-shadow: var(--shadow-md);
   }
 
   .nav-button.prev { left: 0; }
   .nav-button.next { right: 0; }
   
   .nav-button:hover {
+    transform: translateY(-50%) scale(1.1);
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .nav-button:active {
     transform: translateY(-50%) scale(1.05);
-    background: var(--bg-hover);
-    border-color: var(--text-primary);
+  }
+
+  .nav-button svg {
+    transition: transform 0.3s ease;
+  }
+
+  .nav-button:hover svg {
+    transform: scale(1.1);
   }
 
   @media (max-width: 768px) {
     .nav-button {
       width: 50px;
       height: 50px;
+    }
+
+    .nav-button svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav-button {
+      width: 44px;
+      height: 44px;
+    }
+
+    .nav-button svg {
+      width: 18px;
+      height: 18px;
     }
   }
 </style>

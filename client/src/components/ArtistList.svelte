@@ -25,36 +25,47 @@
   .overlay {
     position: absolute;
     top: 100%;
-    left: 30%;
-    right: 0;
-    width: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
     background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    border-radius: 5px;
-    margin-top: 5px;
-    max-height: 300px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-top: 8px;
+    max-height: 400px;
     overflow-y: auto;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
     z-index: 1000;
     transition: all 0.3s ease;
   }
   
   /* Scrollbar customizada */
   .overlay::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   
   .overlay::-webkit-scrollbar-track {
     background: var(--bg-secondary);
-    border-radius: 4px;
+    border-radius: 3px;
   }
   
   .overlay::-webkit-scrollbar-thumb {
     background: var(--border-color);
-    border-radius: 4px;
+    border-radius: 3px;
+    transition: background 0.3s ease;
   }
   
   .overlay::-webkit-scrollbar-thumb:hover {
     background: var(--text-tertiary);
+  }
+
+  @media (max-width: 768px) {
+    .overlay {
+      left: 0;
+      transform: none;
+      margin: 8px 20px 0;
+      border-radius: 8px;
+    }
   }
 </style>

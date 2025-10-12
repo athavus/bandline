@@ -78,12 +78,9 @@
 
 <style>
   .theme-toggle {
-    position: fixed;
-    top: 45px;
-    right: 295px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     border: 1px solid var(--theme-toggle-border);
     background: var(--theme-toggle-bg);
     color: var(--theme-toggle-color);
@@ -93,16 +90,16 @@
     justify-content: center;
     transition: all 0.3s ease;
     box-shadow: var(--theme-toggle-shadow);
-    z-index: 1000;
   }
 
   .theme-toggle:hover {
-    transform: translateY(-2px);
+    transform: scale(1.05);
     box-shadow: var(--theme-toggle-shadow-hover);
+    border-color: var(--accent-color);
   }
 
   .theme-toggle:active {
-    transform: translateY(0);
+    transform: scale(0.95);
   }
 
   .icon {
@@ -117,7 +114,7 @@
   }
 
   .icon svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 </style>

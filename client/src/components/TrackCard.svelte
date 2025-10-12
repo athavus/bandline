@@ -36,40 +36,43 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 24px;
-    background: var(--bg-secondary);
-    border-radius: 15px;
-    border: 1px solid transparent;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
   }
 
   .track-card:hover {
     background: var(--bg-hover);
-    border-color: var(--border-color);
-    transform: translateX(8px);
+    border-color: var(--accent-color);
+    transform: translateX(8px) translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .track-info {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
     flex: 1;
     min-width: 0;
   }
 
   .track-num {
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: var(--bg-hover);
-    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 900;
+    font-family: var(--font-primary);
+    font-weight: 700;
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
     position: relative;
     flex-shrink: 0;
@@ -82,16 +85,17 @@
 
   .track-spotify-icon {
     position: absolute;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     opacity: 0;
     transition: opacity 0.3s ease;
   }
 
   .track-card:hover .track-num {
-    background: rgba(30, 215, 96, 0.95);
-    color: #000;
-    border-color: rgba(30, 215, 96, 0.95);
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: scale(1.1);
   }
 
   .track-card:hover .track-number {
@@ -103,9 +107,10 @@
   }
 
   .track-title {
+    font-family: var(--font-primary);
     font-weight: 600;
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 0.95rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -113,10 +118,66 @@
   }
 
   .track-time {
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-primary);
     color: var(--text-secondary);
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
     transition: color 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .track-card {
+      padding: 14px 16px;
+      border-radius: 8px;
+    }
+
+    .track-info {
+      gap: 12px;
+    }
+
+    .track-num {
+      width: 32px;
+      height: 32px;
+      font-size: 0.8rem;
+    }
+
+    .track-spotify-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .track-title {
+      font-size: 0.9rem;
+    }
+
+    .track-time {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .track-card {
+      padding: 12px 14px;
+    }
+
+    .track-num {
+      width: 28px;
+      height: 28px;
+      font-size: 0.75rem;
+    }
+
+    .track-spotify-icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    .track-title {
+      font-size: 0.85rem;
+    }
+
+    .track-time {
+      font-size: 0.8rem;
+    }
   }
 </style>

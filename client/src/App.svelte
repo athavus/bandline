@@ -143,60 +143,64 @@
 <Sidebar bind:open={sidebarOpen} on:action={handleSidebarAction} />
 
 <main class:sidebar-open={sidebarOpen}>
-  {#if !sidebarOpen}
-    <button
-      class="menu-toggle"
-      on:click={toggleSidebar}
-      aria-label="Toggle menu"
-    >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M3 12H21M3 6H21M3 18H21"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-        />
-      </svg>
-    </button>
-  {/if}
-  <ThemeButton />
-
-  <!-- Indicador de usuário logado -->
-  {#if authState.isAuthenticated}
-    <div class="user-indicator">
-      <span class="user-welcome"
-        >Olá, {authState.user?.username || "Usuário"}!</span
-      >
-      <button class="logout-btn" on:click={() => auth.logout()}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <polyline
-            points="16,17 21,12 16,7"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <line
-            x1="21"
-            y1="12"
-            x2="9"
-            y2="12"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </button>
+  <header class="app-header">
+    <div class="header-left">
+      {#if !sidebarOpen}
+        <button
+          class="menu-toggle"
+          on:click={toggleSidebar}
+          aria-label="Toggle menu"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M3 12H21M3 6H21M3 18H21"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      {/if}
+      <ThemeButton />
     </div>
-  {/if}
+
+    <!-- Indicador de usuário logado -->
+    {#if authState.isAuthenticated}
+      <div class="user-indicator">
+        <span class="user-welcome"
+          >Olá, {authState.user?.username || "Usuário"}!</span
+        >
+        <button class="logout-btn" on:click={() => auth.logout()}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <polyline
+              points="16,17 21,12 16,7"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <line
+              x1="21"
+              y1="12"
+              x2="9"
+              y2="12"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+    {/if}
+  </header>
 
   <div class="search-container">
     <SearchInput
@@ -282,24 +286,42 @@
 <style>
   main {
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 0;
     transition: margin-left 0.3s ease;
+    min-height: 100vh;
+    background: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
   }
 
   main.sidebar-open {
     margin-left: 280px;
   }
 
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
   .menu-toggle {
-    position: fixed;
-    top: 52px;
-    left: 20px;
-    z-index: 999;
     background: var(--bg-card);
-    border: 1.5px solid var(--border-color);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -310,21 +332,17 @@
   }
 
   .menu-toggle:hover {
-    transform: scale(1.05);
-    box-shadow: var(--shadow-md);
     background: var(--bg-hover);
+    border-color: var(--accent-color);
+    transform: scale(1.05);
   }
 
   .user-indicator {
-    position: fixed;
-    top: 50px;
-    right: 30px;
-    z-index: 999;
     display: flex;
     align-items: center;
     gap: 12px;
     background: var(--bg-card);
-    border: 1.5px solid var(--border-color);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 8px 16px;
     box-shadow: var(--shadow-sm);
@@ -332,6 +350,7 @@
 
   .user-welcome {
     color: var(--text-primary);
+    font-family: var(--font-primary);
     font-size: 0.9rem;
     font-weight: 500;
   }
@@ -351,6 +370,7 @@
   .logout-btn:hover {
     color: var(--error-color);
     background: var(--bg-hover);
+    transform: scale(1.1);
   }
 
   .search-container {
@@ -359,28 +379,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 40px 24px;
   }
 
   .welcome-section {
     text-align: center;
     max-width: 600px;
-    margin: 60px auto 0;
-    padding: 40px 20px;
+    margin: 40px auto;
+    padding: 40px 24px;
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
   }
 
   .welcome-section h2 {
     color: var(--text-primary);
-    font-size: 2.2rem;
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
     font-weight: 700;
-    margin: 0 0 16px 0;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    margin: 0 0 20px 0;
   }
 
   .welcome-section p {
     color: var(--text-secondary);
+    font-family: var(--font-primary);
     font-size: 1.1rem;
     line-height: 1.6;
     margin: 0 0 32px 0;
@@ -395,34 +418,38 @@
 
   .primary-btn,
   .secondary-btn {
-    padding: 12px 32px;
+    padding: 14px 32px;
     border-radius: 8px;
+    font-family: var(--font-primary);
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1.5px solid;
+    border: 1px solid;
   }
 
   .primary-btn {
-    background: var(--gradient-primary);
-    border-color: transparent;
-    color: #ffffff;
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    box-shadow: var(--shadow-sm);
   }
 
   .primary-btn:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
   }
 
   .secondary-btn {
-    background: var(--bg-primary);
+    background: transparent;
     border-color: var(--border-color);
     color: var(--text-primary);
   }
 
   .secondary-btn:hover {
-    border-color: var(--primary-color);
+    border-color: var(--accent-color);
     background: var(--bg-hover);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
@@ -431,23 +458,31 @@
   .actions {
     margin-top: 20px;
     text-align: center;
+    padding: 0 24px;
   }
 
   .details-btn {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 24px;
-    background: var(--gradient-primary);
+    padding: 16px 28px;
+    background: var(--accent-color);
     border: none;
     border-radius: 8px;
-    color: #ffffff;
+    color: white;
     cursor: pointer;
+    font-family: var(--font-primary);
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
     transition: all 0.3s ease;
     margin: 20px 0px 0px 0px;
     box-shadow: var(--shadow-sm);
+  }
+
+  .details-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .details-btn svg {
@@ -456,17 +491,8 @@
     transition: transform 0.3s ease;
   }
 
-  .details-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-
   .details-btn:hover svg {
     transform: scale(1.1);
-  }
-
-  .details-btn:active {
-    transform: translateY(0);
   }
 
   @media (max-width: 768px) {
@@ -474,31 +500,90 @@
       margin-left: 0;
     }
 
+    .app-header {
+      padding: 16px 20px;
+    }
+
+    .menu-toggle {
+      width: 36px;
+      height: 36px;
+    }
+
     .user-indicator {
-      position: relative;
-      top: auto;
-      right: auto;
-      justify-content: center;
-      margin: 0 0 20px 0;
+      padding: 6px 12px;
+    }
+
+    .search-container {
+      padding: 30px 20px;
     }
 
     .welcome-section {
-      margin-top: 40px;
-      padding: 20px;
+      margin: 30px 20px;
+      padding: 30px 20px;
+      border-radius: 12px;
+    }
+
+    .welcome-section h2 {
+      font-size: 2rem;
+    }
+
+    .welcome-section p {
+      font-size: 1rem;
+    }
+
+    .welcome-buttons {
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      width: 100%;
+      max-width: 280px;
+      padding: 12px 24px;
+    }
+
+    .details-btn {
+      padding: 14px 24px;
+      font-size: 0.9rem;
+    }
+
+    .actions {
+      padding: 0 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .app-header {
+      padding: 12px 16px;
+    }
+
+    .welcome-section {
+      margin: 20px 16px;
+      padding: 24px 16px;
     }
 
     .welcome-section h2 {
       font-size: 1.8rem;
     }
 
-    .welcome-buttons {
-      flex-direction: column;
-      align-items: center;
+    .welcome-section p {
+      font-size: 0.95rem;
     }
 
     .primary-btn,
     .secondary-btn {
-      width: 200px;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+    }
+
+    .search-container {
+      padding: 24px 16px;
+    }
+
+    .actions {
+      padding: 0 16px;
     }
   }
 </style>

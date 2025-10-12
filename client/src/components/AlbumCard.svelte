@@ -71,13 +71,34 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 3;
   }
 
   .album-item:hover,
   .album-item.active {
-    transform: translateY(-15px);
+    transform: translateY(-15px) scale(1.05);
+  }
+
+  /* Timeline connector */
+  .album-item::before {
+    content: '';
+    position: absolute;
+    top: 85px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: var(--accent-color);
+    border-radius: 1px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .album-item:hover::before,
+  .album-item.active::before {
+    opacity: 1;
   }
 
   .album-cover {
@@ -85,7 +106,7 @@
     height: 170px;
     border-radius: 20px;
     background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
+    border: 3px solid var(--border-color);
     margin-bottom: 20px;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -93,15 +114,17 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    box-shadow: var(--shadow-md);
   }
 
   .album-item:hover .album-cover {
-    border-color: var(--text-primary);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow-xl);
+    transform: rotate(2deg);
   }
 
   .album-item:hover .album-cover img {
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 
   .album-cover img {
@@ -124,42 +147,48 @@
   }
 
   .album-name {
+    font-family: var(--font-heading);
     font-size: 1.1rem;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--text-primary);
     margin: 0 0 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: color 0.3s ease;
+    text-align: center;
   }
 
   .album-year {
-    font-size: 0.95rem;
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
     color: var(--text-secondary);
     margin: 0 0 10px;
-    font-weight: 600;
+    font-weight: 500;
     transition: color 0.3s ease;
+    text-align: center;
   }
 
   .album-badge {
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 6px 14px;
+    font-family: var(--font-primary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 4px 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: inline-block;
     transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
   }
 
   .album-item:hover .album-badge {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-    border-color: var(--text-primary);
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
   }
 
   @media (max-width: 1024px) {
@@ -170,6 +199,15 @@
       width: 140px;
       height: 140px;
     }
+    .album-details {
+      width: 130px;
+    }
+    .album-name {
+      font-size: 1rem;
+    }
+    .album-year {
+      font-size: 0.85rem;
+    }
   }
 
   @media (max-width: 768px) {
@@ -179,6 +217,44 @@
     .album-cover {
       width: 110px;
       height: 110px;
+      border-radius: 16px;
+    }
+    .album-details {
+      width: 100px;
+    }
+    .album-name {
+      font-size: 0.9rem;
+    }
+    .album-year {
+      font-size: 0.8rem;
+    }
+    .album-badge {
+      font-size: 0.65rem;
+      padding: 3px 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .album-item {
+      width: 100px;
+    }
+    .album-cover {
+      width: 90px;
+      height: 90px;
+      border-radius: 12px;
+    }
+    .album-details {
+      width: 85px;
+    }
+    .album-name {
+      font-size: 0.8rem;
+    }
+    .album-year {
+      font-size: 0.75rem;
+    }
+    .album-badge {
+      font-size: 0.6rem;
+      padding: 2px 8px;
     }
   }
 </style>

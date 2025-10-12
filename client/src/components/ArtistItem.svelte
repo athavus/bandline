@@ -26,53 +26,101 @@
   .artist-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
+    gap: 16px;
+    padding: 16px 20px;
     width: 100%;
     border: none;
-    background: var(--bg-card);
+    background: transparent;
     cursor: pointer;
     text-align: left;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .artist-item:last-child {
+    border-bottom: none;
   }
   
   .artist-item:hover {
     background: var(--bg-hover);
+    transform: translateX(4px);
   }
   
   .artist-item img,
   .no-image {
-    width: 50px;
-    height: 50px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+  }
+
+  .artist-item:hover img {
+    border-color: var(--accent-color);
+    transform: scale(1.05);
   }
   
   .no-image {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--border-color);
+    background: var(--bg-secondary);
     color: var(--text-tertiary);
-    font-size: 24px;
+    font-size: 20px;
+    font-weight: 600;
     transition: all 0.3s ease;
+  }
+
+  .artist-item:hover .no-image {
+    background: var(--accent-color);
+    color: white;
   }
   
   .artist-info {
     flex: 1;
+    min-width: 0;
   }
   
   .artist-name {
+    font-family: var(--font-heading);
     font-weight: 600;
-    margin-bottom: 3px;
+    font-size: 1rem;
+    margin-bottom: 4px;
     color: var(--text-primary);
     transition: color 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .artist-details {
-    font-size: 14px;
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
     color: var(--text-secondary);
     transition: color 0.3s ease;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    .artist-item {
+      padding: 12px 16px;
+      gap: 12px;
+    }
+
+    .artist-item img,
+    .no-image {
+      width: 48px;
+      height: 48px;
+    }
+
+    .artist-name {
+      font-size: 0.9rem;
+    }
+
+    .artist-details {
+      font-size: 0.8rem;
+    }
   }
 </style>

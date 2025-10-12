@@ -36,10 +36,11 @@
     margin: 60px 80px 0;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 30px;
-    padding: 50px;
-    animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    padding: 40px;
+    animation: slideUp 0.5s ease;
     transition: all 0.3s ease;
+    box-shadow: var(--shadow-lg);
   }
 
   @keyframes slideUp {
@@ -57,45 +58,48 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 35px;
-    padding-bottom: 25px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
     border-bottom: 2px solid var(--border-color);
     transition: border-color 0.3s ease;
   }
 
   .tracks-header h3 {
-    font-size: 2rem;
-    font-weight: 900;
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
     margin: 0;
     color: var(--text-primary);
     transition: color 0.3s ease;
   }
 
   .close-btn {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     color: var(--text-secondary);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    font-weight: 600;
   }
 
   .close-btn:hover {
-    background: var(--text-primary);
-    color: var(--bg-card);
-    border-color: var(--text-primary);
-    transform: rotate(90deg);
+    background: var(--error-color);
+    color: white;
+    border-color: var(--error-color);
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: var(--shadow-md);
   }
 
   .tracks-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
   }
 
@@ -103,12 +107,49 @@
     .tracks-panel {
       margin: 40px 20px 0;
       padding: 30px;
+      border-radius: 8px;
+    }
+
+    .tracks-header h3 {
+      font-size: 1.6rem;
     }
   }
 
   @media (max-width: 768px) {
+    .tracks-panel {
+      margin: 30px 16px 0;
+      padding: 24px;
+      border-radius: 8px;
+    }
+
     .tracks-grid {
       grid-template-columns: 1fr;
+    }
+
+    .tracks-header h3 {
+      font-size: 1.4rem;
+    }
+
+    .close-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tracks-panel {
+      margin: 20px 12px 0;
+      padding: 20px;
+    }
+
+    .tracks-header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+    }
+
+    .tracks-header h3 {
+      font-size: 1.2rem;
     }
   }
 </style>
