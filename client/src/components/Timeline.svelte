@@ -52,12 +52,19 @@
     if (selectedAlbum?.id === album.id) {
       selectedAlbum = null;
       albumTracks = null;
-      sliderElement.classList.remove('noise');
     } else {
       selectedAlbum = album;
       loadAlbumTracks(album.id);
-      sliderElement.classList.add('noise');
     }
+  }
+
+  function handleTrackClick(trackId: string) {
+    window.open(`https://open.spotify.com/track/${trackId}`, '_blank');
+  }
+
+  function openAlbumInSpotify(e: Event, albumId: string) {
+    e.stopPropagation();
+    window.open(`https://open.spotify.com/album/${albumId}`, '_blank');
   }
 
   function formatDate(dateString: string) {
@@ -125,6 +132,16 @@
                 {:else}
                   <div class="no-image">♫</div>
                 {/if}
+                <button 
+                  class="spotify-btn"
+                  on:click={(e) => openAlbumInSpotify(e, album.id)}
+                  aria-label="Abrir no Spotify"
+                  title="Abrir no Spotify"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                  </svg>
+                </button>
               </div>
               <div class="album-details">
                 <h3 class="album-name">{album.name}</h3>
@@ -157,9 +174,20 @@
           </div>
           <div class="tracks-grid">
             {#each albumTracks.items as track}
-              <div class="track-card">
+              <div 
+                class="track-card"
+                on:click={() => handleTrackClick(track.id)}
+                on:keypress={(e) => e.key === 'Enter' && handleTrackClick(track.id)}
+                role="button"
+                tabindex="0"
+              >
                 <div class="track-info">
-                  <span class="track-num">{track.track_number}</span>
+                  <span class="track-num">
+                    <span class="track-number">{track.track_number}</span>
+                    <svg class="track-spotify-icon" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                    </svg>
+                  </span>
                   <span class="track-title">{track.name}</span>
                 </div>
                 <span class="track-time">{formatDuration(track.duration_ms)}</span>
@@ -181,7 +209,7 @@
     position: relative;
     width: 100%;
     padding: 10px 0px 60px 0px;
-    background: var(--gradient-bg);
+    background: var(--bg-primary);
     min-height: 500px;
     transition: background 0.3s ease;
     border-radius: 30px;
@@ -203,15 +231,14 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: var(--gradient-dark);
-    border: none;
-    color: #fff;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
     z-index: 5;
   }
 
@@ -219,8 +246,9 @@
   .nav-button.next { right: 0; }
   
   .nav-button:hover {
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+    transform: translateY(-50%) scale(1.05);
+    background: var(--bg-hover);
+    border-color: var(--text-primary);
   }
 
   .timeline-slider {
@@ -265,17 +293,19 @@
     height: 170px;
     border-radius: 20px;
     background: var(--bg-secondary);
-    box-shadow: var(--shadow-lg);
+    border: 2px solid var(--border-color);
     margin-bottom: 20px;
     overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
   }
 
   .album-item:hover .album-cover {
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    border-color: var(--text-primary);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   }
 
   .album-item:hover .album-cover img {
@@ -287,6 +317,41 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
+  }
+
+  .spotify-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(30, 215, 96, 0.95);
+    border: none;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  .spotify-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .album-item:hover .spotify-btn {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .spotify-btn:hover {
+    background: rgb(30, 215, 96);
+    transform: scale(1.1);
   }
 
   .no-image {
@@ -323,23 +388,30 @@
   .album-badge {
     font-size: 0.75rem;
     font-weight: 700;
-    background: var(--gradient-dark);
-    color: #fff;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
     border-radius: 20px;
     padding: 6px 14px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: var(--shadow-sm);
     display: inline-block;
+    transition: all 0.3s ease;
+  }
+
+  .album-item:hover .album-badge {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    border-color: var(--text-primary);
   }
 
   /* Tracks Panel */
   .tracks-panel {
     margin: 60px 80px 0;
     background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 30px;
     padding: 50px;
-    box-shadow: var(--shadow-lg);
     animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     transition: all 0.3s ease;
   }
@@ -361,7 +433,7 @@
     align-items: center;
     margin-bottom: 35px;
     padding-bottom: 25px;
-    border-bottom: 3px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
     transition: border-color 0.3s ease;
   }
 
@@ -378,7 +450,7 @@
     height: 45px;
     border-radius: 50%;
     background: var(--bg-secondary);
-    border: none;
+    border: 1px solid var(--border-color);
     color: var(--text-secondary);
     font-size: 1.4rem;
     cursor: pointer;
@@ -391,6 +463,7 @@
   .close-btn:hover {
     background: var(--text-primary);
     color: var(--bg-card);
+    border-color: var(--text-primary);
     transform: rotate(90deg);
   }
 
@@ -407,13 +480,14 @@
     padding: 18px 24px;
     background: var(--bg-secondary);
     border-radius: 15px;
-    border-left: 4px solid transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
     transition: all 0.3s ease;
   }
 
   .track-card:hover {
     background: var(--bg-hover);
-    border-left-color: var(--text-primary);
+    border-color: var(--border-color);
     transform: translateX(8px);
   }
 
@@ -429,7 +503,8 @@
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    background: var(--border-color);
+    background: var(--bg-hover);
+    border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -437,6 +512,35 @@
     color: var(--text-primary);
     font-size: 1rem;
     transition: all 0.3s ease;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .track-number {
+    position: absolute;
+    transition: opacity 0.3s ease;
+  }
+
+  .track-spotify-icon {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .track-card:hover .track-num {
+    background: rgba(30, 215, 96, 0.95);
+    color: #000;
+    border-color: rgba(30, 215, 96, 0.95);
+  }
+
+  .track-card:hover .track-number {
+    opacity: 0;
+  }
+
+  .track-card:hover .track-spotify-icon {
+    opacity: 1;
   }
 
   .track-title {
@@ -476,8 +580,8 @@
   .loading-spinner {
     width: 50px;
     height: 50px;
-    border: 6px solid var(--border-color);
-    border-top: 6px solid var(--accent-color);
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--text-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 25px;
@@ -486,7 +590,7 @@
   .loading-spinner.small {
     width: 30px;
     height: 30px;
-    border-width: 4px;
+    border-width: 3px;
     margin-bottom: 15px;
   }
 
@@ -510,20 +614,19 @@
   .error button {
     margin-top: 25px;
     padding: 15px 35px;
-    background: var(--gradient-dark);
-    color: #fff;
-    border: none;
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    border: 2px solid var(--text-primary);
     border-radius: 30px;
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: var(--shadow-lg);
     transition: all 0.3s ease;
   }
 
   .error button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
   .no-albums {

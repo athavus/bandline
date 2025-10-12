@@ -91,7 +91,12 @@
   {:else if selectedArtist}
     <div class="actions">
       <button class="details-btn" on:click={openDetailsModal}>
-        Ver detalhes do artista
+        <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+          <g fill="currentColor">
+            <path d="M426.666667,1.42108547e-14 L426.666667,341.333333 L3.55271368e-14,341.333333 L3.55271368e-14,1.42108547e-14 L426.666667,1.42108547e-14 Z M384,42.6666667 L42.6666667,42.6666667 L42.6666667,298.666667 L384,298.666667 L384,42.6666667 Z M341.333333,213.333333 L341.333333,245.333333 L234.666667,245.333333 L234.666667,213.333333 L341.333333,213.333333 Z M341.333333,149.333333 L341.333333,181.333333 L234.666667,181.333333 L234.666667,149.333333 L341.333333,149.333333 Z M192,85.3333333 L192,170.666667 L85.3333333,170.666667 L85.3333333,85.3333333 L192,85.3333333 Z M341.333333,85.3333333 L341.333333,117.333333 L234.666667,117.333333 L234.666667,85.3333333 L341.333333,85.3333333 Z" transform="translate(42.666667, 85.333333)"></path>
+          </g>
+        </svg>
+        Detalhes do Artista
       </button>
       <Timeline 
         artistId={selectedArtist.id} 
@@ -99,12 +104,10 @@
       />
     </div>
 
-    <Modal open={showModal} onClose={closeDetailsModal}>
-      <ArtistDetails 
-        artist={selectedArtist} 
-        on:showTimeline={handleShowTimeline}
-      />
+    <Modal class="modal-artist-details" open={showModal} onClose={closeDetailsModal}>
+      <ArtistDetails artist={selectedArtist} on:showTimeline={handleShowTimeline} />
     </Modal>
+
   {/if}
 </main>
 
@@ -128,21 +131,33 @@
   }
 
   .details-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: transparent;
+    border: 1.5px solid var(--bg-color, #ffffff91);
+    border-radius: 8px;
+    color: var(--bg-color, #fff);
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin: 20px 0px 0px 0px;
   }
+  
+  .details-btn svg {
+    width: 20px;
+    height: 20px;
+    background: var(--text-color, #333);
+    color: var(--bg-color, #fff);
+    transition: transform 0.5s ease;
+  }
+  
   .details-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    transform: translateY(-1px);
   }
+  
   .details-btn:active {
     transform: translateY(0);
   }
