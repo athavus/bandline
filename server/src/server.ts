@@ -4,8 +4,10 @@ import dotenv from 'dotenv';
 
 import artistsRouter from './routes/artists/artists.ts';
 import searchArtistsRouter from './routes/search/search.ts';
-import artistAlbums from './routes/albums/albums.ts';
-import albumTracks from './routes/tracks/tracks.ts';
+import artistAlbumsRouter from './routes/albums/albums.ts';
+import albumTracksRouter from './routes/tracks/tracks.ts';
+import loginRouter from './routes/login/login.ts';
+import registerRouter from './routes/sign-in/sign-in.ts';
 
 // Configurando variáveis de ambiente
 dotenv.config();
@@ -19,11 +21,12 @@ app.use(cors());
 app.use(express.json());
 
 // Rotas configuradas
-app.use('/artistAlbums', artistAlbums);
+app.use('/artistAlbums', artistAlbumsRouter);
 app.use('/searchArtists', searchArtistsRouter);
 app.use('/artists', artistsRouter);
-app.use('/albumTracks', albumTracks);
-
+app.use('/albumTracks', albumTracksRouter);
+app.use('/login', loginRouter);
+app.use('/register', registerRouter);
 
 // Criando o servidor https
 app.listen(PORT, () => {
