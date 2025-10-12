@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-  import SpotifyButton from './SpotifyButton.svelte';
+  import { createEventDispatcher } from "svelte";
+  import SpotifyButton from "./SpotifyButton.svelte";
 
   export let album: any;
   export let position: number;
@@ -10,24 +10,26 @@
 
   function formatDate(dateString: string) {
     const date = new Date(
-      dateString.length === 4 ? `${dateString}-01-01` :
-      dateString.length === 7 ? `${dateString}-01` :
-      dateString
+      dateString.length === 4
+        ? `${dateString}-01-01`
+        : dateString.length === 7
+          ? `${dateString}-01`
+          : dateString,
     );
-    return date.toLocaleDateString('pt-BR', {
-      year: 'numeric',
-      month: dateString.length === 4 ? undefined : 'long',
-      day: dateString.length > 7 ? 'numeric' : undefined
+    return date.toLocaleDateString("pt-BR", {
+      year: "numeric",
+      month: dateString.length === 4 ? undefined : "long",
+      day: dateString.length > 7 ? "numeric" : undefined,
     });
   }
 
   function handleClick() {
-    dispatch('click');
+    dispatch("click");
   }
 
   function openAlbumInSpotify(e: Event) {
     e.stopPropagation();
-    window.open(`https://open.spotify.com/album/${album.id}`, '_blank');
+    window.open(`https://open.spotify.com/album/${album.id}`, "_blank");
   }
 </script>
 
@@ -35,7 +37,7 @@
   class="album-item {active ? 'active' : ''}"
   style="left: {position}px"
   on:click={handleClick}
-  on:keypress={(e) => e.key === 'Enter' && handleClick()}
+  on:keypress={(e) => e.key === "Enter" && handleClick()}
   role="button"
   tabindex="0"
 >
@@ -45,14 +47,18 @@
     {:else}
       <div class="no-image">♫</div>
     {/if}
-    
+
     <SpotifyButton on:click={openAlbumInSpotify} />
   </div>
-  
+
   <div class="album-details">
     <h3 class="album-name">{album.name}</h3>
     <p class="album-year">{formatDate(album.release_date)}</p>
-    <span class="album-badge">{album.total_tracks} faixas</span>
+    {#if album.total_tracks > 1}
+      <span class="album-badge">{album.total_tracks} faixas</span>
+    {:else if album.total_tracks == 1}
+      <span class="album-badge">{album.total_tracks} faixa</span>
+    {/if}
   </div>
 </div>
 
