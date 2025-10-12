@@ -9,7 +9,13 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "rootDir": "src",
-    "allowImportingTsExtensions": true
+    "baseUrl": "./src",
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@config/*": ["config/*"],
+      "@routes/*": ["routes/*"],
+      "@token/*": ["config/spotifyToken/*"]
+    },
   },
   "include": ["src"],
   "ts-node": {

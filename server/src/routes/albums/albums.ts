@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import token from '../../api/token/token.ts';
+import token from "@token/spotifyToken";
 import { Router } from 'express';
 import type { SpotifyAlbums } from './types.ts';
 
