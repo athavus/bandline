@@ -2,7 +2,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { prisma } from '@config/prisma/prisma';
+import { prisma } from './prisma';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 

@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
-import type { SpotifyTokenResponse } from './types.ts';
+import type { SpotifyTokenResponse } from '../types/spotify-token-types.ts';
 
 dotenv.config();
 

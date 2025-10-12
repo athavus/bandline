@@ -14,7 +14,6 @@
     "paths": {
       "@config/*": ["config/*"],
       "@routes/*": ["routes/*"],
-      "@token/*": ["config/spotifyToken/*"]
     },
     "typeRoots": ["./node_modules/@types"]
   },

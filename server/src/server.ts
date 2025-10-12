@@ -2,12 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import session from 'express-session';
-import passport from './config/passport/passport';  // ajuste de import
-import artistsRouter from './routes/artists/artists';
-import searchArtistsRouter from './routes/search/search';
-import artistAlbumsRouter from './routes/albums/albums';
-import albumTracksRouter from './routes/tracks/tracks';
-import authRouter from './routes/auth/auth';
+import passport from './config/passport';
+import artistsRouter from './routes/artists';
+import searchArtistsRouter from './routes/search';
+import artistAlbumsRouter from './routes/albums';
+import albumTracksRouter from './routes/tracks';
+import authRouter from './routes/auth';
 
 dotenv.config();
 const app = express();

@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import passport from '@config/passport/passport';
+import passport from '@config/passport';
 import bcrypt from 'bcryptjs';
-import { prisma } from '@config/prisma/prisma';
-import type { LoginRequest, RegisterRequest, AuthResponse, PublicUser } from './types';
+import { prisma } from '@config/prisma';
+import type { LoginRequest, RegisterRequest, AuthResponse, PublicUser } from '../types/auth-types.ts';
 
 const router = Router();
 

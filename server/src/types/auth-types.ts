@@ -1,4 +1,3 @@
-// routes/auth/types.ts
 import { User as PrismaUser } from '@prisma/client';
 
 export interface LoginRequest {

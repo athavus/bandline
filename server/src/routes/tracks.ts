@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
-import token from "@token/spotifyToken";
+import token from "../config/spotifyToken.ts";
 import { Router } from 'express';
-import type { SpotifyAlbumTracks } from './types.ts';
+import type { SpotifyAlbumTracks } from '../types/tracks-types.ts';
 
 async function getAlbumTracks(albumId: string) {
   const url = new URL(`https://api.spotify.com/v1/albums/${albumId}/tracks`);

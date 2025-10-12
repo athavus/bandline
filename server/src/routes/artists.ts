@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
-import token from "@token/spotifyToken";
+import token from "../config/spotifyToken";
 import { Router } from 'express';
 
-import type { SpotifyArtist } from './types.ts';
+import type { SpotifyArtist } from '../types/artists-types.ts';
 
 async function getArtistData(artistId: string) {
   const artistDataRequest = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
