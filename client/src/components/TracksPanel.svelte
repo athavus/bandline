@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-  import type { SpotifyAlbumTracks } from '../types/tracks.ts';
-  import TrackCard from './TrackCard.svelte';
-  import LoadingSpinner from './LoadingSpinner.svelte';
+  import { createEventDispatcher } from "svelte";
+  import type { SpotifyAlbumTracks } from "../types/tracks.ts";
+  import TrackCard from "./TrackCard.svelte";
+  import LoadingSpinner from "./LoadingSpinner.svelte";
+  import SpotifyButton from "./SpotifyButton.svelte";
 
   export let album: any;
   export let albumTracks: SpotifyAlbumTracks | null = null;
@@ -11,7 +12,12 @@
   const dispatch = createEventDispatcher();
 
   function handleClose() {
-    dispatch('close');
+    dispatch("close");
+  }
+
+  function openAlbumInSpotify(e: Event) {
+    e.stopPropagation();
+    window.open(`https://open.spotify.com/album/${album.id}`, "_blank");
   }
 </script>
 
@@ -23,10 +29,35 @@
       <h3>{album.name}</h3>
       <button class="close-btn" on:click={handleClose}>✕</button>
     </div>
-    <div class="tracks-grid">
-      {#each albumTracks.items as track}
-        <TrackCard {track} />
-      {/each}
+
+    <div class="tracks-content">
+      <div class="album-cover-section">
+        <div class="album-cover-wrapper">
+          {#if album.images?.length}
+            <img
+              src={album.images[0].url}
+              alt={album.name}
+              class="album-cover-large"
+            />
+          {:else}
+            <div class="no-image-large">♫</div>
+          {/if}
+          <div class="spotify-button-wrapper">
+            <SpotifyButton large on:click={openAlbumInSpotify} />
+          </div>
+        </div>
+        <div class="album-info">
+          <h4>{album.name}</h4>
+          <p class="release-date">{album.release_date}</p>
+          <p class="track-count">{albumTracks.items.length} faixas</p>
+        </div>
+      </div>
+
+      <div class="tracks-grid">
+        {#each albumTracks.items as track}
+          <TrackCard {track} />
+        {/each}
+      </div>
     </div>
   {/if}
 </div>
@@ -97,7 +128,91 @@
     box-shadow: var(--shadow-md);
   }
 
+  .tracks-content {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  .album-cover-section {
+    flex-shrink: 0;
+    width: 300px;
+    position: sticky;
+    top: 20px;
+  }
+
+  .album-cover-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+    overflow: visible;
+  }
+
+  .spotify-button-wrapper {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 10;
+  }
+
+  .album-cover-large {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: var(--shadow-xl);
+    border: 3px solid var(--border-color);
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  .no-image-large {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    font-size: 4rem;
+    color: var(--text-tertiary);
+    font-weight: 900;
+    border: 3px solid var(--border-color);
+    position: relative;
+    z-index: 1;
+  }
+
+  .album-info {
+    text-align: left;
+  }
+
+  .album-info h4 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 12px;
+    line-height: 1.3;
+  }
+
+  .album-info .release-date {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0 0 8px;
+  }
+
+  .album-info .track-count {
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    margin: 0;
+    font-weight: 600;
+  }
+
   .tracks-grid {
+    flex: 1;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
@@ -113,6 +228,19 @@
     .tracks-header h3 {
       font-size: 1.6rem;
     }
+
+    .tracks-content {
+      gap: 30px;
+    }
+
+    .album-cover-section {
+      width: 250px;
+    }
+
+    .album-cover-large,
+    .no-image-large {
+      height: 250px;
+    }
   }
 
   @media (max-width: 768px) {
@@ -120,6 +248,26 @@
       margin: 30px 16px 0;
       padding: 24px;
       border-radius: 8px;
+    }
+
+    .tracks-content {
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .album-cover-section {
+      width: 100%;
+      position: static;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .album-cover-large,
+    .no-image-large {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 0;
     }
 
     .tracks-grid {
@@ -149,6 +297,21 @@
     }
 
     .tracks-header h3 {
+      font-size: 1.2rem;
+    }
+
+    .album-cover-section {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .album-cover-large,
+    .no-image-large {
+      width: 100%;
+      height: 200px;
+    }
+
+    .album-info h4 {
       font-size: 1.2rem;
     }
   }

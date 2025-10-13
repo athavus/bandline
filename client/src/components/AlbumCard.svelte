@@ -66,7 +66,7 @@
   .album-item {
     position: absolute;
     top: 0;
-    width: 180px;
+    width: 240px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -82,7 +82,7 @@
 
   /* Timeline connector */
   .album-item::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 85px;
     left: 50%;
@@ -102,8 +102,8 @@
   }
 
   .album-cover {
-    width: 170px;
-    height: 170px;
+    width: 240px;
+    height: 240px;
     border-radius: 20px;
     background: var(--bg-secondary);
     border: 3px solid var(--border-color);
