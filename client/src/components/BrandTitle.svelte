@@ -29,7 +29,7 @@
   .brand-title {
     position: relative;
     width: 100%;
-    padding: 60px 24px 40px;
+    padding: 60px 0px 40px;
     text-align: center;
     overflow: hidden;
     background: var(--bg-primary);
