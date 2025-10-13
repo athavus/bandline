@@ -12,6 +12,7 @@
   import AuthModal from "./components/AuthModal.svelte";
   import ArtistHeaderBar from "./components/ArtistHeaderBar.svelte";
   import WelcomeSection from "./components/WelcomeSection.svelte";
+  import BrandTitle from "./components/BrandTitle.svelte";
   import { searchArtists, getArtistData } from "./lib/data.ts";
   import { auth } from "./lib/stores/auth.ts";
   import type { SearchArtistResult, SpotifyArtist } from "./types/artist";
@@ -204,6 +205,8 @@
     {/if}
   </header>
 
+  <BrandTitle />
+
   <div class="search-container">
     <SearchInput
       bind:value={query}
@@ -220,13 +223,22 @@
 
   {#if !authState.isAuthenticated}
     <WelcomeSection
-      onLogin={() => { showAuthModal = true; authMode = "login"; }}
-      onRegister={() => { showAuthModal = true; authMode = "register"; }}
+      onLogin={() => {
+        showAuthModal = true;
+        authMode = "login";
+      }}
+      onRegister={() => {
+        showAuthModal = true;
+        authMode = "register";
+      }}
     />
   {:else if loading}
     <Loading message="Carregando dados do artista..." />
   {:else if selectedArtist}
-    <ArtistHeaderBar name={selectedArtist.name} onDetailsClick={openDetailsModal} />
+    <ArtistHeaderBar
+      name={selectedArtist.name}
+      onDetailsClick={openDetailsModal}
+    />
     <Timeline artistId={selectedArtist.id} on:back={handleBackToArtist} />
     <Modal
       class="modal-artist-details"
@@ -344,164 +356,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 24px;
-  }
-
-  .welcome-section {
-    text-align: center;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 40px 24px;
-    background: var(--bg-card);
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .welcome-section h2 {
-    color: var(--text-primary);
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin: 0 0 20px 0;
-  }
-
-  .welcome-section p {
-    color: var(--text-secondary);
-    font-family: var(--font-primary);
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin: 0 0 32px 0;
-  }
-
-  .welcome-buttons {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .primary-btn,
-  .secondary-btn {
-    padding: 14px 32px;
-    border-radius: 8px;
-    font-family: var(--font-primary);
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid;
-  }
-
-  .primary-btn {
-    background: var(--accent-color);
-    border-color: var(--accent-color);
-    color: white;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .primary-btn:hover {
-    background: var(--accent-hover);
-    border-color: var(--accent-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-
-  .secondary-btn {
-    background: transparent;
-    border-color: var(--border-color);
-    color: var(--text-primary);
-  }
-
-  .secondary-btn:hover {
-    border-color: var(--accent-color);
-    background: var(--bg-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .artist-header-bar {
-    background: var(--bg-primary);
-    padding: 24px 24px 0 24px;
-    margin: 0;
-  }
-
-  .artist-header-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    padding-bottom: 20px;
-    border-bottom: 2px solid transparent;
-    border-image: linear-gradient(90deg, transparent 0%, var(--accent-color) 50%, transparent 100%) 1;
-    border-width: 0 0 2px 0;
-    border-style: solid;
-  }
-
-  .artist-name {
-    margin: 0;
-    color: var(--text-primary);
-    font-family: var(--font-heading);
-    font-size: 1.6rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-color) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .details-btn-compact {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
-    background: var(--gradient-primary);
-    border: none;
-    border-radius: 24px;
-    color: white;
-    cursor: pointer;
-    font-family: var(--font-primary);
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .details-btn-compact::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s ease;
-  }
-
-  .details-btn-compact:hover::before {
-    left: 100%;
-  }
-
-  .details-btn-compact:hover {
-    background: var(--gradient-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.4);
-  }
-
-  .details-btn-compact:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.3);
-  }
-
-  .details-btn-compact svg {
-    flex-shrink: 0;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+    padding: 20px 24px 40px;
   }
 
   @media (max-width: 768px) {
@@ -523,53 +378,7 @@
     }
 
     .search-container {
-      padding: 30px 20px;
-    }
-
-    .welcome-section {
-      margin: 30px 20px;
-      padding: 30px 20px;
-      border-radius: 12px;
-    }
-
-    .welcome-section h2 {
-      font-size: 2rem;
-    }
-
-    .welcome-section p {
-      font-size: 1rem;
-    }
-
-    .welcome-buttons {
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .primary-btn,
-    .secondary-btn {
-      width: 100%;
-      max-width: 280px;
-      padding: 12px 24px;
-    }
-
-    .artist-header-bar {
-      padding: 20px 0 0 20px;
-    }
-
-    .artist-header-container {
-      gap: 14px;
-      padding-bottom: 16px;
-    }
-
-    .artist-name {
-      font-size: 1.4rem;
-    }
-
-    .details-btn-compact {
-      padding: 10px 20px;
-      font-size: 0.85rem;
-      gap: 8px;
+      padding: 16px 20px 30px;
     }
   }
 
@@ -578,47 +387,8 @@
       padding: 12px 16px;
     }
 
-    .welcome-section {
-      margin: 20px 16px;
-      padding: 24px 16px;
-    }
-
-    .welcome-section h2 {
-      font-size: 1.8rem;
-    }
-
-    .welcome-section p {
-      font-size: 0.95rem;
-    }
-
-    .primary-btn,
-    .secondary-btn {
-      padding: 12px 20px;
-      font-size: 0.9rem;
-    }
-
     .search-container {
-      padding: 24px 16px;
-    }
-
-    .artist-header-bar {
-      padding: 16px 0 0 16px;
-    }
-
-    .artist-header-container {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 14px;
-      padding-bottom: 14px;
-    }
-
-    .artist-name {
-      font-size: 1.3rem;
-    }
-
-    .details-btn-compact {
-      padding: 10px 20px;
-      font-size: 0.85rem;
+      padding: 12px 16px 24px;
     }
   }
 </style>

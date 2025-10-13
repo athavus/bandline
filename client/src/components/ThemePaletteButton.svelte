@@ -1,25 +1,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  type Palette = {
-    name: string;
-    accent: string;
-    hover: string;
-    dark: string;
-  };
-
+  type Palette = { accent: string; hover: string; dark: string };
 
   const palettes: Palette[] = [
     { accent: "#1db954", hover: "#1ed760", dark: "#0d8040" },
+    { accent: "#ef4444", hover: "#f87171", dark: "#b91c1c" },
     { accent: "#7c3aed", hover: "#8b5cf6", dark: "#5b21b6" },
     { accent: "#ef44cc", hover: "#f472b6", dark: "#9d174d" },
     { accent: "#38bdf8", hover: "#60a5fa", dark: "#0369a1" },
     { accent: "#1e40af", hover: "#2563eb", dark: "#1e3a8a" },
     { accent: "#f97316", hover: "#fb923c", dark: "#c2410c" },
     { accent: "#eab308", hover: "#facc15", dark: "#a16207" },
-    { accent: "#6b7280", hover: "#9ca3af", dark: "#374151" }
+    { accent: "#6b7280", hover: "#9ca3af", dark: "#374151" },
   ];
-
 
   let open = false;
   let currentAccent = "#1db954";
@@ -33,7 +27,10 @@
         currentAccent = accent;
       } catch {}
     } else {
-      currentAccent = getComputedStyle(document.documentElement).getPropertyValue("--accent-color").trim() || "#1db954";
+      currentAccent =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--accent-color")
+          .trim() || "#1db954";
     }
   });
 
@@ -46,14 +43,28 @@
     // keep rgb in sync for effects
     const { r, g, b } = hexToRgb(accent);
     root.style.setProperty("--accent-rgb", `${r}, ${g}, ${b}`);
-    root.style.setProperty("--gradient-primary", `linear-gradient(135deg, ${accent} 0%, ${hover} 100%)`);
+    root.style.setProperty(
+      "--gradient-primary",
+      `linear-gradient(135deg, ${accent} 0%, ${hover} 100%)`,
+    );
 
-    localStorage.setItem("accentPalette", JSON.stringify({ accent, hover, dark }));
+    localStorage.setItem(
+      "accentPalette",
+      JSON.stringify({ accent, hover, dark }),
+    );
   }
 
   function hexToRgb(hex: string) {
     const str = hex.replace("#", "");
-    const bigint = parseInt(str.length === 3 ? str.split("").map(h=>h+h).join("") : str, 16);
+    const bigint = parseInt(
+      str.length === 3
+        ? str
+            .split("")
+            .map((h) => h + h)
+            .join("")
+        : str,
+      16,
+    );
     const r = (bigint >> 16) & 255;
     const g = (bigint >> 8) & 255;
     const b = bigint & 255;
@@ -68,23 +79,36 @@
 </script>
 
 <div class="palette-wrapper">
-  <button class="palette-toggle" on:click={() => (open = !open)} aria-haspopup="true" aria-expanded={open} title="Mudar cor do tema">
+  <button
+    class="palette-toggle"
+    on:click={() => (open = !open)}
+    aria-haspopup="true"
+    aria-expanded={open}
+    title="Mudar cor do tema"
+  >
     <span class="swatch" style={`background: ${currentAccent}`}></span>
   </button>
   {#if open}
     <div class="palette-popover" role="menu">
       {#each palettes as p}
-        <button class="palette-option" role="menuitem" on:click={() => selectPalette(p)} title={p.name}>
+        <button
+          class="palette-option"
+          role="menuitem"
+          on:click={() => selectPalette(p)}
+          title="palette"
+        >
           <span class="swatch" style={`background: ${p.accent}`}></span>
         </button>
       {/each}
     </div>
   {/if}
   <div class="backdrop" on:click={() => (open = false)} class:show={open}></div>
-  </div>
+</div>
 
 <style>
-  .palette-wrapper { position: relative; }
+  .palette-wrapper {
+    position: relative;
+  }
 
   .palette-toggle {
     width: 40px;
@@ -100,10 +124,21 @@
     box-shadow: var(--theme-toggle-shadow);
   }
 
-  .palette-toggle:hover { transform: scale(1.05); box-shadow: var(--theme-toggle-shadow-hover); border-color: var(--accent-color); }
-  .palette-toggle:active { transform: scale(0.95); }
+  .palette-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: var(--theme-toggle-shadow-hover);
+    border-color: var(--accent-color);
+  }
+  .palette-toggle:active {
+    transform: scale(0.95);
+  }
 
-  .swatch { width: 20px; height: 20px; border-radius: 4px; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.1); }
+  .swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.1);
+  }
 
   .palette-popover {
     position: absolute;
@@ -114,11 +149,11 @@
     border-radius: 10px;
     padding: 8px;
     display: grid;
-    grid-auto-flow: column;       /* Extende as opções na horizontal */
+    grid-auto-flow: column; /* Extende as opções na horizontal */
     gap: 6px;
     box-shadow: var(--shadow-lg);
     z-index: 20;
-    max-width: max-content;       /* Ajusta a largura para o conteúdo */
+    max-width: max-content; /* Ajusta a largura para o conteúdo */
   }
 
   .palette-option {
@@ -135,12 +170,22 @@
     height: 40px;
   }
 
-  .palette-option:hover { border-color: var(--accent-color); background: var(--bg-hover); transform: translateY(-1px); }
+  .palette-option:hover {
+    border-color: var(--accent-color);
+    background: var(--bg-hover);
+    transform: translateY(-1px);
+  }
 
-  .label { white-space: nowrap; }
+  .label {
+    white-space: nowrap;
+  }
 
-  .backdrop { position: fixed; inset: 0; display: none; }
-  .backdrop.show { display: block; }
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    display: none;
+  }
+  .backdrop.show {
+    display: block;
+  }
 </style>
-
-
