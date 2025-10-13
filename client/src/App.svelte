@@ -164,7 +164,6 @@
       <ThemeButton />
     </div>
 
-    <!-- Indicador de usuário logado -->
     {#if authState.isAuthenticated}
       <div class="user-indicator">
         <span class="user-welcome"
@@ -216,7 +215,6 @@
     <ArtistList {artists} show={showOverlay} on:select={handleSelectArtist} />
   </div>
 
-  <!-- Mensagem de boas-vindas para usuários não autenticados -->
   {#if !authState.isAuthenticated}
     <div class="welcome-section">
       <h2>Descubra seus artistas favoritos</h2>
@@ -248,20 +246,31 @@
   {:else if loading}
     <Loading message="Carregando dados do artista..." />
   {:else if selectedArtist}
-    <div class="actions">
-      <button class="details-btn" on:click={openDetailsModal}>
-        <svg width="20" height="20" viewBox="0 0 512 512">
-          <g fill="currentColor">
+    <div class="artist-header-bar">
+      <div class="artist-header-container">
+        <h2 class="artist-name">{selectedArtist.name}</h2>
+        <button class="details-btn-compact" on:click={openDetailsModal}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
             <path
-              d="M426.666667,1.42108547e-14 L426.666667,341.333333 L3.55271368e-14,341.333333 L3.55271368e-14,1.42108547e-14 L426.666667,1.42108547e-14 Z M384,42.6666667 L42.6666667,42.6666667 L42.6666667,298.666667 L384,298.666667 L384,42.6666667 Z M341.333333,213.333333 L341.333333,245.333333 L234.666667,245.333333 L234.666667,213.333333 L341.333333,213.333333 Z M341.333333,149.333333 L341.333333,181.333333 L234.666667,181.333333 L234.666667,149.333333 L341.333333,149.333333 Z M192,85.3333333 L192,170.666667 L85.3333333,170.666667 L85.3333333,85.3333333 L192,85.3333333 Z M341.333333,85.3333333 L341.333333,117.333333 L234.666667,117.333333 L234.666667,85.3333333 L341.333333,85.3333333 Z"
-              transform="translate(42.666667, 85.333333)"
-            ></path>
-          </g>
-        </svg>
-        Detalhes do Artista
-      </button>
-      <Timeline artistId={selectedArtist.id} on:back={handleBackToArtist} />
+              d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <polyline
+              points="13 2 13 9 20 9"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Detalhes do Artista
+        </button>
+      </div>
     </div>
+    <Timeline artistId={selectedArtist.id} on:back={handleBackToArtist} />
     <Modal
       class="modal-artist-details"
       open={showModal}
@@ -275,7 +284,6 @@
   {/if}
 </main>
 
-<!-- Modal de Autenticação -->
 <AuthModal
   bind:open={showAuthModal}
   bind:mode={authMode}
@@ -455,44 +463,88 @@
     box-shadow: var(--shadow-sm);
   }
 
-  .actions {
-    margin-top: 20px;
-    text-align: center;
-    padding: 0 24px;
+  .artist-header-bar {
+    background: var(--bg-primary);
+    padding: 24px 24px 0 24px;
+    margin: 0;
   }
 
-  .details-btn {
+  .artist-header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(90deg, transparent 0%, var(--accent-color) 50%, transparent 100%) 1;
+    border-width: 0 0 2px 0;
+    border-style: solid;
+  }
+
+  .artist-name {
+    margin: 0;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .details-btn-compact {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px 28px;
-    background: var(--accent-color);
+    gap: 10px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
     border: none;
-    border-radius: 8px;
+    border-radius: 24px;
     color: white;
     cursor: pointer;
     font-family: var(--font-primary);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
     transition: all 0.3s ease;
-    margin: 20px 0px 0px 0px;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
   }
 
-  .details-btn:hover {
-    background: var(--accent-hover);
+  .details-btn-compact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .details-btn-compact:hover::before {
+    left: 100%;
+  }
+
+  .details-btn-compact:hover {
+    background: linear-gradient(135deg, #1ed760 0%, #1db954 100%);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
   }
 
-  .details-btn svg {
-    width: 20px;
-    height: 20px;
-    transition: transform 0.3s ease;
+  .details-btn-compact:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);
   }
 
-  .details-btn:hover svg {
-    transform: scale(1.1);
+  .details-btn-compact svg {
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
   }
 
   @media (max-width: 768px) {
@@ -544,13 +596,23 @@
       padding: 12px 24px;
     }
 
-    .details-btn {
-      padding: 14px 24px;
-      font-size: 0.9rem;
+    .artist-header-bar {
+      padding: 20px 0 0 20px;
     }
 
-    .actions {
-      padding: 0 20px;
+    .artist-header-container {
+      gap: 14px;
+      padding-bottom: 16px;
+    }
+
+    .artist-name {
+      font-size: 1.4rem;
+    }
+
+    .details-btn-compact {
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      gap: 8px;
     }
   }
 
@@ -582,8 +644,24 @@
       padding: 24px 16px;
     }
 
-    .actions {
-      padding: 0 16px;
+    .artist-header-bar {
+      padding: 16px 0 0 16px;
+    }
+
+    .artist-header-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      padding-bottom: 14px;
+    }
+
+    .artist-name {
+      font-size: 1.3rem;
+    }
+
+    .details-btn-compact {
+      padding: 10px 20px;
+      font-size: 0.85rem;
     }
   }
 </style>
