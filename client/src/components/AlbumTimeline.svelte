@@ -6,6 +6,7 @@
   import TracksPanel from './TracksPanel.svelte';
   import LoadingSpinner from './LoadingSpinner.svelte';
   import NavigationButton from './NavigationButton.svelte';
+  import BrandSubtitle from './BrandSubtitle.svelte';
 
   export let artistId: string = '';
 
@@ -91,6 +92,7 @@
   </div>
 {:else if albums?.items?.length}
   <div class="timeline-container">
+    <BrandSubtitle firstWord="Disco" secondWord="grafia" />
     <div class="timeline-wrapper">
       <NavigationButton
         direction="prev"

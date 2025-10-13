@@ -87,7 +87,7 @@
     gap: 40px;
     align-items: start;
     max-width: 1400px;
-    margin: 40px auto;
+    margin: 40px 40px 40px 120px;
     padding: 0 20px;
   }
 

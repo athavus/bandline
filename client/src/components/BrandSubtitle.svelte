@@ -1,0 +1,177 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+
+  let mounted = false;
+  export let firstWord: string = "Band";
+  export let secondWord: string = "line";
+  export let inline: boolean = false;
+  
+  onMount(() => {
+    mounted = true;
+  });
+</script>
+
+<div class="brand-subtitle" class:inline class:mounted>
+  <div class="subtitle-container" class:inline>
+    <h2 class="subtitle">
+      <span class="subtitle-first">{firstWord}</span><span class="subtitle-second">{secondWord}</span>
+    </h2>
+  </div>
+</div>
+
+<style>
+  .brand-subtitle {
+    position: relative;
+    width: 100%;
+    padding: 32px 0px 20px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .subtitle-container {
+    display: block;
+  }
+
+  .subtitle-container.inline {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .brand-subtitle.inline {
+    padding: 0 !important;
+    min-width: 0;
+  }
+
+  .brand-subtitle.inline .subtitle-container {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
+    opacity: 1;
+    transform: none;
+  }
+
+  .brand-subtitle.inline .subtitle {
+    font-size: 1.1rem !important;
+    margin: 0 !important;
+  }
+
+  .brand-subtitle.inline .subtitle-first,
+  .brand-subtitle.inline .subtitle-second {
+    font-size: 1.1rem !important;
+  }
+
+  .brand-subtitle.inline .subtitle-first::after {
+    display: none !important;
+  }
+
+  .subtitle {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    display: inline-block;
+    position: relative;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .subtitle-first {
+    color: var(--text-primary);
+    position: relative;
+  }
+
+  .subtitle-first::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--accent-color),
+      var(--accent-hover)
+    );
+    border-radius: 2px;
+    animation: expandLine 1s ease-out 0.5s forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .subtitle-second {
+    background: linear-gradient(
+      135deg,
+      var(--accent-color) 0%,
+      var(--accent-hover) 50%,
+      var(--accent-color) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+    text-shadow: 0 0 30px rgba(var(--accent-rgb), 0.2);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes expandLine {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes gradientShift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .brand-subtitle {
+      padding: 28px 0px 16px;
+    }
+
+    .subtitle {
+      font-size: 2rem;
+    }
+
+    .subtitle-first::after {
+      height: 2.5px;
+      bottom: 3px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .brand-subtitle {
+      padding: 24px 0px 12px;
+    }
+
+    .subtitle {
+      font-size: 1.75rem;
+    }
+
+    .subtitle-first::after {
+      height: 2px;
+      bottom: 2px;
+    }
+  }
+</style>
