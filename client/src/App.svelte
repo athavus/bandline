@@ -204,11 +204,7 @@
       </div>
     {/if}
   </header>
-
-  {#if !selectedArtist && !loading}
-    <BrandTitle />
-  {/if}
-
+  <BrandTitle />
   <div class="search-container">
     <SearchInput
       bind:value={query}
@@ -271,10 +267,15 @@
     background: var(--bg-primary);
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   main.sidebar-open {
     margin-left: 280px;
+    width: calc(100% - 280px);
+    max-width: calc(100vw - 280px);
   }
 
   .app-header {
