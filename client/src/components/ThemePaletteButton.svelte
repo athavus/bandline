@@ -8,12 +8,18 @@
     dark: string;
   };
 
+
   const palettes: Palette[] = [
-    { name: "Verde", accent: "#1db954", hover: "#1ed760", dark: "#0d8040" },
-    { name: "Roxo", accent: "#7c3aed", hover: "#8b5cf6", dark: "#5b21b6" },
-    { name: "Vermelho", accent: "#ef4444", hover: "#f87171", dark: "#b91c1c" },
-    { name: "Azul Claro", accent: "#06b6d4", hover: "#22d3ee", dark: "#0e7490" }
+    { accent: "#1db954", hover: "#1ed760", dark: "#0d8040" },
+    { accent: "#7c3aed", hover: "#8b5cf6", dark: "#5b21b6" },
+    { accent: "#ef44cc", hover: "#f472b6", dark: "#9d174d" },
+    { accent: "#38bdf8", hover: "#60a5fa", dark: "#0369a1" },
+    { accent: "#1e40af", hover: "#2563eb", dark: "#1e3a8a" },
+    { accent: "#f97316", hover: "#fb923c", dark: "#c2410c" },
+    { accent: "#eab308", hover: "#facc15", dark: "#a16207" },
+    { accent: "#6b7280", hover: "#9ca3af", dark: "#374151" }
   ];
+
 
   let open = false;
   let currentAccent = "#1db954";
@@ -70,7 +76,6 @@
       {#each palettes as p}
         <button class="palette-option" role="menuitem" on:click={() => selectPalette(p)} title={p.name}>
           <span class="swatch" style={`background: ${p.accent}`}></span>
-          <span class="label">{p.name}</span>
         </button>
       {/each}
     </div>
@@ -98,7 +103,7 @@
   .palette-toggle:hover { transform: scale(1.05); box-shadow: var(--theme-toggle-shadow-hover); border-color: var(--accent-color); }
   .palette-toggle:active { transform: scale(0.95); }
 
-  .swatch { width: 18px; height: 18px; border-radius: 4px; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.1); }
+  .swatch { width: 20px; height: 20px; border-radius: 4px; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.1); }
 
   .palette-popover {
     position: absolute;
@@ -109,25 +114,25 @@
     border-radius: 10px;
     padding: 8px;
     display: grid;
-    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    grid-auto-flow: column;       /* Extende as opções na horizontal */
     gap: 6px;
     box-shadow: var(--shadow-lg);
     z-index: 20;
+    max-width: max-content;       /* Ajusta a largura para o conteúdo */
   }
 
   .palette-option {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
+    justify-content: center;
+    padding: 8px;
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    color: var(--text-primary);
-    font-family: var(--font-primary);
-    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    width: 40px;
+    height: 40px;
   }
 
   .palette-option:hover { border-color: var(--accent-color); background: var(--bg-hover); transform: translateY(-1px); }
