@@ -32,7 +32,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgba(30, 215, 96, 0.95);
+    background: rgba(var(--accent-rgb), 0.95);
     border: none;
     color: #000;
     display: flex;
@@ -67,7 +67,7 @@
   }
 
   .spotify-btn:hover {
-    background: rgb(30, 215, 96);
+    background: var(--accent-color);
     transform: scale(1.1);
   }
 

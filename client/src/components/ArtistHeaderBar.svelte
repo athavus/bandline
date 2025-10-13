@@ -55,7 +55,7 @@
     align-items: center;
     gap: 10px;
     padding: 12px 24px;
-    background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+    background: var(--gradient-primary);
     border: none;
     border-radius: 24px;
     color: white;
@@ -84,9 +84,9 @@
   .details-btn-compact:hover::before { left: 100%; }
 
   .details-btn-compact:hover {
-    background: linear-gradient(135deg, #1ed760 0%, #1db954 100%);
+    background: var(--gradient-primary);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+    box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.4);
   }
 
   .details-btn-compact:active {

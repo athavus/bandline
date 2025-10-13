@@ -6,6 +6,7 @@
   import Timeline from "./components/Timeline.svelte";
   import Loading from "./components/Loading.svelte";
   import ThemeButton from "./components/ThemeButton.svelte";
+  import ThemePaletteButton from "./components/ThemePaletteButton.svelte";
   import Modal from "./components/Modal.svelte";
   import Sidebar from "./components/Sidebar.svelte";
   import AuthModal from "./components/AuthModal.svelte";
@@ -163,6 +164,7 @@
         </button>
       {/if}
       <ThemeButton />
+      <ThemePaletteButton />
     </div>
 
     {#if authState.isAuthenticated}
@@ -456,7 +458,7 @@
     align-items: center;
     gap: 10px;
     padding: 12px 24px;
-    background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+    background: var(--gradient-primary);
     border: none;
     border-radius: 24px;
     color: white;
@@ -465,7 +467,7 @@
     font-size: 0.9rem;
     font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
     white-space: nowrap;
     position: relative;
     overflow: hidden;
@@ -487,14 +489,14 @@
   }
 
   .details-btn-compact:hover {
-    background: linear-gradient(135deg, #1ed760 0%, #1db954 100%);
+    background: var(--gradient-primary);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+    box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.4);
   }
 
   .details-btn-compact:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.3);
   }
 
   .details-btn-compact svg {

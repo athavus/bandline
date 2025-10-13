@@ -150,7 +150,7 @@
 
   .spotify-button-wrapper {
     position: absolute;
-    bottom: 12px;
+    bottom: 20px;
     right: 12px;
     z-index: 10;
   }

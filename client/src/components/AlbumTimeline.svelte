@@ -64,7 +64,7 @@
   }
 
   function getTimelineX(i: number) {
-    return 200 + i * 300;
+    return 200 + i * 350;
   }
 
   function getTotalWidth() {
@@ -81,7 +81,9 @@
 </script>
 
 {#if loading}
-  <LoadingSpinner text="Carregando discografia..." />
+  <div class="disco-loading">
+    <LoadingSpinner text="Carregando discografia..." />
+  </div>
 {:else if error}
   <div class="error">
     <p>❌ Erro ao carregar discografia: {error}</p>
@@ -187,9 +189,9 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, rgba(29,185,84,0.2), var(--accent-color), rgba(29,185,84,0.2));
+    background: linear-gradient(90deg, rgba(var(--accent-rgb),0.2), var(--accent-color), rgba(var(--accent-rgb),0.2));
     border-radius: 3px;
-    box-shadow: 0 0 0 1px rgba(29,185,84,0.15), 0 6px 22px rgba(29,185,84,0.25);
+    box-shadow: 0 0 0 1px rgba(var(--accent-rgb),0.15), 0 6px 22px rgba(var(--accent-rgb),0.25);
     z-index: 0;
   }
 
@@ -212,21 +214,25 @@
     background: var(--bg-primary);
     border: 3px solid var(--accent-color);
     transform: translateX(-50%);
-    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.18);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.18);
   }
 
   .timeline-dot.active {
     width: 16px;
     height: 16px;
     background: var(--accent-color);
-    box-shadow: 0 0 0 6px rgba(29, 185, 84, 0.18), 0 0 18px rgba(29, 185, 84, 0.55);
+    box-shadow: 0 0 0 6px rgba(var(--accent-rgb), 0.18), 0 0 18px rgba(var(--accent-rgb), 0.55);
     animation: dot-pulse 1.8s ease-out infinite;
   }
 
   @keyframes dot-pulse {
-    0% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 6px rgba(29,185,84,0.18), 0 0 18px rgba(29,185,84,0.55); }
-    60% { transform: translateX(-50%) scale(1.05); box-shadow: 0 0 0 10px rgba(29,185,84,0.12), 0 0 28px rgba(29,185,84,0.45); }
-    100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 6px rgba(29,185,84,0.18), 0 0 18px rgba(29,185,84,0.55); }
+    0% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 6px rgba(var(--accent-rgb),0.18), 0 0 18px rgba(var(--accent-rgb),0.55); }
+    60% { transform: translateX(-50%) scale(1.05); box-shadow: 0 0 0 10px rgba(var(--accent-rgb),0.12), 0 0 28px rgba(var(--accent-rgb),0.45); }
+    100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 6px rgba(var(--accent-rgb),0.18), 0 0 18px rgba(var(--accent-rgb),0.55); }
+  }
+
+  .disco-loading {
+    margin-top: 40px;
   }
 
   .error {
