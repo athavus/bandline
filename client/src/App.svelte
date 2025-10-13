@@ -9,6 +9,8 @@
   import Modal from "./components/Modal.svelte";
   import Sidebar from "./components/Sidebar.svelte";
   import AuthModal from "./components/AuthModal.svelte";
+  import ArtistHeaderBar from "./components/ArtistHeaderBar.svelte";
+  import WelcomeSection from "./components/WelcomeSection.svelte";
   import { searchArtists, getArtistData } from "./lib/data.ts";
   import { auth } from "./lib/stores/auth.ts";
   import type { SearchArtistResult, SpotifyArtist } from "./types/artist";
@@ -124,7 +126,6 @@
     }
 
     sidebarOpen = false;
-    console.log("Ação da sidebar:", action);
   }
 
   function handleAuthModalClose() {
@@ -216,60 +217,14 @@
   </div>
 
   {#if !authState.isAuthenticated}
-    <div class="welcome-section">
-      <h2>Descubra seus artistas favoritos</h2>
-      <p>
-        Faça login ou crie uma conta para acessar nossa plataforma de descoberta
-        musical
-      </p>
-      <div class="welcome-buttons">
-        <button
-          class="primary-btn"
-          on:click={() => {
-            showAuthModal = true;
-            authMode = "login";
-          }}
-        >
-          Fazer Login
-        </button>
-        <button
-          class="secondary-btn"
-          on:click={() => {
-            showAuthModal = true;
-            authMode = "register";
-          }}
-        >
-          Criar Conta
-        </button>
-      </div>
-    </div>
+    <WelcomeSection
+      onLogin={() => { showAuthModal = true; authMode = "login"; }}
+      onRegister={() => { showAuthModal = true; authMode = "register"; }}
+    />
   {:else if loading}
     <Loading message="Carregando dados do artista..." />
   {:else if selectedArtist}
-    <div class="artist-header-bar">
-      <div class="artist-header-container">
-        <h2 class="artist-name">{selectedArtist.name}</h2>
-        <button class="details-btn-compact" on:click={openDetailsModal}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <polyline
-              points="13 2 13 9 20 9"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          Detalhes do Artista
-        </button>
-      </div>
-    </div>
+    <ArtistHeaderBar name={selectedArtist.name} onDetailsClick={openDetailsModal} />
     <Timeline artistId={selectedArtist.id} on:back={handleBackToArtist} />
     <Modal
       class="modal-artist-details"

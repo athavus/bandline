@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  // removed unused dispatcher
   import type { SpotifyAlbums } from '../types/album.ts';
   import type { SpotifyAlbumTracks } from '../types/tracks.ts';
   import AlbumCard from './AlbumCard.svelte';
@@ -17,7 +17,7 @@
   let error: string | null = null;
   let sliderElement: HTMLElement;
 
-  const dispatch = createEventDispatcher();
+  // no dispatch usage
 
   function scroll(amount: number) {
     sliderElement?.scrollBy({ left: amount, behavior: 'smooth' });
@@ -28,6 +28,7 @@
     loading = true;
     error = null;
     albums = null;
+    selectedAlbum = null; // Reset selected album
     try {
       const res = await fetch(`http://localhost:3000/artistAlbums/${artistId}`);
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -70,6 +71,12 @@
     return albums?.items ? getTimelineX(albums.items.length - 1) + 200 : 0;
   }
 
+
+  $: if (albums?.items && albums.items.length > 0 && !selectedAlbum) {
+    selectedAlbum = albums.items[0];
+    loadAlbumTracks(selectedAlbum.id);
+  }
+
   $: artistId && loadAlbums();
 </script>
 
@@ -91,6 +98,14 @@
       
       <div class="timeline-slider" bind:this={sliderElement}>
         <div class="timeline-track" style="width: {getTotalWidth()}px">
+          <div class="timeline-dots">
+            {#each albums.items as _album, i}
+              <span
+                class="timeline-dot {selectedAlbum?.id === _album.id ? 'active' : ''}"
+                style="left: {getTimelineX(i)}px"
+              ></span>
+            {/each}
+          </div>
           {#each albums.items as album, i (album.id)}
             <AlbumCard
               {album}
@@ -150,7 +165,7 @@
     overflow-x: auto;
     overflow-y: visible;
     scroll-behavior: smooth;
-    padding: 80px 0;
+    padding: 100px 0; /* more headroom for line and cards */
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -159,41 +174,59 @@
 
   .timeline-track {
     position: relative;
-    height: 300px;
-    margin-top: 20px;
-    z-index: 2;
+    height: 340px;
+    margin-top: 0;
+    z-index: 2; /* dots above line, cards above dots */
   }
 
   /* Timeline line */
   .timeline-track::before {
     content: '';
     position: absolute;
-    top: 85px;
+    top: 120px; /* baseline for the line */
     left: 0;
     right: 0;
-    height: 3px;
-    background: var(--accent-color);
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);
+    height: 4px;
+    background: linear-gradient(90deg, rgba(29,185,84,0.2), var(--accent-color), rgba(29,185,84,0.2));
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(29,185,84,0.15), 0 6px 22px rgba(29,185,84,0.25);
+    z-index: 0;
+  }
+
+  /* Explicit timeline dots aligned to albums */
+  .timeline-dots {
+    position: absolute;
+    top: 114px; /* centers dot on 120px line */
+    left: 0;
+    right: 0;
+    height: 24px;
+    pointer-events: none;
     z-index: 1;
   }
 
-  /* Timeline dots */
-  .timeline-track::after {
-    content: '';
+  .timeline-dot {
     position: absolute;
-    top: 78px;
-    left: 0;
-    right: 0;
-    height: 17px;
-    background: repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      transparent 298px,
-      var(--accent-color) 300px,
-      var(--accent-color) 302px
-    );
-    z-index: 2;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    border: 3px solid var(--accent-color);
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.18);
+  }
+
+  .timeline-dot.active {
+    width: 16px;
+    height: 16px;
+    background: var(--accent-color);
+    box-shadow: 0 0 0 6px rgba(29, 185, 84, 0.18), 0 0 18px rgba(29, 185, 84, 0.55);
+    animation: dot-pulse 1.8s ease-out infinite;
+  }
+
+  @keyframes dot-pulse {
+    0% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 6px rgba(29,185,84,0.18), 0 0 18px rgba(29,185,84,0.55); }
+    60% { transform: translateX(-50%) scale(1.05); box-shadow: 0 0 0 10px rgba(29,185,84,0.12), 0 0 28px rgba(29,185,84,0.45); }
+    100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 6px rgba(29,185,84,0.18), 0 0 18px rgba(29,185,84,0.55); }
   }
 
   .error {
