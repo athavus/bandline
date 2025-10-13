@@ -23,12 +23,26 @@
 <aside class="sidebar" class:open>
   <div class="sidebar-header">
     <div class="sidebar-logo">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
-        <path d="M12 1v6m0 6v6" stroke="currentColor" stroke-width="2" />
-        <path d="M21 12h-6m-6 0H3" stroke="currentColor" stroke-width="2" />
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        class="logo-icon"
+      >
+        <path
+          d="M9 18V5l12-2v13"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2" />
+        <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2" />
       </svg>
-      <span>BANDLINE</span>
+      <span class="logo-text">
+        <span class="logo-band">Band</span><span class="logo-line">line</span>
+      </span>
     </div>
     <button class="sidebar-close" on:click={() => (open = false)}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -387,13 +401,48 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    color: var(--text-primary);
-    font-weight: 600;
-    font-size: 1.1rem;
   }
 
-  .sidebar-logo svg {
-    color: var(--primary-color);
+  .logo-icon {
+    color: var(--accent-color);
+    filter: drop-shadow(0 2px 6px rgba(var(--accent-rgb), 0.4));
+    animation: iconPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes iconPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      filter: drop-shadow(0 2px 6px rgba(var(--accent-rgb), 0.4));
+    }
+    50% {
+      transform: scale(1.05);
+      filter: drop-shadow(0 3px 8px rgba(var(--accent-rgb), 0.6));
+    }
+  }
+
+  .logo-text {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .logo-band {
+    background: linear-gradient(
+      135deg,
+      var(--accent-color) 0%,
+      var(--accent-hover) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .logo-line {
+    color: var(--text-primary);
+    font-weight: 700;
   }
 
   .sidebar-close {

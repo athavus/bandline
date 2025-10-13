@@ -205,7 +205,9 @@
     {/if}
   </header>
 
-  <BrandTitle />
+  {#if !selectedArtist && !loading}
+    <BrandTitle />
+  {/if}
 
   <div class="search-container">
     <SearchInput
