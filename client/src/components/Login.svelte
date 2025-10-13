@@ -26,6 +26,7 @@
     
     if (result.success) {
       dispatch('loginSuccess');
+      
     } else {
       errorMessage = result.error || 'Erro no login';
     }
@@ -35,6 +36,7 @@
 
   function handleGoogleLogin() {
     auth.loginWithGoogle();
+    window.open("http://localhost:5173/");
   }
 
   function goToRegister() {

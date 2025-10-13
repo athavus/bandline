@@ -24,7 +24,7 @@
 <style>
   .overlay {
     position: absolute;
-    top: 100%;
+    top: 70%;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;

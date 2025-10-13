@@ -86,23 +86,9 @@ router.post('/logout', (req: Request, res: Response<AuthResponse>) => {
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/callback', passport.authenticate('google', {
-  failureRedirect: '/auth/login-failed',
-  successRedirect: '/auth/login-success'
-}));
-
-router.get('/login-success', (req, res: Response<AuthResponse>) => {
-  const u = req.user as any;
-  const publicUser: PublicUser = {
-    id: u.id,
-    username: u.username,
-    email: u.email,
-    avatarUrl: u.avatarUrl
-  };
-  return res.json({ message: 'Login OAuth2 bem-sucedido', user: publicUser });
+  failureRedirect: 'http://localhost:5173/login?error=oauth_failed'
+}), (req: Request, res: Response) => {
+  res.redirect('http://localhost:5173/');
 });
-
-router.get('/login-failed', (req, res: Response<{ error: string }>) =>
-  res.status(401).json({ error: 'Falha no login OAuth2' })
-);
 
 export default router;

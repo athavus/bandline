@@ -133,7 +133,7 @@
 
   function handleLoginSuccess() {
     showAuthModal = false;
-    // Se havia uma pesquisa pendente, executá-la após o login
+
     if (query) {
       handleInput();
     }
@@ -278,7 +278,7 @@
 <!-- Modal de Autenticação -->
 <AuthModal
   bind:open={showAuthModal}
-  {authMode}
+  bind:mode={authMode}
   on:close={handleAuthModalClose}
   on:loginSuccess={handleLoginSuccess}
 />

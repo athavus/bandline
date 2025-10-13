@@ -47,7 +47,6 @@
   }
 
   .search-input::placeholder {
-    color: var(--text-tertiary);
     opacity: 1;
     font-weight: 400;
   }

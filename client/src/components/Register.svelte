@@ -91,6 +91,7 @@
 
   function handleGoogleLogin() {
     auth.loginWithGoogle();
+    window.open("http://localhost:5173/");
   }
 
   function goToLogin() {
