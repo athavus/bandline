@@ -16,7 +16,8 @@ export interface SpotifyArtist {
   name: string,
   popularity: number,
   type: string,
-  uri: string
+  uri: string,
+  description?: string
 };
 
 export interface SearchArtistResult {

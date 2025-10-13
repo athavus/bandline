@@ -235,6 +235,7 @@
     <ArtistDetails
       artist={selectedArtist}
       on:showTimeline={handleShowTimeline}
+      on:selectRelatedArtist={handleSelectArtist}
     />
     <Timeline artistId={selectedArtist.id} on:back={handleBackToArtist} />
 

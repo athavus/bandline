@@ -1,7 +1,12 @@
 <script lang="ts">
   import type { SpotifyArtist } from "../types/artist.ts";
   import SpotifyButton from "./SpotifyButton.svelte";
+  import RelatedArtists from "./RelatedArtists.svelte";
+  import { createEventDispatcher } from "svelte";
+  
   export let artist: SpotifyArtist;
+
+  const dispatch = createEventDispatcher();
 
   function openArtistInSpotify(e: Event) {
     e.stopPropagation();
@@ -9,48 +14,86 @@
       window.open(`https://open.spotify.com/artist/${artist.id}`, "_blank");
     }
   }
+
+  function handleRelatedArtistSelect(event: CustomEvent) {
+    dispatch('selectRelatedArtist', event.detail);
+  }
 </script>
 
-<div class="artist-card">
-  <div class="artist-header">
-    <div class="artist-info">
-      <h2>{artist.name}</h2>
-      {#if artist.genres.length > 0}
-        <p class="genres">{artist.genres.join(" • ")}</p>
-      {/if}
-    </div>
-    <div class="artist-image-wrapper">
-      {#if artist.image}
-        <img src={artist.image} alt={artist.name} class="artist-image" />
-      {:else if artist.images && artist.images.length > 0}
-        <img src={artist.images[0].url} alt={artist.name} class="artist-image" />
-      {/if}
-      <SpotifyButton on:click={openArtistInSpotify} />
-    </div>
-    
-    <div class="info-grid-header">
-      <div class="info-item">
-        <span class="label">Popularidade</span>
-        <span class="value popularity">
-          <span class="bar" style="--progress: {artist.popularity}%"></span>
-          {artist.popularity}/100
-        </span>
+<div class="artist-layout">
+  <!-- Card principal do artista -->
+  <div class="artist-card">
+    <div class="artist-header">
+      <!-- Descrição esticada -->
+      <div class="description-section">
+        <h3 class="section-title">Sobre a Banda</h3>
+        <div class="description-content">
+          <p>{artist.description}</p>
+        </div>
       </div>
-      <div class="info-item">
-        <span class="label">Seguidores</span>
-        <span class="value">
-          {artist.total_followers?.toLocaleString("pt-BR") ?? "—"}
-        </span>
+
+      <!-- Informações do artista compactas -->
+      <div class="artist-info-section">
+        <div class="artist-info">
+          <h2>{artist.name}</h2>
+          {#if artist.genres.length > 0}
+            <p class="genres">{artist.genres.join(" • ")}</p>
+          {/if}
+        </div>
+        
+        <div class="artist-content">
+          <!-- Estatísticas à esquerda da imagem -->
+          <div class="info-stats">
+            <div class="info-item">
+              <span class="label">Seguidores</span>
+              <span class="value">
+                {artist.total_followers?.toLocaleString("pt-BR") ?? "—"}
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="label">Popularidade</span>
+              <span class="value popularity">
+                <span class="bar" style="--progress: {artist.popularity}%"></span>
+                {artist.popularity}/100
+              </span>
+            </div>
+          </div>
+          
+          <!-- Imagem à direita -->
+          <div class="artist-image-wrapper">
+            {#if artist.image}
+              <img src={artist.image} alt={artist.name} class="artist-image" />
+            {:else if artist.images && artist.images.length > 0}
+              <img src={artist.images[0].url} alt={artist.name} class="artist-image" />
+            {/if}
+            <SpotifyButton on:click={openArtistInSpotify} />
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Artistas relacionados -->
+  <RelatedArtists 
+    mainArtistId={artist.id} 
+    on:selectArtist={handleRelatedArtistSelect}
+  />
 </div>
 
 <style>
+  .artist-layout {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: start;
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
   .artist-card {
     width: 100%;
-    max-width: 760px;
-    margin: 40px auto;
+    max-width: 1000px;
     padding: 28px;
     border-radius: 16px;
     background: var(--bg-card);
@@ -61,18 +104,94 @@
 
   .artist-header {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 24px;
+    grid-template-columns: 2fr 1fr;
+    gap: 60px;
     align-items: stretch;
+    min-height: 300px;
+  }
+
+  .description-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    justify-content: flex-start;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    margin-bottom: 4px;
+  }
+
+  .description-content {
+    background: var(--bg-tertiary);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border-light);   
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .description-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+    text-align: justify;
+    width: 100%;
+  }
+
+  .artist-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  .artist-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: end;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .genres {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .artist-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .info-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
   }
 
   .artist-image-wrapper {
     position: relative;
-    width: 200px;
-    height: 100%;
-    min-height: 200px;
-    grid-column: 2;
-    grid-row: 1 / span 2;
+    width: 220px;
+    height: 220px;
+    flex-shrink: 0;
   }
 
   .artist-image {
@@ -82,28 +201,6 @@
     object-fit: cover;
     box-shadow: var(--shadow-md);
     transition: transform 0.3s ease;
-  }
-
-  .artist-info {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    text-align: right;
-  }
-
-  h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    text-align: right;
-  }
-
-  .genres {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    margin-bottom: 12px;
-    text-align: right;
   }
 
   .spotify-button {
@@ -123,28 +220,15 @@
     background: rgba(var(--accent-rgb), 0.8);
   }
 
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 16px;
-  }
-
-  .info-grid-header {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    grid-column: 1;
-  }
 
   .info-item {
     background: var(--bg-tertiary);
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 20px 24px;
     border: 1px solid var(--border-light);
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 10px;
   }
 
   .label {
@@ -207,6 +291,7 @@
     box-shadow: var(--shadow-lg);
   }
 
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -215,6 +300,114 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* Responsividade */
+  @media (max-width: 1024px) {
+    .artist-layout {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .artist-layout {
+      margin: 20px auto;
+      padding: 0 16px;
+      gap: 20px;
+    }
+
+    .artist-card {
+      padding: 20px;
+    }
+
+    .artist-header {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      min-height: auto;
+      align-items: start;
+    }
+
+    .artist-content {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .artist-info-section {
+      height: auto;
+      justify-content: flex-start;
+    }
+
+    .description-section {
+      height: auto;
+    }
+
+    .artist-info {
+      text-align: center;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .genres {
+      text-align: center;
+    }
+
+    .description-content {
+      padding: 14px;
+    }
+
+    .section-title {
+      font-size: 0.95rem;
+    }
+
+    .description-content p {
+      font-size: 0.85rem;
+    }
+
+    .artist-image-wrapper {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .artist-layout {
+      margin: 16px auto;
+      padding: 0 12px;
+    }
+
+    .artist-card {
+      padding: 16px;
+    }
+
+    .artist-header {
+      gap: 16px;
+    }
+
+    .artist-content {
+      gap: 12px;
+    }
+
+    .artist-image-wrapper {
+      width: 80px;
+      height: 80px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .description-content {
+      padding: 12px;
+    }
+
+    .description-content p {
+      font-size: 0.8rem;
     }
   }
 </style>
