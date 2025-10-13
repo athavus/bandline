@@ -2,18 +2,18 @@
   import { onMount } from "svelte";
 
   let mounted = false;
-
+  export let inline: boolean = false;
+  
   onMount(() => {
     mounted = true;
   });
 </script>
 
-<div class="brand-title" class:mounted>
-  <div class="title-container">
+<div class="brand-title" class:inline class:mounted>
+  <div class="title-container" class:inline>
     <h1 class="title">
       <span class="title-band">Band</span><span class="title-line">line</span>
     </h1>
-
     <div class="music-wave">
       <span class="wave-bar"></span>
       <span class="wave-bar"></span>
@@ -33,6 +33,11 @@
     text-align: center;
     overflow: hidden;
     background: var(--bg-primary);
+  }
+
+  .brand-title .music-wave {
+    margin-top: 10px; /* Centralizado, abaixo do título */
+    margin-left: 0;
   }
 
   .gradient-bg {
@@ -65,16 +70,96 @@
   }
 
   .title-container {
-    position: relative;
-    z-index: 1;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: block;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
   }
 
-  .brand-title.mounted .title-container {
+  .title-container.inline {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .brand-title.inline {
+    background: none !important;
+    box-shadow: none !important;
+    padding: 0 8px !important;
+    min-width: 0;
+  }
+
+  .brand-title.inline {
+    background: none !important;
+    box-shadow: none !important;
+    padding: 0 8px !important;
+    min-width: 0;
+  }
+
+  .brand-title.inline .title-container {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
+    text-align: left;
+  }
+
+  .brand-title.inline .title {
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+    line-height: 1.05;
+  }
+
+  .brand-title.inline .title-band,
+  .brand-title.inline .title-line {
+    /* Mantém o gradiente e o branco mesmo pequeno */
+    font-size: 1.25rem !important;
+    font-weight: 900 !important;
+    text-shadow: none;
+  }
+
+  .brand-title.inline .music-wave {
+    height: 14px;
+    gap: 2px;
+    margin-left: 8px !important;
+    margin-top: 0 !important;
+    opacity: 1;
+    animation: none;
+    top: -2px;
+    position: relative;
+  }
+
+  .brand-title.inline .wave-bar {
+    width: 2px;
+    border-radius: 1.5px;
+  }
+
+  .brand-title.inline .wave-bar:nth-child(1) {
+    height: 5px;
+  }
+
+  .brand-title.inline .wave-bar:nth-child(2) {
+    height: 9px;
+  }
+
+  .brand-title.inline .wave-bar:nth-child(3) {
+    height: 12px;
+  }
+
+  .brand-title.inline .wave-bar:nth-child(4) {
+    height: 7px;
+  }
+
+  .brand-title.inline .wave-bar:nth-child(5) {
+    height: 5px;
+  }
+
+  /* Remove linha animada do "line" para não entortar */
+  .brand-title.inline .title-line::after {
+    display: none !important;
   }
 
   .title {
