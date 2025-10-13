@@ -7,7 +7,6 @@
   import Loading from "./components/Loading.svelte";
   import ThemeButton from "./components/ThemeButton.svelte";
   import ThemePaletteButton from "./components/ThemePaletteButton.svelte";
-  import Modal from "./components/Modal.svelte";
   import Sidebar from "./components/Sidebar.svelte";
   import AuthModal from "./components/AuthModal.svelte";
   import ArtistHeaderBar from "./components/ArtistHeaderBar.svelte";
@@ -233,21 +232,12 @@
   {:else if loading}
     <Loading message="Carregando dados do artista..." />
   {:else if selectedArtist}
-    <ArtistHeaderBar
-      name={selectedArtist.name}
-      onDetailsClick={openDetailsModal}
+    <ArtistDetails
+      artist={selectedArtist}
+      on:showTimeline={handleShowTimeline}
     />
     <Timeline artistId={selectedArtist.id} on:back={handleBackToArtist} />
-    <Modal
-      class="modal-artist-details"
-      open={showModal}
-      onClose={closeDetailsModal}
-    >
-      <ArtistDetails
-        artist={selectedArtist}
-        on:showTimeline={handleShowTimeline}
-      />
-    </Modal>
+
   {/if}
 </main>
 
