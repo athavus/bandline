@@ -7,6 +7,7 @@
   import LoadingSpinner from './LoadingSpinner.svelte';
   import NavigationButton from './NavigationButton.svelte';
   import BrandSubtitle from './BrandSubtitle.svelte';
+  import { t } from '../lib/stores/language';
 
   export let artistId: string = '';
 
@@ -83,12 +84,12 @@
 
 {#if loading}
   <div class="disco-loading">
-    <LoadingSpinner text="Carregando discografia..." />
+    <LoadingSpinner text={t('loadingDiscography')} />
   </div>
 {:else if error}
   <div class="error">
-    <p>❌ Erro ao carregar discografia: {error}</p>
-    <button on:click={loadAlbums}>Tentar novamente</button>
+    <p>❌ {t('errorLoadingDiscography')} {error}</p>
+    <button on:click={loadAlbums}>{t('tryAgain')}</button>
   </div>
 {:else if albums?.items?.length}
   <div class="timeline-container">
@@ -97,7 +98,7 @@
       <NavigationButton
         direction="prev"
         on:click={() => scroll(-400)}
-        aria-label="Anterior"
+        aria-label={t('previous')}
       />
       
       <div class="timeline-slider" bind:this={sliderElement}>
@@ -124,7 +125,7 @@
       <NavigationButton
         direction="next"
         on:click={() => scroll(400)}
-        aria-label="Próximo"
+        aria-label={t('next')}
       />
     </div>
 
@@ -139,7 +140,7 @@
   </div>
 {:else}
   <div class="no-albums">
-    <p>Nenhum álbum encontrado para este artista.</p>
+    <p>{t('noAlbumsFound')}</p>
   </div>
 {/if}
 

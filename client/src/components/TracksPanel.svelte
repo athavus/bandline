@@ -4,6 +4,7 @@
   import TrackCard from "./TrackCard.svelte";
   import LoadingSpinner from "./LoadingSpinner.svelte";
   import SpotifyButton from "./SpotifyButton.svelte";
+  import { t } from "../lib/stores/language";
 
   export let album: any;
   export let albumTracks: SpotifyAlbumTracks | null = null;
@@ -23,7 +24,7 @@
 
 <div class="tracks-panel">
   {#if loading}
-    <LoadingSpinner text="Carregando faixas..." small={true} />
+    <LoadingSpinner text={t('loadingTracks')} small={true} />
   {:else if albumTracks?.items}
     <div class="tracks-header">
       <h3>{album.name}</h3>
@@ -49,7 +50,7 @@
         <div class="album-info">
           <h4>{album.name}</h4>
           <p class="release-date">{album.release_date}</p>
-          <p class="track-count">{albumTracks.items.length} faixas</p>
+          <p class="track-count">{albumTracks.items.length} {albumTracks.items.length === 1 ? t('track') : t('tracks')}</p>
         </div>
       </div>
 

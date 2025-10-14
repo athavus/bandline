@@ -1,7 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import { auth } from "../lib/stores/auth.ts";
+  import { auth } from "../lib/stores/auth";
   import BrandTitle from "./BrandTitle.svelte";
+  import { t } from "../lib/stores/language";
   export let open = false;
 
   const dispatch = createEventDispatcher();
@@ -67,7 +68,7 @@
           </div>
           <div class="user-details">
             <span class="user-name"
-              >{authState.user?.username || "Usuário"}</span
+              >{authState.user?.username || t('user')}</span
             >
             <span class="user-email">{authState.user?.email || ""}</span>
           </div>
@@ -75,7 +76,7 @@
       </div>
 
       <div class="sidebar-section">
-        <h3>Menu</h3>
+        <h3>{t('menu')}</h3>
         <nav class="sidebar-menu">
           <button class="menu-item" on:click={() => handleAction("favorites")}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -85,7 +86,7 @@
                 stroke-width="2"
               />
             </svg>
-            Favoritos
+            Favorites
           </button>
 
           <button class="menu-item" on:click={() => handleAction("history")}>
@@ -103,7 +104,7 @@
                 stroke-width="2"
               />
             </svg>
-            Histórico
+            History
           </button>
 
           <button class="menu-item" on:click={() => handleAction("playlists")}>
@@ -117,13 +118,13 @@
               />
               <path d="M8 14V5l13-1v9" stroke="currentColor" stroke-width="2" />
             </svg>
-            Álbuns Completos
+            Complete Albums
           </button>
         </nav>
       </div>
 
       <div class="sidebar-section">
-        <h3>Conta</h3>
+        <h3>Account</h3>
         <nav class="sidebar-menu">
           <button class="menu-item" on:click={() => handleAction("profile")}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -140,7 +141,7 @@
                 stroke-width="2"
               />
             </svg>
-            Perfil
+            Profile
           </button>
 
           <button class="menu-item" on:click={() => handleAction("settings")}>
@@ -158,7 +159,7 @@
                 stroke-width="2"
               />
             </svg>
-            Configurações
+            {t('settings')}
           </button>
 
           <button
@@ -185,7 +186,7 @@
                 stroke-width="2"
               />
             </svg>
-            Sair
+            {t('logout')}
           </button>
         </nav>
       </div>
@@ -207,8 +208,8 @@
               stroke-width="2"
             />
           </svg>
-          <h3>Bem-vindo!</h3>
-          <p>Faça login ou crie uma conta para acessar todos os recursos</p>
+          <h3>Welcome!</h3>
+          <p>Sign in or create an account to access all features</p>
         </div>
       </div>
 
@@ -238,7 +239,7 @@
                 stroke-width="2"
               />
             </svg>
-            Fazer Login
+            {t('login')}
           </button>
 
           <button
@@ -275,13 +276,13 @@
                 stroke-width="2"
               />
             </svg>
-            Criar Conta
+            {t('register')}
           </button>
         </nav>
       </div>
 
       <div class="sidebar-section">
-        <h3>Explorar</h3>
+        <h3>Explore</h3>
         <nav class="sidebar-menu">
           <button class="menu-item disabled">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -298,7 +299,7 @@
                 stroke-width="2"
               />
             </svg>
-            Buscar Artistas
+            Search Artists
           </button>
 
           <button class="menu-item disabled">

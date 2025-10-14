@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { auth } from '../lib/stores/auth.ts';
+  import { auth } from '../lib/stores/auth';
+  import { t } from '../lib/stores/language';
   
   const dispatch = createEventDispatcher();
   
@@ -70,7 +71,7 @@
   
   async function handleLogin() {
     if (!username.trim() || !password.trim()) {
-      errorMessage = 'Por favor, preencha todos os campos';
+      errorMessage = t('fillAllFields');
       return;
     }
 
@@ -83,7 +84,7 @@
       dispatch('loginSuccess');
       handleClose();
     } else {
-      errorMessage = result.error || 'Erro no login';
+      errorMessage = result.error || t('loginError');
     }
     
     isLoading = false;
@@ -91,22 +92,22 @@
   
   async function handleRegister() {
     if (!username.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
-      errorMessage = 'Por favor, preencha todos os campos';
+      errorMessage = t('fillAllFields');
       return;
     }
 
     if (!isValidEmail(email)) {
-      errorMessage = 'Por favor, digite um email válido';
+      errorMessage = t('validEmail');
       return;
     }
 
     if (password.length < 8) {
-      errorMessage = 'A senha deve ter pelo menos 8 caracteres';
+      errorMessage = t('passwordMinLength');
       return;
     }
 
     if (!passwordsMatch) {
-      errorMessage = 'As senhas não conferem';
+      errorMessage = t('passwordsDontMatch');
       return;
     }
 
@@ -117,13 +118,13 @@
     const result = await auth.register(username, email, password);
     
     if (result.success) {
-      successMessage = result.message || 'Conta criada com sucesso!';
+      successMessage = result.message || t('accountCreated');
       setTimeout(() => {
         mode = 'login';
         resetForm();
       }, 2000);
     } else {
-      errorMessage = result.error || 'Erro ao criar conta';
+      errorMessage = result.error || t('registerError');
     }
     
     isLoading = false;
@@ -163,18 +164,18 @@
       </button>
       
       <div class="auth-header">
-        <h2>{mode === 'login' ? 'Bem-vindo de volta' : 'Criar conta'}</h2>
-        <p>{mode === 'login' ? 'Entre na sua conta para continuar' : 'Preencha os dados para começar'}</p>
+        <h2>{mode === 'login' ? t('welcomeBack') : t('createAccount')}</h2>
+        <p>{mode === 'login' ? t('enterAccount') : t('fillData')}</p>
       </div>
 
       <form on:submit|preventDefault={mode === 'login' ? handleLogin : handleRegister} class="auth-form">
         <div class="form-group">
-          <label for="username">Nome de usuário{mode === 'register' ? '' : ' ou email'}</label>
+          <label for="username">{t('username')}{mode === 'register' ? '' : ' or email'}</label>
           <input
             id="username"
             type="text"
             bind:value={username}
-            placeholder="Digite seu nome de usuário{mode === 'register' ? '' : ' ou email'}"
+            placeholder={t('enterUsername')}
             disabled={isLoading}
             autocomplete="username"
           />
@@ -182,12 +183,12 @@
 
         {#if mode === 'register'}
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">{t('email')}</label>
             <input
               id="email"
               type="email"
               bind:value={email}
-              placeholder="Digite seu email"
+              placeholder={t('enterEmail')}
               disabled={isLoading}
               autocomplete="email"
             />
@@ -195,13 +196,13 @@
         {/if}
 
         <div class="form-group">
-          <label for="password">Senha</label>
+          <label for="password">{t('password')}</label>
           <div class="password-input">
             <input
               id="password"
               type={showPassword ? 'text' : 'password'}
               bind:value={password}
-              placeholder="Digite sua senha"
+              placeholder={t('enterPassword')}
               disabled={isLoading}
               autocomplete={mode === 'login' ? 'current-password' : 'new-password'}
             />
@@ -210,7 +211,7 @@
               class="password-toggle"
               on:click={() => showPassword = !showPassword}
               disabled={isLoading}
-              aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+              aria-label={showPassword ? t('hidePassword') : t('showPassword')}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 {#if showPassword}
@@ -238,13 +239,13 @@
 
         {#if mode === 'register'}
           <div class="form-group">
-            <label for="confirmPassword">Confirmar senha</label>
+            <label for="confirmPassword">{t('confirmPassword')}</label>
             <div class="password-input">
               <input
                 id="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
                 bind:value={confirmPassword}
-                placeholder="Digite novamente sua senha"
+                placeholder={t('confirmPasswordPlaceholder')}
                 disabled={isLoading}
                 autocomplete="new-password"
                 class:error={confirmPassword && !passwordsMatch}
@@ -254,7 +255,7 @@
                 class="password-toggle"
                 on:click={() => showConfirmPassword = !showConfirmPassword}
                 disabled={isLoading}
-                aria-label={showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                aria-label={showConfirmPassword ? t('hidePassword') : t('showPassword')}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   {#if showConfirmPassword}
@@ -269,7 +270,7 @@
             </div>
             {#if confirmPassword && !passwordsMatch}
               <div class="field-error">
-                As senhas não conferem
+                {t('passwordsDontMatch')}
               </div>
             {/if}
           </div>
@@ -303,15 +304,15 @@
                 <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
                 <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
             </svg>
-            {mode === 'login' ? 'Entrando...' : 'Criando conta...'}
+            {mode === 'login' ? t('entering') : t('creatingAccount')}
           {:else}
-            {mode === 'login' ? 'Entrar' : 'Criar conta'}
+            {mode === 'login' ? t('login') : t('register')}
           {/if}
         </button>
       </form>
 
       <div class="auth-divider">
-        <span>ou</span>
+        <span>or</span>
       </div>
 
       <button type="button" class="google-btn" on:click={handleGoogleLogin} disabled={isLoading}>
@@ -321,14 +322,14 @@
           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
         </svg>
-        Continuar com Google
+        {t('continueWithGoogle')}
       </button>
 
       <div class="auth-footer">
         <p>
-          {mode === 'login' ? 'Não tem uma conta?' : 'Já tem uma conta?'}
+          {mode === 'login' ? t('noAccount') : t('haveAccount')}
           <button type="button" class="link-btn" on:click={switchMode}>
-            {mode === 'login' ? 'Criar conta' : 'Fazer login'}
+            {mode === 'login' ? t('createAccountLink') : t('loginLink')}
           </button>
         </p>
       </div>

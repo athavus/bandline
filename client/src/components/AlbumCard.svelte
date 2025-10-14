@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import SpotifyButton from "./SpotifyButton.svelte";
+  import { t } from "../lib/stores/language";
 
   export let album: any;
   export let position: number;
@@ -16,7 +17,7 @@
           ? `${dateString}-01`
           : dateString,
     );
-    return date.toLocaleDateString("pt-BR", {
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: dateString.length === 4 ? undefined : "long",
       day: dateString.length > 7 ? "numeric" : undefined,
@@ -55,9 +56,9 @@
     <h3 class="album-name">{album.name}</h3>
     <p class="album-year">{formatDate(album.release_date)}</p>
     {#if album.total_tracks > 1}
-      <span class="album-badge">{album.total_tracks} faixas</span>
+      <span class="album-badge">{album.total_tracks} {t('tracks')}</span>
     {:else if album.total_tracks === 1}
-      <span class="album-badge">{album.total_tracks} faixa</span>
+      <span class="album-badge">{album.total_tracks} {t('track')}</span>
     {/if}
   </div>
 </div>

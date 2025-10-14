@@ -1,14 +1,16 @@
 <script lang="ts">
+  import { t } from '../lib/stores/language';
+  
   export let onLogin: () => void;
   export let onRegister: () => void;
 </script>
 
 <div class="welcome-section">
-  <h2>Descubra seus artistas favoritos</h2>
-  <p>Faça login ou crie uma conta para acessar nossa plataforma de descoberta musical</p>
+  <h2>{t('welcomeSubtitle')}</h2>
+  <p>{t('welcomeDescription')}</p>
   <div class="welcome-buttons">
-    <button class="primary-btn" on:click={onLogin}>Fazer Login</button>
-    <button class="secondary-btn" on:click={onRegister}>Criar Conta</button>
+    <button class="primary-btn" on:click={onLogin}>{t('login')}</button>
+    <button class="secondary-btn" on:click={onRegister}>{t('register')}</button>
   </div>
   </div>
 

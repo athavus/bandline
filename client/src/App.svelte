@@ -12,8 +12,10 @@
   import ArtistHeaderBar from "./components/ArtistHeaderBar.svelte";
   import WelcomeSection from "./components/WelcomeSection.svelte";
   import BrandTitle from "./components/BrandTitle.svelte";
-  import { searchArtists, getArtistData } from "./lib/data.ts";
-  import { auth } from "./lib/stores/auth.ts";
+  import LanguageSelector from "./components/LanguageSelector.svelte";
+  import { searchArtists, getArtistData } from "./lib/data";
+  import { auth } from "./lib/stores/auth";
+  import { initLanguage, t, language } from "./lib/stores/language";
   import type { SearchArtistResult, SpotifyArtist } from "./types/artist";
 
   let query = "";
@@ -28,8 +30,10 @@
   let authMode: "login" | "register" = "login";
 
   $: authState = $auth;
+  $: currentLanguage = $language;
 
   onMount(async () => {
+    initLanguage();
     await auth.checkAuth();
   });
 
@@ -167,41 +171,44 @@
       <ThemePaletteButton />
     </div>
 
-    {#if authState.isAuthenticated}
-      <div class="user-indicator">
-        <span class="user-welcome"
-          >Olá, {authState.user?.username || "Usuário"}!</span
-        >
-        <button class="logout-btn" on:click={() => auth.logout()}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <polyline
-              points="16,17 21,12 16,7"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <line
-              x1="21"
-              y1="12"
-              x2="9"
-              y2="12"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-      </div>
-    {/if}
+    <div class="header-right">
+      <LanguageSelector />
+      {#if authState.isAuthenticated}
+        <div class="user-indicator">
+          <span class="user-welcome"
+            >{t('hello')}, {authState.user?.username || t('user')}!</span
+          >
+          <button class="logout-btn" on:click={() => auth.logout()}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <polyline
+                points="16,17 21,12 16,7"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <line
+                x1="21"
+                y1="12"
+                x2="9"
+                y2="12"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      {/if}
+    </div>
   </header>
   <BrandTitle />
   <div class="search-container">
@@ -211,8 +218,8 @@
       on:focus={handleFocus}
       on:blur={handleBlur}
       placeholder={authState.isAuthenticated
-        ? "Buscar artistas..."
-        : "Faça login para buscar artistas"}
+        ? t('searchArtistsPlaceholder')
+        : t('loginToSearch')}
       disabled={!authState.isAuthenticated}
     />
     <ArtistList {artists} show={showOverlay} on:select={handleSelectArtist} />
@@ -230,7 +237,7 @@
       }}
     />
   {:else if loading}
-    <Loading message="Carregando dados do artista..." />
+    <Loading message={t('loading')} />
   {:else if selectedArtist}
     <ArtistDetails
       artist={selectedArtist}
@@ -282,6 +289,12 @@
   }
 
   .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-right {
     display: flex;
     align-items: center;
     gap: 16px;

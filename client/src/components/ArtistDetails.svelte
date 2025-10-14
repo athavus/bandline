@@ -3,6 +3,7 @@
   import SpotifyButton from "./SpotifyButton.svelte";
   import RelatedArtists from "./RelatedArtists.svelte";
   import { createEventDispatcher } from "svelte";
+  import { t } from "../lib/stores/language";
 
   export let artist: SpotifyArtist;
 
@@ -26,7 +27,7 @@
     <div class="artist-header">
       <!-- Descrição esticada -->
       <div class="description-section">
-        <h3 class="section-title">Sobre:</h3>
+        <h3 class="section-title">{t('about')}</h3>
         <div class="description-content">
           <p>{artist.description}</p>
         </div>
@@ -45,13 +46,13 @@
           <!-- Estatísticas à esquerda da imagem -->
           <div class="info-stats">
             <div class="info-item">
-              <span class="label">Seguidores</span>
+              <span class="label">{t('followers')}</span>
               <span class="value">
-                {artist.total_followers?.toLocaleString("pt-BR") ?? "—"}
+                {artist.total_followers?.toLocaleString("en-US") ?? "—"}
               </span>
             </div>
             <div class="info-item">
-              <span class="label">Popularidade</span>
+              <span class="label">{t('popularity')}</span>
               <span class="value popularity">
                 <span class="bar" style="--progress: {artist.popularity}%"
                 ></span>

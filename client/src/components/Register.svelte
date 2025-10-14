@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { auth } from '../lib/stores/auth.ts';
+  import { auth } from '../lib/stores/auth';
   
   const dispatch = createEventDispatcher();
   

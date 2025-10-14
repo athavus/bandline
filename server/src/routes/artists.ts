@@ -42,15 +42,14 @@ function cleanDescription(rawText: string): string {
   return cleanText;
 }
 
+
 async function getArtistDescription(artistName: string) {
   const url = new URL("http://ws.audioscrobbler.com/2.0");
   url.searchParams.append('method', 'artist.getInfo');
-  url.searchParams.append('artist', `${encodeURIComponent(artistName)}`);
-  url.searchParams.append('api_key', `${LASTFM_API_KEY}`);
+  url.searchParams.append('artist', artistName); // encodeURIComponent é redundante aqui porque o objeto URL já cuida disso
+  url.searchParams.append('api_key', LASTFM_API_KEY);
   url.searchParams.append('format', 'json');
-  url.searchParams.append('lang', 'pt');
-
-  console.log(url);
+  url.searchParams.append('lang', 'en');
 
   let response = await fetch(url);
   if (!response.ok) return null;
@@ -60,19 +59,9 @@ async function getArtistDescription(artistName: string) {
     return cleanDescription(data.artist.bio.summary);
   }
 
-  url.searchParams.delete('lang');
-  url.searchParams.append('lang', 'en');
-  console.log(url);
-  response = await fetch(url);
-  if (!response.ok) return null;
-  data = await response.json();
-
-  if (data?.artist?.bio?.summary) {
-    return cleanDescription(data.artist.bio.summary);
-  }
-
   return null;
 }
+
 
 type RelatedArtist = {
   name: string;
