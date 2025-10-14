@@ -47,22 +47,39 @@ function cleanDescription(rawText: string): string {
 
   return cleanText;
 }
+
 async function getArtistDescription(artistName: string) {
-  const url = `http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist=${encodeURIComponent(artistName)}&api_key=${LASTFM_API_KEY}&format=json`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    return null;
+  const url = new URL("http://ws.audioscrobbler.com/2.0");
+  url.searchParams.append('method', 'artist.getInfo');
+  url.searchParams.append('artist', `${encodeURIComponent(artistName)}`);
+  url.searchParams.append('api_key', `${LASTFM_API_KEY}`);
+  url.searchParams.append('format', 'json');
+  url.searchParams.append('lang', 'pt');
+
+  console.log(url);
+
+  let response = await fetch(url);
+  if (!response.ok) return null;
+  let data = await response.json();
+
+  if (data?.artist?.bio?.summary) {
+    return cleanDescription(data.artist.bio.summary);
   }
 
-  const data = await response.json();
+  url.searchParams.delete('lang');
+  url.searchParams.append('lang', 'en');
+  console.log(url);
+  response = await fetch(url);
+  if (!response.ok) return null;
+  data = await response.json();
 
-  if (data && data.artist && data.artist.bio && data.artist.bio.summary) {
-    const rawSummary = data.artist.bio.summary;
-    return cleanDescription(rawSummary);
+  if (data?.artist?.bio?.summary) {
+    return cleanDescription(data.artist.bio.summary);
   }
 
   return null;
 }
+
 
 const router = Router();
 
