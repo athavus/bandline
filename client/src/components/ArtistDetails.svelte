@@ -3,7 +3,7 @@
   import SpotifyButton from "./SpotifyButton.svelte";
   import RelatedArtists from "./RelatedArtists.svelte";
   import { createEventDispatcher } from "svelte";
-  
+
   export let artist: SpotifyArtist;
 
   const dispatch = createEventDispatcher();
@@ -16,7 +16,7 @@
   }
 
   function handleRelatedArtistSelect(event: CustomEvent) {
-    dispatch('selectRelatedArtist', event.detail);
+    dispatch("selectRelatedArtist", event.detail);
   }
 </script>
 
@@ -26,7 +26,7 @@
     <div class="artist-header">
       <!-- Descrição esticada -->
       <div class="description-section">
-        <h3 class="section-title">Sobre a Banda</h3>
+        <h3 class="section-title">Sobre:</h3>
         <div class="description-content">
           <p>{artist.description}</p>
         </div>
@@ -40,7 +40,7 @@
             <p class="genres">{artist.genres.join(" • ")}</p>
           {/if}
         </div>
-        
+
         <div class="artist-content">
           <!-- Estatísticas à esquerda da imagem -->
           <div class="info-stats">
@@ -53,18 +53,23 @@
             <div class="info-item">
               <span class="label">Popularidade</span>
               <span class="value popularity">
-                <span class="bar" style="--progress: {artist.popularity}%"></span>
+                <span class="bar" style="--progress: {artist.popularity}%"
+                ></span>
                 {artist.popularity}/100
               </span>
             </div>
           </div>
-          
+
           <!-- Imagem à direita -->
           <div class="artist-image-wrapper">
             {#if artist.image}
               <img src={artist.image} alt={artist.name} class="artist-image" />
             {:else if artist.images && artist.images.length > 0}
-              <img src={artist.images[0].url} alt={artist.name} class="artist-image" />
+              <img
+                src={artist.images[0].url}
+                alt={artist.name}
+                class="artist-image"
+              />
             {/if}
             <SpotifyButton on:click={openArtistInSpotify} />
           </div>
@@ -127,7 +132,7 @@
     background: var(--bg-tertiary);
     border-radius: 12px;
     padding: 20px;
-    border: 1px solid var(--border-light);   
+    border: 1px solid var(--border-light);
     width: 100%;
     flex: 1;
     display: flex;
@@ -217,7 +222,6 @@
     background: rgba(var(--accent-rgb), 0.8);
   }
 
-
   .info-item {
     background: var(--bg-tertiary);
     border-radius: 10px;
@@ -280,14 +284,15 @@
     aspect-ratio: 1/1;
     border-radius: 8px;
     object-fit: cover;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
   .gallery-img:hover {
     transform: scale(1.04);
     box-shadow: var(--shadow-lg);
   }
-
 
   @keyframes fadeIn {
     from {
