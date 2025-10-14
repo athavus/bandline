@@ -9,7 +9,7 @@ export async function getArtistData(id: string): Promise<SpotifyArtist> {
   }
 
   const dados = (await response.json()) as SpotifyArtist;
-
+  console.log(dados);
   return dados;
 }
 

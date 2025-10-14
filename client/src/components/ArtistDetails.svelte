@@ -74,10 +74,7 @@
   </div>
 
   <!-- Artistas relacionados -->
-  <RelatedArtists 
-    mainArtistId={artist.id} 
-    on:selectArtist={handleRelatedArtistSelect}
-  />
+  <RelatedArtists {artist} on:selectArtist={handleRelatedArtistSelect} />
 </div>
 
 <style>
@@ -87,7 +84,7 @@
     gap: 40px;
     align-items: start;
     max-width: 1400px;
-    margin: 40px 40px 40px 120px;
+    margin: 40px auto; /* Centraliza horizontalmente */
     padding: 0 20px;
   }
 
@@ -164,7 +161,7 @@
   h2 {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--accent-color);
     margin: 0;
   }
 

@@ -6,13 +6,13 @@ import type { SpotifyAlbumTracks } from '../types/tracks-types.ts';
 async function getAlbumTracks(albumId: string) {
   const url = new URL(`https://api.spotify.com/v1/albums/${albumId}/tracks`);
   url.searchParams.append('limit', '50');
-  const albumTracksRequest = await fetch(url, {
+  const albumTracksResponse = await fetch(url, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`
     }
   });
-  const albumTracksData = await albumTracksRequest.json();
+  const albumTracksData = await albumTracksResponse.json();
   return albumTracksData;
 }
 

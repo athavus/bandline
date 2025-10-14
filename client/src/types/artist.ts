@@ -1,3 +1,7 @@
+export interface RelatedArtist {
+  name: string;
+}
+
 export interface SpotifyArtist {
   external_urls: {
     spotify: string
@@ -17,7 +21,8 @@ export interface SpotifyArtist {
   popularity: number,
   type: string,
   uri: string,
-  description?: string
+  description: string,
+  relatedArtists: RelatedArtist[]
 };
 
 export interface SearchArtistResult {

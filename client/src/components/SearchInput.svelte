@@ -26,6 +26,7 @@
   on:blur={handleBlur}
   type="text" 
   {placeholder}
+  id="search-input"
   class="search-input"
 />
 
