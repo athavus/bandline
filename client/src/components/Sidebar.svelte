@@ -86,7 +86,7 @@
                 stroke-width="2"
               />
             </svg>
-            Favorites
+            {t('favorites')}
           </button>
 
           <button class="menu-item" on:click={() => handleAction("history")}>
@@ -104,7 +104,7 @@
                 stroke-width="2"
               />
             </svg>
-            History
+            {t('history')}
           </button>
 
           <button class="menu-item" on:click={() => handleAction("playlists")}>
@@ -118,13 +118,13 @@
               />
               <path d="M8 14V5l13-1v9" stroke="currentColor" stroke-width="2" />
             </svg>
-            Complete Albums
+            {t('completeAlbums')}
           </button>
         </nav>
       </div>
 
       <div class="sidebar-section">
-        <h3>Account</h3>
+        <h3>{t('account')}</h3>
         <nav class="sidebar-menu">
           <button class="menu-item" on:click={() => handleAction("profile")}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -141,7 +141,7 @@
                 stroke-width="2"
               />
             </svg>
-            Profile
+            {t('profile')}
           </button>
 
           <button class="menu-item" on:click={() => handleAction("settings")}>
@@ -208,8 +208,8 @@
               stroke-width="2"
             />
           </svg>
-          <h3>Welcome!</h3>
-          <p>Sign in or create an account to access all features</p>
+          <h3>{t('welcome')}</h3>
+          <p>{t('signInToAccess')}</p>
         </div>
       </div>
 
@@ -282,7 +282,7 @@
       </div>
 
       <div class="sidebar-section">
-        <h3>Explore</h3>
+        <h3>{t('explore')}</h3>
         <nav class="sidebar-menu">
           <button class="menu-item disabled">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -299,7 +299,7 @@
                 stroke-width="2"
               />
             </svg>
-            Search Artists
+            {t('searchArtists')}
           </button>
 
           <button class="menu-item disabled">
@@ -324,7 +324,7 @@
                 stroke-width="2"
               />
             </svg>
-            Top Charts
+            {t('topCharts')}
           </button>
         </nav>
       </div>

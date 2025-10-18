@@ -1,15 +1,15 @@
 <script lang="ts">
   // removed unused dispatcher
-  import type { SpotifyAlbums } from '../types/album.ts';
-  import type { SpotifyAlbumTracks } from '../types/tracks.ts';
-  import AlbumCard from './AlbumCard.svelte';
-  import TracksPanel from './TracksPanel.svelte';
-  import LoadingSpinner from './LoadingSpinner.svelte';
-  import NavigationButton from './NavigationButton.svelte';
-  import BrandSubtitle from './BrandSubtitle.svelte';
-  import { t } from '../lib/stores/language';
+  import type { SpotifyAlbums } from "../types/album.ts";
+  import type { SpotifyAlbumTracks } from "../types/tracks.ts";
+  import AlbumCard from "./AlbumCard.svelte";
+  import TracksPanel from "./TracksPanel.svelte";
+  import LoadingSpinner from "./LoadingSpinner.svelte";
+  import NavigationButton from "./NavigationButton.svelte";
+  import BrandSubtitle from "./BrandSubtitle.svelte";
+  import { t } from "../lib/stores/language";
 
-  export let artistId: string = '';
+  export let artistId: string = "";
 
   let albums: SpotifyAlbums | null = null;
   let selectedAlbum: any = null;
@@ -22,7 +22,7 @@
   // no dispatch usage
 
   function scroll(amount: number) {
-    sliderElement?.scrollBy({ left: amount, behavior: 'smooth' });
+    sliderElement?.scrollBy({ left: amount, behavior: "smooth" });
   }
 
   async function loadAlbums() {
@@ -36,7 +36,7 @@
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       albums = await res.json();
     } catch (err) {
-      error = err instanceof Error ? err.message : 'Erro desconhecido';
+      error = err instanceof Error ? err.message : "Erro desconhecido";
     } finally {
       loading = false;
     }
@@ -73,7 +73,6 @@
     return albums?.items ? getTimelineX(albums.items.length - 1) + 200 : 0;
   }
 
-
   $: if (albums?.items && albums.items.length > 0 && !selectedAlbum) {
     selectedAlbum = albums.items[0];
     loadAlbumTracks(selectedAlbum.id);
@@ -84,29 +83,31 @@
 
 {#if loading}
   <div class="disco-loading">
-    <LoadingSpinner text={t('loadingDiscography')} />
+    <LoadingSpinner text={t("loadingDiscography")} />
   </div>
 {:else if error}
   <div class="error">
-    <p>❌ {t('errorLoadingDiscography')} {error}</p>
-    <button on:click={loadAlbums}>{t('tryAgain')}</button>
+    <p>❌ {t("errorLoadingDiscography")} {error}</p>
+    <button on:click={loadAlbums}>{t("tryAgain")}</button>
   </div>
 {:else if albums?.items?.length}
   <div class="timeline-container">
-    <BrandSubtitle firstWord="Disco" secondWord="grafia" />
+    <BrandSubtitle firstWord={t("firstWord")} secondWord={t("lastWord")} />
     <div class="timeline-wrapper">
       <NavigationButton
         direction="prev"
         on:click={() => scroll(-400)}
-        aria-label={t('previous')}
+        aria-label={t("previous")}
       />
-      
+
       <div class="timeline-slider" bind:this={sliderElement}>
         <div class="timeline-track" style="width: {getTotalWidth()}px">
           <div class="timeline-dots">
             {#each albums.items as _album, i}
               <span
-                class="timeline-dot {selectedAlbum?.id === _album.id ? 'active' : ''}"
+                class="timeline-dot {selectedAlbum?.id === _album.id
+                  ? 'active'
+                  : ''}"
                 style="left: {getTimelineX(i)}px"
               ></span>
             {/each}
@@ -125,7 +126,7 @@
       <NavigationButton
         direction="next"
         on:click={() => scroll(400)}
-        aria-label={t('next')}
+        aria-label={t("next")}
       />
     </div>
 
@@ -140,7 +141,7 @@
   </div>
 {:else}
   <div class="no-albums">
-    <p>{t('noAlbumsFound')}</p>
+    <p>{t("noAlbumsFound")}</p>
   </div>
 {/if}
 
@@ -175,7 +176,9 @@
     -ms-overflow-style: none;
   }
 
-  .timeline-slider::-webkit-scrollbar { display: none; }
+  .timeline-slider::-webkit-scrollbar {
+    display: none;
+  }
 
   .timeline-track {
     position: relative;
@@ -186,15 +189,22 @@
 
   /* Timeline line */
   .timeline-track::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 120px; /* baseline for the line */
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, rgba(var(--accent-rgb),0.2), var(--accent-color), rgba(var(--accent-rgb),0.2));
+    background: linear-gradient(
+      90deg,
+      rgba(var(--accent-rgb), 0.2),
+      var(--accent-color),
+      rgba(var(--accent-rgb), 0.2)
+    );
     border-radius: 3px;
-    box-shadow: 0 0 0 1px rgba(var(--accent-rgb),0.15), 0 6px 22px rgba(var(--accent-rgb),0.25);
+    box-shadow:
+      0 0 0 1px rgba(var(--accent-rgb), 0.15),
+      0 6px 22px rgba(var(--accent-rgb), 0.25);
     z-index: 0;
   }
 
@@ -224,14 +234,31 @@
     width: 16px;
     height: 16px;
     background: var(--accent-color);
-    box-shadow: 0 0 0 6px rgba(var(--accent-rgb), 0.18), 0 0 18px rgba(var(--accent-rgb), 0.55);
+    box-shadow:
+      0 0 0 6px rgba(var(--accent-rgb), 0.18),
+      0 0 18px rgba(var(--accent-rgb), 0.55);
     animation: dot-pulse 1.8s ease-out infinite;
   }
 
   @keyframes dot-pulse {
-    0% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 6px rgba(var(--accent-rgb),0.18), 0 0 18px rgba(var(--accent-rgb),0.55); }
-    60% { transform: translateX(-50%) scale(1.05); box-shadow: 0 0 0 10px rgba(var(--accent-rgb),0.12), 0 0 28px rgba(var(--accent-rgb),0.45); }
-    100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 6px rgba(var(--accent-rgb),0.18), 0 0 18px rgba(var(--accent-rgb),0.55); }
+    0% {
+      transform: translateX(-50%) scale(1);
+      box-shadow:
+        0 0 0 6px rgba(var(--accent-rgb), 0.18),
+        0 0 18px rgba(var(--accent-rgb), 0.55);
+    }
+    60% {
+      transform: translateX(-50%) scale(1.05);
+      box-shadow:
+        0 0 0 10px rgba(var(--accent-rgb), 0.12),
+        0 0 28px rgba(var(--accent-rgb), 0.45);
+    }
+    100% {
+      transform: translateX(-50%) scale(1);
+      box-shadow:
+        0 0 0 6px rgba(var(--accent-rgb), 0.18),
+        0 0 18px rgba(var(--accent-rgb), 0.55);
+    }
   }
 
   .disco-loading {

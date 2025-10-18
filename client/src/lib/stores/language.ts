@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export type Language = 'en' | 'pt';
+export type Language = 'en' | 'pt' | 'es';
 
 export interface Translations {
   // Common
@@ -23,15 +23,14 @@ export interface Translations {
   confirmPassword: string;
   showPassword: string;
   hidePassword: string;
-  
+
   // App specific
   appName: string;
-  searchArtists: string;
   searchArtistsPlaceholder: string;
   loginToSearch: string;
   hello: string;
   user: string;
-  
+
   // Auth
   welcomeBack: string;
   enterAccount: string;
@@ -55,7 +54,7 @@ export interface Translations {
   loginLink: string;
   entering: string;
   creatingAccount: string;
-  
+
   // Artist related
   about: string;
   followers: string;
@@ -64,8 +63,10 @@ export interface Translations {
   relatedArtists: string;
   artistDetails: string;
   openInSpotify: string;
-  
+
   // Albums and tracks
+  firstWord: string,
+  lastWord: string,
   discography: string;
   tracks: string;
   track: string;
@@ -78,23 +79,33 @@ export interface Translations {
   loadingTracks: string;
   errorLoadingDiscography: string;
   tryAgain: string;
-  
+
   // Welcome section
   welcomeTitle: string;
   welcomeSubtitle: string;
   welcomeDescription: string;
   getStarted: string;
-  
+
   // Sidebar
   menu: string;
   home: string;
   settings: string;
   aboutApp: string;
-  
+  favorites: string;
+  history: string;
+  completeAlbums: string;
+  account: string;
+  profile: string;
+  explore: string;
+  searchArtists: string;
+  topCharts: string;
+  welcome: string;
+  signInToAccess: string;
+
   // Timeline
   timeline: string;
   showTimeline: string;
-  
+
   // Errors
   errorLoadingArtist: string;
   errorLoadingData: string;
@@ -123,15 +134,14 @@ const translations: Record<Language, Translations> = {
     confirmPassword: 'Confirm Password',
     showPassword: 'Show password',
     hidePassword: 'Hide password',
-    
+
     // App specific
     appName: 'Bandline',
-    searchArtists: 'Search artists...',
     searchArtistsPlaceholder: 'Search artists...',
     loginToSearch: 'Login to search artists',
     hello: 'Hello',
     user: 'User',
-    
+
     // Auth
     welcomeBack: 'Welcome back',
     enterAccount: 'Sign in to your account to continue',
@@ -155,7 +165,7 @@ const translations: Record<Language, Translations> = {
     loginLink: 'Sign in',
     entering: 'Signing in...',
     creatingAccount: 'Creating account...',
-    
+
     // Artist related
     about: 'About:',
     followers: 'Followers',
@@ -164,8 +174,10 @@ const translations: Record<Language, Translations> = {
     relatedArtists: 'Related Artists',
     artistDetails: 'Artist Details',
     openInSpotify: 'Open in Spotify',
-    
+
     // Albums and tracks
+    firstWord: 'Disco',
+    lastWord: 'Graphy',
     discography: 'Discography',
     tracks: 'tracks',
     track: 'track',
@@ -178,23 +190,33 @@ const translations: Record<Language, Translations> = {
     loadingTracks: 'Loading tracks...',
     errorLoadingDiscography: 'Error loading discography:',
     tryAgain: 'Try again',
-    
+
     // Welcome section
     welcomeTitle: 'Welcome to Bandline',
     welcomeSubtitle: 'Discover your favorite artists',
     welcomeDescription: 'Explore discographies, discover new music, and dive deep into the world of your favorite artists.',
     getStarted: 'Get Started',
-    
+
     // Sidebar
     menu: 'Menu',
     home: 'Home',
     settings: 'Settings',
     aboutApp: 'About',
-    
+    favorites: 'Favorites',
+    history: 'History',
+    completeAlbums: 'Complete Albums',
+    account: 'Account',
+    profile: 'Profile',
+    explore: 'Explore',
+    searchArtists: 'Search Artists',
+    topCharts: 'Top Charts',
+    welcome: 'Welcome!',
+    signInToAccess: 'Sign in or create an account to access all features',
+
     // Timeline
     timeline: 'Timeline',
     showTimeline: 'Show Timeline',
-    
+
     // Errors
     errorLoadingArtist: 'Error loading artist data:',
     errorLoadingData: 'Error loading data:',
@@ -221,15 +243,14 @@ const translations: Record<Language, Translations> = {
     confirmPassword: 'Confirmar senha',
     showPassword: 'Mostrar senha',
     hidePassword: 'Ocultar senha',
-    
+
     // App specific
     appName: 'Bandline',
-    searchArtists: 'Buscar artistas...',
     searchArtistsPlaceholder: 'Buscar artistas...',
     loginToSearch: 'Faça login para buscar artistas',
     hello: 'Olá',
     user: 'Usuário',
-    
+
     // Auth
     welcomeBack: 'Bem-vindo de volta',
     enterAccount: 'Entre na sua conta para continuar',
@@ -253,7 +274,7 @@ const translations: Record<Language, Translations> = {
     loginLink: 'Fazer login',
     entering: 'Entrando...',
     creatingAccount: 'Criando conta...',
-    
+
     // Artist related
     about: 'Sobre:',
     followers: 'Seguidores',
@@ -262,8 +283,10 @@ const translations: Record<Language, Translations> = {
     relatedArtists: 'Artistas Relacionados',
     artistDetails: 'Detalhes do Artista',
     openInSpotify: 'Abrir no Spotify',
-    
+
     // Albums and tracks
+    firstWord: 'Disco',
+    lastWord: 'Grafia',
     discography: 'Discografia',
     tracks: 'faixas',
     track: 'faixa',
@@ -276,27 +299,146 @@ const translations: Record<Language, Translations> = {
     loadingTracks: 'Carregando faixas...',
     errorLoadingDiscography: 'Erro ao carregar discografia:',
     tryAgain: 'Tentar novamente',
-    
+
     // Welcome section
     welcomeTitle: 'Bem-vindo ao Bandline',
     welcomeSubtitle: 'Descubra seus artistas favoritos',
     welcomeDescription: 'Explore discografias, descubra novas músicas e mergulhe no mundo dos seus artistas favoritos.',
     getStarted: 'Começar',
-    
+
     // Sidebar
     menu: 'Menu',
     home: 'Início',
     settings: 'Configurações',
     aboutApp: 'Sobre',
-    
+    favorites: 'Favoritos',
+    history: 'Histórico',
+    completeAlbums: 'Álbuns Completos',
+    account: 'Conta',
+    profile: 'Perfil',
+    explore: 'Explorar',
+    searchArtists: 'Buscar Artistas',
+    topCharts: 'Top Charts',
+    welcome: 'Bem-vindo!',
+    signInToAccess: 'Entre ou crie uma conta para acessar todos os recursos',
+
     // Timeline
     timeline: 'Linha do Tempo',
     showTimeline: 'Mostrar Linha do Tempo',
-    
+
     // Errors
     errorLoadingArtist: 'Erro ao buscar dados do artista:',
     errorLoadingData: 'Erro ao carregar dados:',
     unknownError: 'Erro desconhecido'
+  },
+  es: {
+    // Common
+    loading: 'Cargando...',
+    error: 'Error',
+    success: 'Éxito',
+    cancel: 'Cancelar',
+    confirm: 'Confirmar',
+    close: 'Cerrar',
+    back: 'Atrás',
+    next: 'Siguiente',
+    previous: 'Anterior',
+    search: 'Buscar',
+    login: 'Iniciar sesión',
+    logout: 'Cerrar sesión',
+    register: 'Registrarse',
+    username: 'Nombre de usuario',
+    email: 'Email',
+    password: 'Contraseña',
+    confirmPassword: 'Confirmar contraseña',
+    showPassword: 'Mostrar contraseña',
+    hidePassword: 'Ocultar contraseña',
+
+    // App specific
+    appName: 'Bandline',
+    searchArtistsPlaceholder: 'Buscar artistas...',
+    loginToSearch: 'Inicia sesión para buscar artistas',
+    hello: 'Hola',
+    user: 'Usuario',
+
+    // Auth
+    welcomeBack: 'Bienvenido de vuelta',
+    enterAccount: 'Inicia sesión en tu cuenta para continuar',
+    createAccount: 'Crear cuenta',
+    fillData: 'Completa los datos para comenzar',
+    enterUsername: 'Ingresa tu nombre de usuario o email',
+    enterEmail: 'Ingresa tu email',
+    enterPassword: 'Ingresa tu contraseña',
+    confirmPasswordPlaceholder: 'Ingresa tu contraseña nuevamente',
+    fillAllFields: 'Por favor, completa todos los campos',
+    validEmail: 'Por favor, ingresa un email válido',
+    passwordMinLength: 'La contraseña debe tener al menos 8 caracteres',
+    passwordsDontMatch: 'Las contraseñas no coinciden',
+    accountCreated: '¡Cuenta creada exitosamente!',
+    loginError: 'Error al iniciar sesión',
+    registerError: 'Error al registrarse',
+    continueWithGoogle: 'Continuar con Google',
+    noAccount: '¿No tienes una cuenta?',
+    haveAccount: '¿Ya tienes una cuenta?',
+    createAccountLink: 'Crear cuenta',
+    loginLink: 'Iniciar sesión',
+    entering: 'Iniciando sesión...',
+    creatingAccount: 'Creando cuenta...',
+
+    // Artist related
+    about: 'Acerca de:',
+    followers: 'Seguidores',
+    popularity: 'Popularidad',
+    genres: 'Géneros',
+    relatedArtists: 'Artistas Relacionados',
+    artistDetails: 'Detalles del Artista',
+    openInSpotify: 'Abrir en Spotify',
+
+    // Albums and tracks
+    firstWord: 'Disco',
+    lastWord: 'Grafía',
+    discography: 'Discografía',
+    tracks: 'canciones',
+    track: 'canción',
+    album: 'Álbum',
+    releaseDate: 'Fecha de Lanzamiento',
+    totalTracks: 'Total de Canciones',
+    duration: 'Duración',
+    noAlbumsFound: 'No se encontraron álbumes para este artista.',
+    loadingDiscography: 'Cargando discografía...',
+    loadingTracks: 'Cargando canciones...',
+    errorLoadingDiscography: 'Error al cargar discografía:',
+    tryAgain: 'Intentar de nuevo',
+
+    // Welcome section
+    welcomeTitle: 'Bienvenido a Bandline',
+    welcomeSubtitle: 'Descubre tus artistas favoritos',
+    welcomeDescription: 'Explora discografías, descubre nueva música y sumérgete en el mundo de tus artistas favoritos.',
+    getStarted: 'Comenzar',
+
+    // Sidebar
+    menu: 'Menú',
+    home: 'Inicio',
+    settings: 'Configuración',
+    aboutApp: 'Acerca de',
+    favorites: 'Favoritos',
+    history: 'Historial',
+    completeAlbums: 'Álbumes Completos',
+    account: 'Cuenta',
+    profile: 'Perfil',
+    explore: 'Explorar',
+    searchArtists: 'Buscar Artistas',
+    topCharts: 'Top Charts',
+    welcome: '¡Bienvenido!',
+    signInToAccess: 'Inicia sesión o crea una cuenta para acceder a todas las funciones',
+
+    // Timeline
+    timeline: 'Línea de Tiempo',
+    showTimeline: 'Mostrar Línea de Tiempo',
+
+    // Errors
+    errorLoadingArtist: 'Error al cargar datos del artista:',
+    errorLoadingData: 'Error al cargar datos:',
+    unknownError: 'Error desconocido'
   }
 };
 
@@ -325,7 +467,7 @@ export function setLanguage(lang: Language) {
 
 export function initLanguage() {
   const saved = localStorage.getItem('bandline-language') as Language;
-  if (saved && (saved === 'en' || saved === 'pt')) {
+  if (saved && (saved === 'en' || saved === 'pt' || saved === 'es')) {
     currentLanguage.set(saved);
   }
 }

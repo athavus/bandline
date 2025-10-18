@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { auth } from '../lib/stores/auth';
+  import { t } from '../lib/stores/language';
   
   const dispatch = createEventDispatcher();
   
@@ -15,7 +16,7 @@
 
   async function handleLogin() {
     if (!username.trim() || !password.trim()) {
-      errorMessage = 'Por favor, preencha todos os campos';
+      errorMessage = t('fillAllFields');
       return;
     }
 
@@ -28,7 +29,7 @@
       dispatch('loginSuccess');
       
     } else {
-      errorMessage = result.error || 'Erro no login';
+      errorMessage = result.error || t('loginError');
     }
     
     isLoading = false;
@@ -51,31 +52,31 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h2>Bem-vindo de volta</h2>
-      <p>Entre na sua conta para continuar</p>
+      <h2>{t('welcomeBack')}</h2>
+      <p>{t('enterAccount')}</p>
     </div>
 
     <form on:submit|preventDefault={handleLogin} class="auth-form">
       <div class="form-group">
-        <label for="username">Nome de usuário ou email</label>
+        <label for="username">{t('username')} or email</label>
         <input
           id="username"
           type="text"
           bind:value={username}
-          placeholder="Digite seu nome de usuário ou email"
+          placeholder={t('enterUsername')}
           disabled={isLoading}
           autocomplete="username"
         />
       </div>
 
       <div class="form-group">
-        <label for="password">Senha</label>
+        <label for="password">{t('password')}</label>
         <div class="password-input">
           <input
             id="password"
             type={showPassword ? 'text' : 'password'}
             bind:value={password}
-            placeholder="Digite sua senha"
+            placeholder={t('enterPassword')}
             disabled={isLoading}
             autocomplete="current-password"
           />
@@ -84,7 +85,7 @@
             class="password-toggle"
             on:click={togglePasswordVisibility}
             disabled={isLoading}
-            aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+            aria-label={showPassword ? t('hidePassword') : t('showPassword')}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               {#if showPassword}
@@ -118,15 +119,15 @@
               <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
             </circle>
           </svg>
-          Entrando...
+          {t('entering')}
         {:else}
-          Entrar
+          {t('login')}
         {/if}
       </button>
     </form>
 
     <div class="auth-divider">
-      <span>ou</span>
+      <span>or</span>
     </div>
 
     <button type="button" class="google-btn" on:click={handleGoogleLogin} disabled={isLoading}>
@@ -136,13 +137,13 @@
         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
       </svg>
-      Continuar com Google
+      {t('continueWithGoogle')}
     </button>
 
     <div class="auth-footer">
-      <p>Não tem uma conta? 
+      <p>{t('noAccount')} 
         <button type="button" class="link-btn" on:click={goToRegister}>
-          Criar conta
+          {t('createAccountLink')}
         </button>
       </p>
     </div>
