@@ -1,7 +1,10 @@
 import fetch from 'node-fetch';
-import token from "../config/spotifyToken.ts";
+import getSpotifyToken from "../config/spotifyToken.ts";
 import { Router } from 'express';
 import type { SpotifyAlbumTracks } from '../types/tracks-types.ts';
+
+const router = Router();
+const token = await getSpotifyToken();
 
 async function getAlbumTracks(albumId: string) {
   const url = new URL(`https://api.spotify.com/v1/albums/${albumId}/tracks`);
@@ -15,8 +18,6 @@ async function getAlbumTracks(albumId: string) {
   const albumTracksData = await albumTracksResponse.json();
   return albumTracksData;
 }
-
-const router = Router();
 
 router.get('/:id', async (req, res) => {
   try {
@@ -43,9 +44,11 @@ router.get('/:id', async (req, res) => {
 
     res.json(response);
   } catch (err) {
+
     console.error(err);
     res.status(500).json({ error: "Não foi possível conseguir as músicas do álbum." });
   }
 });
+
 
 export default router;

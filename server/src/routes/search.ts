@@ -1,9 +1,10 @@
 import fetch from 'node-fetch';
 import { Router } from 'express';
-import token from "../config/spotifyToken.ts";
-import type { SpotifyArtist, SpotifyArtistsSearchResponse } from '../artists/types.ts';
+import getSpotifyToken from "../config/spotifyToken.ts";
+import type { SpotifyArtist, SpotifyArtistsSearchResponse } from '../types/artists-types.ts';
 
 const router = Router();
+const token = await getSpotifyToken();
 
 router.get('', async (req, res) => {
   try {

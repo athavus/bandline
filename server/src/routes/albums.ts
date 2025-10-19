@@ -1,7 +1,10 @@
 import fetch from 'node-fetch';
-import token from "../config/spotifyToken";
+import getSpotifyToken from "../config/spotifyToken";
 import { Router } from 'express';
 import type { SpotifyAlbums } from '../types/albums-types.ts';
+
+const token = await getSpotifyToken();
+const router = Router();
 
 async function getArtistAlbums(artistId: string) {
   const url = new URL(`https://api.spotify.com/v1/artists/${artistId}/albums`);
@@ -17,8 +20,6 @@ async function getArtistAlbums(artistId: string) {
   const artistData = await artistDataRequest.json();
   return artistData;
 }
-
-const router = Router();
 
 router.get('/:id', async (req, res) => {
   try {

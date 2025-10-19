@@ -1,11 +1,13 @@
 import fetch from 'node-fetch';
-import token from "../config/spotifyToken";
+import getSpotifyToken from "../config/spotifyToken";
 import { Router } from 'express';
 import dotenv from 'dotenv';
 import type { SpotifyArtist } from '../types/artists-types.ts';
 
 dotenv.config();
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
+const router = Router();
+const token = await getSpotifyToken();
 
 async function getArtistData(artistId: string) {
   const artistDataRequest = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
@@ -99,8 +101,6 @@ async function getRelatedArtists(artistName: string) {
   const data = await relatedArtistsResponse.json();
   return sliceRelatedArtists(data);
 }
-
-const router = Router();
 
 router.get('/:id', async (req, res) => {
   try {
