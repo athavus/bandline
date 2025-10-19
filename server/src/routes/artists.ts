@@ -2,11 +2,9 @@ import fetch from 'node-fetch';
 import token from "../config/spotifyToken";
 import { Router } from 'express';
 import dotenv from 'dotenv';
-
 import type { SpotifyArtist } from '../types/artists-types.ts';
 
 dotenv.config();
-
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 
 async function getArtistData(artistId: string) {
@@ -16,52 +14,59 @@ async function getArtistData(artistId: string) {
       Authorization: `Bearer ${token}`
     }
   });
-
   const artistData: SpotifyArtist = await artistDataRequest.json() as SpotifyArtist;
-
   return artistData;
 }
 
 function cleanDescription(rawText: string): string {
   let cleanText = rawText.replace(/<[^>]*>?/gm, '');
-
   if (cleanText.includes('Read more')) {
     cleanText = cleanText.split('Read more')[0];
   }
-
   if (cleanText.includes('Members')) {
     cleanText = cleanText.replace(/\bMembers\b/g, '');
   }
-
   if (cleanText.includes('Formation')) {
     cleanText = cleanText.replace(/\bFormation\b/g, '');
     cleanText = cleanText.replace(/\(drums\)(?!\.)/g, '(drums).');
   }
-
   cleanText = cleanText.replace(/[\n\s]+/g, ' ').trim();
   return cleanText;
 }
 
-
-async function getArtistDescription(artistName: string) {
-  const url = new URL("http://ws.audioscrobbler.com/2.0");
-  url.searchParams.append('method', 'artist.getInfo');
-  url.searchParams.append('artist', artistName); // encodeURIComponent é redundante aqui porque o objeto URL já cuida disso
-  url.searchParams.append('api_key', LASTFM_API_KEY);
-  url.searchParams.append('format', 'json');
-  url.searchParams.append('lang', 'en');
-
-  let response = await fetch(url);
-  if (!response.ok) return null;
-  let data = await response.json();
-
-  if (data?.artist?.bio?.summary) {
-    return cleanDescription(data.artist.bio.summary);
-  }
-
-  return null;
+type ArtistDescription = {
+  method: string,
+  artist: string,
+  api_key: string,
+  format: string,
+  lang: string
 }
 
+async function getArtistDescription(artistName: string, preferredLang: string) {
+  const baseURL = "http://ws.audioscrobbler.com/2.0";
+  const params = new URLSearchParams({
+    method: "artist.getInfo",
+    artist: artistName,
+    api_key: LASTFM_API_KEY,
+    format: "json",
+    lang: preferredLang
+  } as ArtistDescription);
+
+  const fetchInfo = async (lang: string) => {
+    const url = `${baseURL}?${params.toString().replace(`lang=${preferredLang}`, `lang=${lang}`)}`;
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data?.artist?.bio?.summary ? cleanDescription(data.artist.bio.summary) : null;
+  };
+
+  let description = await fetchInfo(preferredLang);
+  if (!description) {
+    description = await fetchInfo("en");
+  }
+
+  return description;
+}
 
 type RelatedArtist = {
   name: string;
@@ -75,8 +80,6 @@ function sliceRelatedArtists(lastFmRelatedArtists: any): RelatedArtist[] {
   ) {
     return [];
   }
-
-  // mapeia para pegar só o `name` e a imagem de tamanho `medium` (ou pega a primeira imagem se medium não existir)
   return lastFmRelatedArtists.similarartists.artist.map((artist: any) => {
     return {
       name: artist.name,
@@ -93,9 +96,7 @@ async function getRelatedArtists(artistName: string) {
   url.searchParams.append('limit', '5');
 
   const relatedArtistsResponse = await fetch(url);
-
   const data = await relatedArtistsResponse.json();
-
   return sliceRelatedArtists(data);
 }
 
@@ -104,9 +105,15 @@ const router = Router();
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    // Pega o idioma da query string, defaultando para 'en' se não for fornecido
+    const lang = (req.query.lang as string) || 'en';
+
+    // Valida o idioma para garantir que seja um dos aceitos
+    const validLangs = ['en', 'pt', 'es'];
+    const selectedLang = validLangs.includes(lang) ? lang : 'en';
 
     const rawArtist = await getArtistData(id);
-    const description = await getArtistDescription(rawArtist.name);
+    const description = await getArtistDescription(rawArtist.name, selectedLang);
     const relatedArtists = await getRelatedArtists(rawArtist.name);
 
     const filteredArtist = {
@@ -126,4 +133,5 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: "Não foi possível conseguir o artista do spotify ou a descrição do last.fm" });
   }
 });
+
 export default router;
