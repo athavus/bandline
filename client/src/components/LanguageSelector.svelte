@@ -120,14 +120,13 @@
   .language-dropdown {
     position: absolute;
     top: 100%;
-    right: 0;
     margin-top: 4px;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     box-shadow: var(--shadow-lg);
     z-index: 1000;
-    min-width: 70px;
+    min-width: 50px;
     overflow: hidden;
     animation: slideDown 0.2s ease;
   }

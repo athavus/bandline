@@ -56,9 +56,9 @@
     <h3 class="album-name">{album.name}</h3>
     <p class="album-year">{formatDate(album.release_date)}</p>
     {#if album.total_tracks > 1}
-      <span class="album-badge">{album.total_tracks} {t('tracks')}</span>
+      <span class="album-badge">{album.total_tracks} {t("tracks")}</span>
     {:else if album.total_tracks === 1}
-      <span class="album-badge">{album.total_tracks} {t('track')}</span>
+      <span class="album-badge">{album.total_tracks} {t("track")}</span>
     {/if}
   </div>
 </div>
@@ -191,56 +191,344 @@
     pointer-events: none;
     z-index: -1;
     background:
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 20%, transparent 60%) 4% 100% / 3px 20%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 6% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 8% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 70%) 10% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 35%) 12% 100% / 3px 35%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 55%) 14% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 80%) 16% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 25%, transparent 25%) 18% 100% / 3px 25%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 45%, transparent 45%) 20% 100% / 3px 45%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 65%) 22% 100% / 3px 65%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 40%) 24% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 60%) 26% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 28% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 30% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 70%) 32% 100% / 3px 20%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 35%) 34% 100% / 3px 35%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 55%) 36% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 80%) 38% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 25%, transparent 25%) 40% 100% / 3px 25%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 45%, transparent 45%) 42% 100% / 3px 45%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 65%) 44% 100% / 3px 15%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 40%) 46% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 10%, transparent 60%) 48% 100% / 3px 20%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 50% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 52% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 70%) 54% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 35%) 56% 100% / 3px 35%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 55%) 58% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 20%, transparent 80%) 60% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 25%, transparent 25%) 62% 100% / 3px 25%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 45%, transparent 45%) 64% 100% / 3px 45%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 65%) 66% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 40%) 68% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 60%) 70% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 72% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 74% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 20%, transparent 70%) 76% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 35%) 78% 100% / 3px 35%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 55%) 80% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 80%) 82% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 25%, transparent 25%) 84% 100% / 3px 25%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 45%, transparent 45%) 86% 100% / 3px 45%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 65%) 88% 100% / 3px 15%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 40%) 90% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 20%, transparent 60%) 92% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 94% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 96% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 75%) 98% 100% / 3px 25%;
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 20%,
+          transparent 60%
+        )
+        4% 100% / 3px 20%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        6% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        8% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 70%
+        )
+        10% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 35%
+        )
+        12% 100% / 3px 35%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 55%
+        )
+        14% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 80%
+        )
+        16% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 25%,
+          transparent 25%
+        )
+        18% 100% / 3px 25%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 45%,
+          transparent 45%
+        )
+        20% 100% / 3px 45%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 65%
+        )
+        22% 100% / 3px 65%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 40%
+        )
+        24% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 60%
+        )
+        26% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        28% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        30% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 70%
+        )
+        32% 100% / 3px 20%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 35%
+        )
+        34% 100% / 3px 35%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 55%
+        )
+        36% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 80%
+        )
+        38% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 25%,
+          transparent 25%
+        )
+        40% 100% / 3px 25%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 45%,
+          transparent 45%
+        )
+        42% 100% / 3px 45%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 65%
+        )
+        44% 100% / 3px 15%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 40%
+        )
+        46% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 10%,
+          transparent 60%
+        )
+        48% 100% / 3px 20%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        50% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        52% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 70%
+        )
+        54% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 35%
+        )
+        56% 100% / 3px 35%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 55%
+        )
+        58% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 20%,
+          transparent 80%
+        )
+        60% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 25%,
+          transparent 25%
+        )
+        62% 100% / 3px 25%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 45%,
+          transparent 45%
+        )
+        64% 100% / 3px 45%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 65%
+        )
+        66% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 40%
+        )
+        68% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 60%
+        )
+        70% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        72% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        74% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 20%,
+          transparent 70%
+        )
+        76% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 35%
+        )
+        78% 100% / 3px 35%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 55%
+        )
+        80% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 80%
+        )
+        82% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 25%,
+          transparent 25%
+        )
+        84% 100% / 3px 25%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 45%,
+          transparent 45%
+        )
+        86% 100% / 3px 45%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 65%
+        )
+        88% 100% / 3px 15%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 40%
+        )
+        90% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 20%,
+          transparent 60%
+        )
+        92% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        94% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        96% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 75%
+        )
+        98% 100% / 3px 25%;
     background-repeat: no-repeat;
-    animation: spectrogram-left 1.25s ease-in-out infinite;
+    animation: spectrogram-left 3s ease-in-out infinite;
     filter: blur(0.3px);
     transform: rotate(-90deg);
   }
@@ -256,130 +544,638 @@
     height: 250px !important;
     pointer-events: none;
     z-index: -1;
-    background: 
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 20%, transparent 60%) 4% 100% / 3px 20%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 6% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 8% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 70%) 10% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 35%) 12% 100% / 3px 35%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 55%) 14% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 80%) 16% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 25%, transparent 25%) 18% 100% / 3px 25%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 45%, transparent 45%) 20% 100% / 3px 45%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 65%) 22% 100% / 3px 65%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 40%) 24% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 60%) 26% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 28% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 30% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 70%) 32% 100% / 3px 20%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 35%) 34% 100% / 3px 35%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 55%) 36% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 80%) 38% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 25%, transparent 25%) 40% 100% / 3px 25%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 45%, transparent 45%) 42% 100% / 3px 45%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 65%) 44% 100% / 3px 15%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 40%) 46% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 10%, transparent 60%) 48% 100% / 3px 20%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 50% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 52% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 70%) 54% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 35%) 56% 100% / 3px 35%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 55%) 58% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 20%, transparent 80%) 60% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 25%, transparent 25%) 62% 100% / 3px 25%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 45%, transparent 45%) 64% 100% / 3px 45%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 65%) 66% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 40%) 68% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 60%) 70% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 72% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 74% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 20%, transparent 70%) 76% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 35%, transparent 35%) 78% 100% / 3px 35%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 55%) 80% 100% / 3px 55%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 80%) 82% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 25%, transparent 25%) 84% 100% / 3px 25%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 45%, transparent 45%) 86% 100% / 3px 45%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 65%) 88% 100% / 3px 15%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 40%, transparent 40%) 90% 100% / 3px 40%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 20%, transparent 60%) 92% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 30%, transparent 30%) 94% 100% / 3px 30%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 50%, transparent 50%) 96% 100% / 3px 50%,
-      linear-gradient(to top, rgba(var(--accent-rgb), 0.9) 0%, rgba(var(--accent-rgb), 0.9) 55%, transparent 75%) 98% 100% / 3px 25%;
+    background:
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 20%,
+          transparent 60%
+        )
+        4% 100% / 3px 20%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        6% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        8% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 70%
+        )
+        10% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 35%
+        )
+        12% 100% / 3px 35%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 55%
+        )
+        14% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 80%
+        )
+        16% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 25%,
+          transparent 25%
+        )
+        18% 100% / 3px 25%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 45%,
+          transparent 45%
+        )
+        20% 100% / 3px 45%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 65%
+        )
+        22% 100% / 3px 65%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 40%
+        )
+        24% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 60%
+        )
+        26% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        28% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        30% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 70%
+        )
+        32% 100% / 3px 20%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 35%
+        )
+        34% 100% / 3px 35%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 55%
+        )
+        36% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 80%
+        )
+        38% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 25%,
+          transparent 25%
+        )
+        40% 100% / 3px 25%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 45%,
+          transparent 45%
+        )
+        42% 100% / 3px 45%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 65%
+        )
+        44% 100% / 3px 15%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 40%
+        )
+        46% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 10%,
+          transparent 60%
+        )
+        48% 100% / 3px 20%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        50% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        52% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 70%
+        )
+        54% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 35%
+        )
+        56% 100% / 3px 35%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 55%
+        )
+        58% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 20%,
+          transparent 80%
+        )
+        60% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 25%,
+          transparent 25%
+        )
+        62% 100% / 3px 25%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 45%,
+          transparent 45%
+        )
+        64% 100% / 3px 45%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 65%
+        )
+        66% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 40%
+        )
+        68% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 60%
+        )
+        70% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        72% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        74% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 20%,
+          transparent 70%
+        )
+        76% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 35%,
+          transparent 35%
+        )
+        78% 100% / 3px 35%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 55%
+        )
+        80% 100% / 3px 55%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 80%
+        )
+        82% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 25%,
+          transparent 25%
+        )
+        84% 100% / 3px 25%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 45%,
+          transparent 45%
+        )
+        86% 100% / 3px 45%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 65%
+        )
+        88% 100% / 3px 15%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 40%,
+          transparent 40%
+        )
+        90% 100% / 3px 40%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 20%,
+          transparent 60%
+        )
+        92% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 30%,
+          transparent 30%
+        )
+        94% 100% / 3px 30%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 50%,
+          transparent 50%
+        )
+        96% 100% / 3px 50%,
+      linear-gradient(
+          to top,
+          rgba(var(--accent-rgb), 0.9) 0%,
+          rgba(var(--accent-rgb), 0.9) 55%,
+          transparent 75%
+        )
+        98% 100% / 3px 25%;
     background-repeat: no-repeat;
-    animation: spectrogram-right 1.25s ease-in-out infinite;
+    animation: spectrogram-right 3s ease-in-out infinite;
     filter: blur(0.3px);
     transform: rotate(90deg);
   }
 
   @keyframes spectrogram-left {
-    0% { 
-      background-size: 3px 30%, 3px 50%, 3px 40%, 3px 70%, 3px 35%, 3px 60%, 3px 45%, 3px 80%, 3px 25%, 3px 55%;
+    0% {
+      background-size:
+        3px 30%,
+        3px 50%,
+        3px 40%,
+        3px 70%,
+        3px 35%,
+        3px 60%,
+        3px 45%,
+        3px 80%,
+        3px 25%,
+        3px 55%;
     }
-    10% { 
-      background-size: 3px 50%, 3px 35%, 3px 70%, 3px 45%, 3px 60%, 3px 30%, 3px 75%, 3px 40%, 3px 55%, 3px 65%;
+    10% {
+      background-size:
+        3px 50%,
+        3px 35%,
+        3px 70%,
+        3px 45%,
+        3px 60%,
+        3px 30%,
+        3px 75%,
+        3px 40%,
+        3px 55%,
+        3px 65%;
     }
-    20% { 
-      background-size: 3px 40%, 3px 65%, 3px 50%, 3px 30%, 3px 70%, 3px 45%, 3px 60%, 3px 35%, 3px 75%, 3px 50%;
+    20% {
+      background-size:
+        3px 40%,
+        3px 65%,
+        3px 50%,
+        3px 30%,
+        3px 70%,
+        3px 45%,
+        3px 60%,
+        3px 35%,
+        3px 75%,
+        3px 50%;
     }
-    30% { 
-      background-size: 3px 70%, 3px 45%, 3px 35%, 3px 80%, 3px 50%, 3px 65%, 3px 40%, 3px 55%, 3px 30%, 3px 60%;
+    30% {
+      background-size:
+        3px 70%,
+        3px 45%,
+        3px 35%,
+        3px 80%,
+        3px 50%,
+        3px 65%,
+        3px 40%,
+        3px 55%,
+        3px 30%,
+        3px 60%;
     }
-    40% { 
-      background-size: 3px 35%, 3px 75%, 3px 60%, 3px 40%, 3px 55%, 3px 50%, 3px 70%, 3px 45%, 3px 65%, 3px 35%;
+    40% {
+      background-size:
+        3px 35%,
+        3px 75%,
+        3px 60%,
+        3px 40%,
+        3px 55%,
+        3px 50%,
+        3px 70%,
+        3px 45%,
+        3px 65%,
+        3px 35%;
     }
-    50% { 
-      background-size: 3px 60%, 3px 40%, 3px 70%, 3px 55%, 3px 45%, 3px 75%, 3px 35%, 3px 65%, 3px 50%, 3px 40%;
+    50% {
+      background-size:
+        3px 60%,
+        3px 40%,
+        3px 70%,
+        3px 55%,
+        3px 45%,
+        3px 75%,
+        3px 35%,
+        3px 65%,
+        3px 50%,
+        3px 40%;
     }
-    60% { 
-      background-size: 3px 45%, 3px 70%, 3px 35%, 3px 65%, 3px 80%, 3px 40%, 3px 55%, 3px 50%, 3px 60%, 3px 75%;
+    60% {
+      background-size:
+        3px 45%,
+        3px 70%,
+        3px 35%,
+        3px 65%,
+        3px 80%,
+        3px 40%,
+        3px 55%,
+        3px 50%,
+        3px 60%,
+        3px 75%;
     }
-    70% { 
-      background-size: 3px 75%, 3px 50%, 3px 65%, 3px 35%, 3px 60%, 3px 70%, 3px 45%, 3px 30%, 3px 80%, 3px 55%;
+    70% {
+      background-size:
+        3px 75%,
+        3px 50%,
+        3px 65%,
+        3px 35%,
+        3px 60%,
+        3px 70%,
+        3px 45%,
+        3px 30%,
+        3px 80%,
+        3px 55%;
     }
-    80% { 
-      background-size: 3px 50%, 3px 60%, 3px 45%, 3px 75%, 3px 40%, 3px 55%, 3px 65%, 3px 70%, 3px 35%, 3px 50%;
+    80% {
+      background-size:
+        3px 50%,
+        3px 60%,
+        3px 45%,
+        3px 75%,
+        3px 40%,
+        3px 55%,
+        3px 65%,
+        3px 70%,
+        3px 35%,
+        3px 50%;
     }
-    90% { 
-      background-size: 3px 65%, 3px 35%, 3px 80%, 3px 50%, 3px 70%, 3px 45%, 3px 30%, 3px 60%, 3px 55%, 3px 40%;
+    90% {
+      background-size:
+        3px 65%,
+        3px 35%,
+        3px 80%,
+        3px 50%,
+        3px 70%,
+        3px 45%,
+        3px 30%,
+        3px 60%,
+        3px 55%,
+        3px 40%;
     }
-    100% { 
-      background-size: 3px 30%, 3px 50%, 3px 40%, 3px 70%, 3px 35%, 3px 60%, 3px 45%, 3px 80%, 3px 25%, 3px 55%;
+    100% {
+      background-size:
+        3px 30%,
+        3px 50%,
+        3px 40%,
+        3px 70%,
+        3px 35%,
+        3px 60%,
+        3px 45%,
+        3px 80%,
+        3px 25%,
+        3px 55%;
     }
   }
 
   @keyframes spectrogram-right {
-    0% { 
-      background-size: 3px 45%, 3px 65%, 3px 30%, 3px 75%, 3px 40%, 3px 55%, 3px 35%, 3px 70%, 3px 50%, 3px 60%;
+    0% {
+      background-size:
+        3px 45%,
+        3px 65%,
+        3px 30%,
+        3px 75%,
+        3px 40%,
+        3px 55%,
+        3px 35%,
+        3px 70%,
+        3px 50%,
+        3px 60%;
     }
-    10% { 
-      background-size: 3px 65%, 3px 40%, 3px 70%, 3px 50%, 3px 60%, 3px 45%, 3px 75%, 3px 35%, 3px 55%, 3px 50%;
+    10% {
+      background-size:
+        3px 65%,
+        3px 40%,
+        3px 70%,
+        3px 50%,
+        3px 60%,
+        3px 45%,
+        3px 75%,
+        3px 35%,
+        3px 55%,
+        3px 50%;
     }
-    20% { 
-      background-size: 3px 35%, 3px 75%, 3px 50%, 3px 40%, 3px 65%, 3px 60%, 3px 45%, 3px 55%, 3px 70%, 3px 35%;
+    20% {
+      background-size:
+        3px 35%,
+        3px 75%,
+        3px 50%,
+        3px 40%,
+        3px 65%,
+        3px 60%,
+        3px 45%,
+        3px 55%,
+        3px 70%,
+        3px 35%;
     }
-    30% { 
-      background-size: 3px 80%, 3px 50%, 3px 65%, 3px 45%, 3px 55%, 3px 70%, 3px 40%, 3px 60%, 3px 35%, 3px 75%;
+    30% {
+      background-size:
+        3px 80%,
+        3px 50%,
+        3px 65%,
+        3px 45%,
+        3px 55%,
+        3px 70%,
+        3px 40%,
+        3px 60%,
+        3px 35%,
+        3px 75%;
     }
-    40% { 
-      background-size: 3px 50%, 3px 70%, 3px 40%, 3px 65%, 3px 50%, 3px 35%, 3px 75%, 3px 45%, 3px 60%, 3px 55%;
+    40% {
+      background-size:
+        3px 50%,
+        3px 70%,
+        3px 40%,
+        3px 65%,
+        3px 50%,
+        3px 35%,
+        3px 75%,
+        3px 45%,
+        3px 60%,
+        3px 55%;
     }
-    50% { 
-      background-size: 3px 70%, 3px 35%, 3px 75%, 3px 55%, 3px 45%, 3px 65%, 3px 50%, 3px 70%, 3px 40%, 3px 60%;
+    50% {
+      background-size:
+        3px 70%,
+        3px 35%,
+        3px 75%,
+        3px 55%,
+        3px 45%,
+        3px 65%,
+        3px 50%,
+        3px 70%,
+        3px 40%,
+        3px 60%;
     }
-    60% { 
-      background-size: 3px 40%, 3px 60%, 3px 55%, 3px 70%, 3px 75%, 3px 50%, 3px 65%, 3px 35%, 3px 80%, 3px 45%;
+    60% {
+      background-size:
+        3px 40%,
+        3px 60%,
+        3px 55%,
+        3px 70%,
+        3px 75%,
+        3px 50%,
+        3px 65%,
+        3px 35%,
+        3px 80%,
+        3px 45%;
     }
-    70% { 
-      background-size: 3px 65%, 3px 45%, 3px 60%, 3px 35%, 3px 70%, 3px 75%, 3px 50%, 3px 80%, 3px 55%, 3px 40%;
+    70% {
+      background-size:
+        3px 65%,
+        3px 45%,
+        3px 60%,
+        3px 35%,
+        3px 70%,
+        3px 75%,
+        3px 50%,
+        3px 80%,
+        3px 55%,
+        3px 40%;
     }
-    80% { 
-      background-size: 3px 55%, 3px 75%, 3px 45%, 3px 60%, 3px 50%, 3px 40%, 3px 70%, 3px 65%, 3px 35%, 3px 55%;
+    80% {
+      background-size:
+        3px 55%,
+        3px 75%,
+        3px 45%,
+        3px 60%,
+        3px 50%,
+        3px 40%,
+        3px 70%,
+        3px 65%,
+        3px 35%,
+        3px 55%;
     }
-    90% { 
-      background-size: 3px 70%, 3px 50%, 3px 80%, 3px 45%, 3px 65%, 3px 55%, 3px 35%, 3px 75%, 3px 60%, 3px 40%;
+    90% {
+      background-size:
+        3px 70%,
+        3px 50%,
+        3px 80%,
+        3px 45%,
+        3px 65%,
+        3px 55%,
+        3px 35%,
+        3px 75%,
+        3px 60%,
+        3px 40%;
     }
-    100% { 
-      background-size: 3px 45%, 3px 65%, 3px 30%, 3px 75%, 3px 40%, 3px 55%, 3px 35%, 3px 70%, 3px 50%, 3px 60%;
+    100% {
+      background-size:
+        3px 45%,
+        3px 65%,
+        3px 30%,
+        3px 75%,
+        3px 40%,
+        3px 55%,
+        3px 35%,
+        3px 70%,
+        3px 50%,
+        3px 60%;
     }
   }
 
