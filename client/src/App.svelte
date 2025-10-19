@@ -9,13 +9,13 @@
   import ThemePaletteButton from "./components/ThemePaletteButton.svelte";
   import Sidebar from "./components/Sidebar.svelte";
   import AuthModal from "./components/AuthModal.svelte";
-  import ArtistHeaderBar from "./components/ArtistHeaderBar.svelte";
   import WelcomeSection from "./components/WelcomeSection.svelte";
   import BrandTitle from "./components/BrandTitle.svelte";
   import LanguageSelector from "./components/LanguageSelector.svelte";
   import { searchArtists, getArtistData } from "./lib/data";
   import { auth } from "./lib/stores/auth";
   import { initLanguage, t, language } from "./lib/stores/language";
+  import { initURLState, setQueryParams, getQueryParam } from "./lib/urlState";
   import type { SearchArtistResult, SpotifyArtist } from "./types/artist";
 
   let query = "";
@@ -28,14 +28,43 @@
   let sidebarOpen = false;
   let showAuthModal = false;
   let authMode: "login" | "register" = "login";
-
   $: authState = $auth;
-  $: currentLanguage = $language;
 
   onMount(async () => {
     initLanguage();
     await auth.checkAuth();
+    initURLState();
+
+    const artistId = getQueryParam("artist");
+    const urlQuery = getQueryParam("q");
+
+    if (artistId && authState.isAuthenticated) {
+      await loadArtistFromURL(artistId);
+    }
+
+    if (urlQuery) {
+      query = urlQuery;
+    }
   });
+
+  async function loadArtistFromURL(artistId: string) {
+    if (!authState.isAuthenticated) return;
+
+    loading = true;
+    selectedArtist = null;
+    showTimeline = false;
+
+    try {
+      selectedArtist = await getArtistData(artistId);
+      query = selectedArtist.name;
+    } catch (error) {
+      console.error("Erro ao carregar artista da URL:", error);
+      // Limpa a URL se houver erro
+      setQueryParams({ artist: null, q: null });
+    } finally {
+      loading = false;
+    }
+  }
 
   async function handleInput() {
     if (!authState.isAuthenticated) {
@@ -43,6 +72,8 @@
       authMode = "login";
       return;
     }
+
+    setQueryParams({ q: query || null });
 
     const result = await searchArtists(query);
     artists = result.artists || [];
@@ -62,6 +93,12 @@
     loading = true;
     selectedArtist = null;
     showTimeline = false;
+
+    setQueryParams({
+      artist: artist.id,
+      q: artist.name,
+    });
+
     try {
       selectedArtist = await getArtistData(artist.id);
     } catch (error) {
@@ -96,19 +133,6 @@
     }, 200);
   }
 
-  function openDetailsModal() {
-    if (!authState.isAuthenticated) {
-      showAuthModal = true;
-      authMode = "login";
-      return;
-    }
-    showModal = true;
-  }
-
-  function closeDetailsModal() {
-    showModal = false;
-  }
-
   function toggleSidebar() {
     sidebarOpen = !sidebarOpen;
   }
@@ -128,6 +152,8 @@
       showTimeline = false;
       query = "";
       artists = [];
+
+      setQueryParams({ artist: null, q: null });
     }
 
     sidebarOpen = false;
@@ -140,7 +166,10 @@
   function handleLoginSuccess() {
     showAuthModal = false;
 
-    if (query) {
+    const artistId = getQueryParam("artist");
+    if (artistId) {
+      loadArtistFromURL(artistId);
+    } else if (query) {
       handleInput();
     }
   }
@@ -176,7 +205,7 @@
       {#if authState.isAuthenticated}
         <div class="user-indicator">
           <span class="user-welcome"
-            >{t('hello')}, {authState.user?.username || t('user')}!</span
+            >{t("hello")}, {authState.user?.username || t("user")}!</span
           >
           <button class="logout-btn" on:click={() => auth.logout()}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -218,8 +247,8 @@
       on:focus={handleFocus}
       on:blur={handleBlur}
       placeholder={authState.isAuthenticated
-        ? t('searchArtistsPlaceholder')
-        : t('loginToSearch')}
+        ? t("searchArtistsPlaceholder")
+        : t("loginToSearch")}
       disabled={!authState.isAuthenticated}
     />
     <ArtistList {artists} show={showOverlay} on:select={handleSelectArtist} />
@@ -237,7 +266,7 @@
       }}
     />
   {:else if loading}
-    <Loading message={t('loading')} />
+    <Loading message={t("loading")} />
   {:else if selectedArtist}
     <ArtistDetails
       artist={selectedArtist}
@@ -245,7 +274,6 @@
       on:selectRelatedArtist={handleSelectArtist}
     />
     <Timeline artistId={selectedArtist.id} on:back={handleBackToArtist} />
-
   {/if}
 </main>
 
