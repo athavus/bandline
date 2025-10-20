@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import { t } from "../../lib/stores/language";
+  import { t } from "../../../lib/stores/language";
   import MenuSection from "./MenuSection.svelte";
   import MenuItem from "./MenuItem.svelte";
   import UserInfo from "./UserInfo.svelte";

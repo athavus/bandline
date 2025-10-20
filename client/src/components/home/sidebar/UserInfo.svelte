@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { t } from "../../lib/stores/language";
+  import { t } from "../../../lib/stores/language";
 
   export let user: {
     username?: string;

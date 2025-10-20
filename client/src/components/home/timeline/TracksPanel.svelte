@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { SpotifyAlbumTracks } from "../../types/tracks.ts";
+  import type { SpotifyAlbumTracks } from "../../../types/tracks.ts";
   import TrackCard from "./TrackCard.svelte";
   import LoadingSpinner from "../utils/LoadingSpinner.svelte";
   import SpotifyButton from "../utils/SpotifyButton.svelte";
-  import { t } from "../../lib/stores/language";
+  import { t } from "../../../lib/stores/language";
 
   export let album: any;
   export let albumTracks: SpotifyAlbumTracks | null = null;

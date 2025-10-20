@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SearchArtistResult } from "../../types/artist.ts";
+  import type { SearchArtistResult } from "../../../types/artist.ts";
 
   export let artist: SearchArtistResult;
 </script>

@@ -1,13 +1,13 @@
 <script lang="ts">
   // removed unused dispatcher
-  import type { SpotifyAlbums } from "../../types/album.ts";
-  import type { SpotifyAlbumTracks } from "../../types/tracks.ts";
+  import type { SpotifyAlbums } from "../../../types/album.ts";
+  import type { SpotifyAlbumTracks } from "../../../types/tracks.ts";
   import AlbumCard from "./AlbumCard.svelte";
   import TracksPanel from "./TracksPanel.svelte";
   import LoadingSpinner from "../utils/LoadingSpinner.svelte";
   import NavigationButton from "../utils/NavigationButton.svelte";
   import BrandSubtitle from "../titles/BrandSubtitle.svelte";
-  import { t } from "../../lib/stores/language";
+  import { t } from "../../../lib/stores/language";
 
   export let artistId: string = "";
 

@@ -24,6 +24,7 @@
     }
   },
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "svelte-spa-router": "^4.0.1"
   }
 }

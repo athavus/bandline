@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import ArtistItem from "./ArtistItem.svelte";
-  import type { SearchArtistResult } from "../../types/artist";
+  import type { SearchArtistResult } from "../../../types/artist";
 
   export let artists: SearchArtistResult[] = [];
   export let show = false;

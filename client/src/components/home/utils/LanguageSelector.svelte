@@ -3,7 +3,7 @@
     language,
     setLanguage,
     type Language,
-  } from "../../lib/stores/language";
+  } from "../../../lib/stores/language";
 
   let isOpen = false;
 

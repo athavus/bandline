@@ -1,16 +1,16 @@
 <script lang="ts">
-  import SearchInput from "../components/SearchInput.svelte";
-  import ArtistList from "../components/artists/ArtistList.svelte";
-  import ArtistDetails from "../components/artists/ArtistDetails.svelte";
-  import Timeline from "../components/timeline/Timeline.svelte";
-  import Loading from "../components/utils/Loading.svelte";
-  import ThemeButton from "../components/utils/ThemeButton.svelte";
-  import ThemePaletteButton from "../components/utils/ThemePaletteButton.svelte";
-  import Sidebar from "../components/Sidebar.svelte";
-  import AuthModal from "../components/AuthModal.svelte";
-  import WelcomeSection from "../components/WelcomeSection.svelte";
-  import BrandTitle from "../components/titles/BrandTitle.svelte";
-  import LanguageSelector from "../components/utils/LanguageSelector.svelte";
+  import SearchInput from "../components/home/SearchInput.svelte";
+  import ArtistList from "../components/home/artists/ArtistList.svelte";
+  import ArtistDetails from "../components/home/artists/ArtistDetails.svelte";
+  import Timeline from "../components/home/timeline/Timeline.svelte";
+  import Loading from "../components/home/utils/Loading.svelte";
+  import ThemeButton from "../components/home/utils/ThemeButton.svelte";
+  import ThemePaletteButton from "../components/home/utils/ThemePaletteButton.svelte";
+  import Sidebar from "../components/home/Sidebar.svelte";
+  import AuthModal from "../components/home/AuthModal.svelte";
+  import WelcomeSection from "../components/home/WelcomeSection.svelte";
+  import BrandTitle from "../components/home/titles/BrandTitle.svelte";
+  import LanguageSelector from "../components/home/utils/LanguageSelector.svelte";
   import { searchArtists, getArtistData } from "../lib/data";
   import { auth } from "../lib/stores/auth";
   import { t } from "../lib/stores/language";

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SpotifyArtist } from "../../types/artist.ts";
+  import type { SpotifyArtist } from "../../../types/artist.ts";
   import { createEventDispatcher } from "svelte";
 
   export let artist: SpotifyArtist;
