@@ -1,15 +1,15 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import ArtistItem from "./ArtistItem.svelte";
-  import type { SearchArtistResult } from "../types/artist";
-  
-  export let artists: SearchArtistResult[] = []
+  import type { SearchArtistResult } from "../../types/artist";
+
+  export let artists: SearchArtistResult[] = [];
   export let show = false;
-  
+
   const dispatch = createEventDispatcher();
-  
+
   function handleSelect(artist: SearchArtistResult) {
-    dispatch('select', artist);
+    dispatch("select", artist);
   }
 </script>
 
@@ -39,23 +39,23 @@
     z-index: 1000;
     transition: all 0.3s ease;
   }
-  
+
   /* Scrollbar customizada */
   .overlay::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   .overlay::-webkit-scrollbar-track {
     background: var(--bg-secondary);
     border-radius: 3px;
   }
-  
+
   .overlay::-webkit-scrollbar-thumb {
     background: var(--border-color);
     border-radius: 3px;
     transition: background 0.3s ease;
   }
-  
+
   .overlay::-webkit-scrollbar-thumb:hover {
     background: var(--text-tertiary);
   }

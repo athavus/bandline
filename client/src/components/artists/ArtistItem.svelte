@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { SearchArtistResult } from '../types/artist.ts';
-  
+  import type { SearchArtistResult } from "../../types/artist.ts";
+
   export let artist: SearchArtistResult;
 </script>
 
@@ -10,13 +10,13 @@
   {:else}
     <div class="no-image">?</div>
   {/if}
-  
+
   <div class="artist-info">
     <div class="artist-name">{artist.name}</div>
     <div class="artist-details">
-      {artist.total_followers.toLocaleString('pt-BR')} seguidores
+      {artist.total_followers.toLocaleString("pt-BR")} seguidores
       {#if artist.genres.length > 0}
-        • {artist.genres.join(', ')}
+        • {artist.genres.join(", ")}
       {/if}
     </div>
   </div>
@@ -40,12 +40,12 @@
   .artist-item:last-child {
     border-bottom: none;
   }
-  
+
   .artist-item:hover {
     background: var(--bg-hover);
     transform: translateX(4px);
   }
-  
+
   .artist-item img,
   .no-image {
     width: 56px;
@@ -61,7 +61,7 @@
     border-color: var(--accent-color);
     transform: scale(1.05);
   }
-  
+
   .no-image {
     display: flex;
     align-items: center;
@@ -77,12 +77,12 @@
     background: var(--accent-color);
     color: white;
   }
-  
+
   .artist-info {
     flex: 1;
     min-width: 0;
   }
-  
+
   .artist-name {
     font-family: var(--font-heading);
     font-weight: 600;
@@ -94,7 +94,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .artist-details {
     font-family: var(--font-primary);
     font-size: 0.875rem;

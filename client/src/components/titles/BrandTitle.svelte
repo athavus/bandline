@@ -3,7 +3,7 @@
 
   let mounted = false;
   export let inline: boolean = false;
-  
+
   onMount(() => {
     mounted = true;
   });

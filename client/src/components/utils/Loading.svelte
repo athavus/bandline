@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let message = 'Carregando...';
+  export let message = "Carregando...";
 </script>
 
 <div class="loading">
@@ -24,13 +24,13 @@
     max-width: 300px;
     margin: 0 auto;
   }
-  
+
   .spinner-container {
     position: relative;
     width: 50px;
     height: 50px;
   }
-  
+
   .spinner {
     width: 50px;
     height: 50px;
@@ -53,12 +53,16 @@
     border-radius: 50%;
     animation: spin 1.5s linear infinite reverse;
   }
-  
+
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
-  
+
   p {
     margin: 0;
     color: var(--text-secondary);

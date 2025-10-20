@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { language, setLanguage, type Language } from "../lib/stores/language";
+  import {
+    language,
+    setLanguage,
+    type Language,
+  } from "../../lib/stores/language";
 
   let isOpen = false;
 

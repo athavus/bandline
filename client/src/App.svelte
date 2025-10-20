@@ -1,17 +1,17 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import SearchInput from "./components/SearchInput.svelte";
-  import ArtistList from "./components/ArtistList.svelte";
-  import ArtistDetails from "./components/ArtistDetails.svelte";
-  import Timeline from "./components/Timeline.svelte";
-  import Loading from "./components/Loading.svelte";
-  import ThemeButton from "./components/ThemeButton.svelte";
-  import ThemePaletteButton from "./components/ThemePaletteButton.svelte";
+  import ArtistList from "./components/artists/ArtistList.svelte";
+  import ArtistDetails from "./components/artists/ArtistDetails.svelte";
+  import Timeline from "./components/timeline/Timeline.svelte";
+  import Loading from "./components/utils/Loading.svelte";
+  import ThemeButton from "./components/utils/ThemeButton.svelte";
+  import ThemePaletteButton from "./components/utils/ThemePaletteButton.svelte";
   import Sidebar from "./components/Sidebar.svelte";
   import AuthModal from "./components/AuthModal.svelte";
   import WelcomeSection from "./components/WelcomeSection.svelte";
-  import BrandTitle from "./components/BrandTitle.svelte";
-  import LanguageSelector from "./components/LanguageSelector.svelte";
+  import BrandTitle from "./components/titles/BrandTitle.svelte";
+  import LanguageSelector from "./components/utils/LanguageSelector.svelte";
   import { searchArtists, getArtistData } from "./lib/data";
   import { auth } from "./lib/stores/auth";
   import { initLanguage, t, language } from "./lib/stores/language";
