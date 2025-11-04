@@ -11,6 +11,9 @@ importers:
 
   .:
     dependencies:
+      '@iconify/svelte':
+        specifier: ^5.1.0
+        version: 5.1.0(svelte@5.39.11)
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -50,6 +53,14 @@ packages:
 
   '@emnapi/wasi-threads@1.1.0':
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
+
+  '@iconify/svelte@5.1.0':
+    resolution: {integrity: sha512-I14nSqo0pNXO5OKsT61ZO3XIPF4yRHA2ErgPsaZ1sPJdKXn80o7o8jOe1xpWphbb9FihdX6by9zlKKBss61mFw==}
+    peerDependencies:
+      svelte: '>4.0.0'
+
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -482,6 +493,13 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@iconify/svelte@5.1.0(svelte@5.39.11)':
+    dependencies:
+      '@iconify/types': 2.0.0
+      svelte: 5.39.11
+
+  '@iconify/types@2.0.0': {}
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
