@@ -49,12 +49,12 @@
           type="button"
         >
           <div class="artist-icon">
-            <div class="music-wave">
-              <span class="wave-bar"></span>
-              <span class="wave-bar"></span>
-              <span class="wave-bar"></span>
-              <span class="wave-bar"></span>
-              <span class="wave-bar"></span>
+            <div class="related-music-wave">
+              <span class="related-wave-bar"></span>
+              <span class="related-wave-bar"></span>
+              <span class="related-wave-bar"></span>
+              <span class="related-wave-bar"></span>
+              <span class="related-wave-bar"></span>
             </div>
           </div>
           <span class="artist-name">{artistName.name}</span>

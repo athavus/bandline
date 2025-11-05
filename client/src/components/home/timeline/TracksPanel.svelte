@@ -29,7 +29,6 @@
   {:else if albumTracks?.items}
     <div class="tracks-header">
       <h3>{album.name}</h3>
-      <button class="close-btn" on:click={handleClose}>✕</button>
     </div>
 
     <div class="tracks-content">
