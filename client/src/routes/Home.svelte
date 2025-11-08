@@ -11,6 +11,8 @@
   import WelcomeSection from "../components/home/WelcomeSection.svelte";
   import BrandTitle from "../components/home/titles/BrandTitle.svelte";
   import LanguageSelector from "../components/home/utils/LanguageSelector.svelte";
+  import loadArtistFromURL from "../App.svelte";
+
   import { searchArtists, getArtistData } from "../lib/data";
   import { auth } from "../lib/stores/auth";
   import { t } from "../lib/stores/language";

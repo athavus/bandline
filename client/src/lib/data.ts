@@ -11,7 +11,6 @@ export async function getArtistData(id: string): Promise<SpotifyArtist> {
     throw new Error("Erro ao buscar os dados do artista");
   }
   const dados = (await response.json()) as SpotifyArtist;
-  console.log(dados);
   return dados;
 }
 

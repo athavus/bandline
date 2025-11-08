@@ -3,6 +3,7 @@
   import Router from "svelte-spa-router";
 
   import Home from "./routes/Home.svelte";
+  import History from "./routes/History.svelte";
 
   import { getArtistData } from "./lib/data";
   import { auth } from "./lib/stores/auth";
@@ -34,7 +35,7 @@
     }
   });
 
-  async function loadArtistFromURL(artistId: string) {
+  export async function loadArtistFromURL(artistId: string) {
     if (!authState.isAuthenticated) return;
 
     loading = true;
@@ -55,6 +56,7 @@
 
   const routes = {
     "/": Home,
+    "/history": History,
   };
 </script>
 
