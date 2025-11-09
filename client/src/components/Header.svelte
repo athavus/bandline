@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import ThemeButton from "../components/home/utils/ThemeButton.svelte";
   import ThemePaletteButton from "../components/home/utils/ThemePaletteButton.svelte";
+  import Sidebar from "../components/home/Sidebar.svelte";
   import LanguageSelector from "../components/home/utils/LanguageSelector.svelte";
 
   import { auth } from "../lib/stores/auth";

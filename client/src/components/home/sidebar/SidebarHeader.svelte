@@ -1,16 +1,25 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import "./SidebarHeader.css";
-
+  import { replace } from "svelte-spa-router";
   const dispatch = createEventDispatcher();
 
   function handleClose() {
     dispatch("close");
   }
+  function goHome() {
+    replace("/");
+  }
 </script>
 
 <div class="sidebar-header">
-  <div class="sidebar-logo">
+  <div
+    class="sidebar-logo"
+    role="button"
+    tabindex="0"
+    on:click={goHome}
+    on:keydown={(e) => (e.key === "Enter" || e.key === " ") && goHome()}
+  >
     <slot />
   </div>
   <button class="sidebar-close" on:click={handleClose}>

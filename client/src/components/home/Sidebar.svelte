@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { auth } from "../../lib/stores/auth";
+  import { replace } from "svelte-spa-router";
   import BrandTitle from "./titles/BrandTitle.svelte";
   import SidebarOverlay from "./sidebar/SidebarOverlay.svelte";
   import SidebarHeader from "./sidebar/SidebarHeader.svelte";
@@ -22,6 +23,10 @@
     open = false;
   }
 
+  function goHome() {
+    replace("/");
+  }
+
   function handleClose() {
     open = false;
   }
@@ -31,7 +36,7 @@
 
 <aside class="sidebar" class:open>
   <SidebarHeader on:close={handleClose}>
-    <BrandTitle inline />
+    <BrandTitle on:click={goHome} inline />
   </SidebarHeader>
 
   <div class="sidebar-content">

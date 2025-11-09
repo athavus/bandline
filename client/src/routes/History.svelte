@@ -1,5 +1,6 @@
 <script lang="ts">
   import Header from "../components/Header.svelte";
+  import Sidebar from "../components/home/Sidebar.svelte";
   import type { SearchArtistResult, SpotifyArtist } from "../types/artist";
   import { auth } from "../lib/stores/auth";
   import { setQueryParams } from "../lib/urlState";
@@ -9,6 +10,8 @@
   let selectedArtist: SpotifyArtist | null = null;
   let showTimeline = false;
   let sidebarOpen = false;
+  let showAuthModal = false;
+  let authMode: "login" | "register" = "login";
 
   function toggleSidebar() {
     sidebarOpen = !sidebarOpen;
@@ -22,7 +25,25 @@
     artists = [];
     setQueryParams({ artist: null, q: null });
   }
+
+  function handleSidebarAction(event: CustomEvent<string>) {
+    const action = event.detail;
+
+    if (action === "login") {
+      showAuthModal = true;
+      authMode = "login";
+    } else if (action === "register") {
+      showAuthModal = true;
+      authMode = "register";
+    } else if (action === "logout") {
+      handleLogout();
+    }
+
+    sidebarOpen = false;
+  }
 </script>
+
+<Sidebar bind:open={sidebarOpen} on:action={handleSidebarAction} />
 
 <main>
   <Header
