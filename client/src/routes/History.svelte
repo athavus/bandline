@@ -1,6 +1,6 @@
 <script lang="ts">
   import Header from "../components/Header.svelte";
-  import Sidebar from "../components/home/Sidebar.svelte";
+  import Sidebar from "../components/Sidebar.svelte";
   import type { SearchArtistResult, SpotifyArtist } from "../types/artist";
   import { auth } from "../lib/stores/auth";
   import { setQueryParams } from "../lib/urlState";

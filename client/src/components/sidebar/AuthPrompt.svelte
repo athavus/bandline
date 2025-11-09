@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { t } from "../../../lib/stores/language";
+  import { t } from "../../lib/stores/language";
   import "./AuthPrompt.css";
 </script>
 

@@ -1,9 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import ThemeButton from "../components/home/utils/ThemeButton.svelte";
-  import ThemePaletteButton from "../components/home/utils/ThemePaletteButton.svelte";
-  import Sidebar from "../components/home/Sidebar.svelte";
-  import LanguageSelector from "../components/home/utils/LanguageSelector.svelte";
+  import ThemeButton from "./utils/ThemeButton.svelte";
+  import ThemePaletteButton from "./utils/ThemePaletteButton.svelte";
+  import LanguageSelector from "./utils/LanguageSelector.svelte";
 
   import { auth } from "../lib/stores/auth";
   import { t } from "../lib/stores/language";

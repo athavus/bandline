@@ -3,11 +3,11 @@
   import ArtistList from "../components/home/artists/ArtistList.svelte";
   import ArtistDetails from "../components/home/artists/ArtistDetails.svelte";
   import Timeline from "../components/home/timeline/Timeline.svelte";
-  import Loading from "../components/home/utils/Loading.svelte";
-  import Sidebar from "../components/home/Sidebar.svelte";
+  import Loading from "../components/utils/Loading.svelte";
+  import Sidebar from "../components/Sidebar.svelte";
   import AuthModal from "../components/home/AuthModal.svelte";
   import WelcomeSection from "../components/home/WelcomeSection.svelte";
-  import BrandTitle from "../components/home/titles/BrandTitle.svelte";
+  import BrandTitle from "../components/titles/BrandTitle.svelte";
   import Header from "../components/Header.svelte";
   import loadArtistFromURL from "../App.svelte";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SpotifyArtist } from "../../../types/artist.ts";
-  import SpotifyButton from "../utils/SpotifyButton.svelte";
+  import SpotifyButton from "../../utils/SpotifyButton.svelte";
   import RelatedArtists from "./RelatedArtists.svelte";
   import { createEventDispatcher } from "svelte";
   import { t } from "../../../lib/stores/language";

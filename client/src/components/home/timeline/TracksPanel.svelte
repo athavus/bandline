@@ -3,8 +3,8 @@
   import type { SpotifyAlbumTracks } from "../../../types/tracks.ts";
   import Icon from "@iconify/svelte";
   import TrackCard from "./TrackCard.svelte";
-  import LoadingSpinner from "../utils/LoadingSpinner.svelte";
-  import SpotifyButton from "../utils/SpotifyButton.svelte";
+  import LoadingSpinner from "../../utils/LoadingSpinner.svelte";
+  import SpotifyButton from "../../utils/SpotifyButton.svelte";
   import { t } from "../../../lib/stores/language";
   import "./TracksPanel.css";
 
