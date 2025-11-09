@@ -19,9 +19,9 @@
     const routes = {
       favorites: "/favorites",
       history: "/history",
-      playlists: "/playlists",
+      playlists: "/playlist",
       profile: "/profile",
-      settings: "/settings",
+      settings: "/config",
       logout: "/logout",
     } as const;
 

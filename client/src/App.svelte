@@ -11,6 +11,11 @@
   import { initURLState, setQueryParams, getQueryParam } from "./lib/urlState";
 
   import type { SpotifyArtist } from "./types/artist";
+  import Profile from "./routes/Profile.svelte";
+  import Config from "./routes/Config.svelte";
+
+  import Favorites from "./routes/Favorites.svelte";
+  import Playlists from "./routes/Playlists.svelte";
 
   let query = "";
   let selectedArtist: SpotifyArtist | null = null;
@@ -57,6 +62,10 @@
   const routes = {
     "/": Home,
     "/history": History,
+    "/profile": Profile,
+    "/config": Config,
+    "/favorites": Favorites,
+    "/playlist": Playlists,
   };
 </script>
 
