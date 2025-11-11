@@ -2,7 +2,7 @@ import type { SpotifyArtist, SearchArtistResult } from "../types/artist";
 import { language } from "../lib/stores/language";
 import { get } from "svelte/store";
 
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export async function getArtistData(id: string): Promise<SpotifyArtist> {
   const currentLang = get(language);
@@ -50,7 +50,7 @@ export async function searchArtists(query: string): Promise<{ artists: SearchArt
 
 export async function getArtistAlbums(artistId: string) {
   try {
-    const response = await fetch(`http://localhost:3000/artistAlbums/${artistId}`);
+    const response = await fetch(`${API_URL}/artistAlbums/${artistId}`);
     if (!response.ok) {
       throw new Error('Falha ao buscar álbuns do artista');
     }
@@ -63,7 +63,7 @@ export async function getArtistAlbums(artistId: string) {
 
 export async function getAlbumTracks(albumId: string) {
   try {
-    const response = await fetch(`http://localhost:3000/albumTracks/${albumId}`);
+    const response = await fetch(`${API_URL}/albumTracks/${albumId}`);
     if (!response.ok) {
       throw new Error('Falha ao buscar faixas do álbum');
     }

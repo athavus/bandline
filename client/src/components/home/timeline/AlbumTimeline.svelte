@@ -21,7 +21,7 @@
   let sliderElement: HTMLElement;
 
   // no dispatch usage
-
+  const API_URL = import.meta.env.VITE_API_URL;
   function scroll(amount: number) {
     sliderElement?.scrollBy({ left: amount, behavior: "smooth" });
   }
@@ -33,7 +33,7 @@
     albums = null;
     selectedAlbum = null; // Reset selected album
     try {
-      const res = await fetch(`http://localhost:3000/artistAlbums/${artistId}`);
+      const res = await fetch(`${API_URL}/artistAlbums/${artistId}`);
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       albums = await res.json();
     } catch (err) {
@@ -46,7 +46,7 @@
   async function loadAlbumTracks(albumId: string) {
     tracksLoading = true;
     try {
-      const res = await fetch(`http://localhost:3000/albumTracks/${albumId}`);
+      const res = await fetch(`${API_URL}/albumTracks/${albumId}`);
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       albumTracks = await res.json();
     } catch {
@@ -88,7 +88,7 @@
   </div>
 {:else if error}
   <div class="error">
-    <p>❌ {t("errorLoadingDiscography")} {error}</p>
+    <p>{t("errorLoadingDiscography")} {error}</p>
     <button on:click={loadAlbums}>{t("tryAgain")}</button>
   </div>
 {:else if albums?.items?.length}
