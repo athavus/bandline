@@ -11,7 +11,11 @@
     import Header from "../components/Header.svelte";
     import loadArtistFromURL from "../App.svelte";
 
-    import { searchArtists, getArtistData } from "../lib/data";
+    import {
+        searchArtists,
+        getArtistData,
+        saveSearchHistory,
+    } from "../lib/data";
     import { auth } from "../lib/stores/auth";
     import { t } from "../lib/stores/language";
     import { setQueryParams, getQueryParam } from "../lib/urlState";
@@ -60,6 +64,8 @@
             artist: artist.id,
             q: artist.name,
         });
+
+        await saveSearchHistory(artist.id, artist.name);
 
         try {
             selectedArtist = await getArtistData(artist.id);
