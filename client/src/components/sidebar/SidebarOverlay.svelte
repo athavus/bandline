@@ -1,14 +1,20 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import "./SidebarOverlay.css";
+    import { createEventDispatcher } from "svelte";
+    import "./SidebarOverlay.css";
 
-  export let open = false;
+    export let open = false;
 
-  const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
-  function handleClick() {
-    dispatch("click");
-  }
+    function handleClick() {
+        dispatch("click");
+    }
 </script>
 
-<div class="sidebar-overlay" class:open on:click={handleClick}></div>
+<div
+    class="sidebar-overlay"
+    class:open
+    role="presentation"
+    aria-hidden="true"
+    on:click={handleClick}
+></div>
