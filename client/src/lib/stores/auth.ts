@@ -1,11 +1,11 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 const createAuthStore = () => {
   const { subscribe, set, update } = writable({
     user: null,
     isAuthenticated: false,
     loading: false,
-    error: null
+    error: null,
   });
 
   const API = import.meta.env.VITE_API_URL;
@@ -14,48 +14,69 @@ const createAuthStore = () => {
     subscribe,
 
     login: async (username, password) => {
-      update(state => ({ ...state, loading: true, error: null }));
+      update((state) => ({ ...state, loading: true, error: null }));
       try {
         const response = await fetch(`${API}/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
-          credentials: 'include'
+          credentials: "include",
         });
         const data = await response.json();
         if (response.ok) {
-          set({ user: data.user, isAuthenticated: true, loading: false, error: null });
+          set({
+            user: data.user,
+            isAuthenticated: true,
+            loading: false,
+            error: null,
+          });
           return { success: true };
         } else {
-          update(state => ({ ...state, loading: false, error: data.error || 'Erro no login' }));
+          update((state) => ({
+            ...state,
+            loading: false,
+            error: data.error || "Erro no login",
+          }));
           return { success: false, error: data.error };
         }
       } catch {
-        update(state => ({ ...state, loading: false, error: 'Erro de conexão' }));
-        return { success: false, error: 'Erro de conexão' };
+        update((state) => ({
+          ...state,
+          loading: false,
+          error: "Erro de conexão",
+        }));
+        return { success: false, error: "Erro de conexão" };
       }
     },
 
     register: async (username, email, password) => {
-      update(state => ({ ...state, loading: true, error: null }));
+      update((state) => ({ ...state, loading: true, error: null }));
       try {
         const response = await fetch(`${API}/auth/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, email, password }),
-          credentials: 'include'
+          credentials: "include",
         });
         const data = await response.json();
         if (response.ok) {
-          update(state => ({ ...state, loading: false, error: null }));
+          update((state) => ({ ...state, loading: false, error: null }));
           return { success: true, message: data.message };
         } else {
-          update(state => ({ ...state, loading: false, error: data.error || 'Erro no registro' }));
+          update((state) => ({
+            ...state,
+            loading: false,
+            error: data.error || "Erro no registro",
+          }));
           return { success: false, error: data.error };
         }
       } catch {
-        update(state => ({ ...state, loading: false, error: 'Erro de conexão' }));
-        return { success: false, error: 'Erro de conexão' };
+        update((state) => ({
+          ...state,
+          loading: false,
+          error: "Erro de conexão",
+        }));
+        return { success: false, error: "Erro de conexão" };
       }
     },
 
@@ -65,30 +86,55 @@ const createAuthStore = () => {
 
     logout: async () => {
       try {
-        await fetch(`${API}/auth/logout`, { method: 'POST', credentials: 'include' });
+        await fetch(`${API}/auth/logout`, {
+          method: "POST",
+          credentials: "include",
+        });
       } catch (err) {
-        console.error('Erro no logout:', err);
+        console.error("Erro no logout:", err);
       } finally {
-        set({ user: null, isAuthenticated: false, loading: false, error: null });
+        set({
+          user: null,
+          isAuthenticated: false,
+          loading: false,
+          error: null,
+        });
       }
     },
 
     checkAuth: async () => {
-      update(state => ({ ...state, loading: true }));
+      update((state) => ({ ...state, loading: true }));
       try {
-        const response = await fetch(`${API}/auth/me`, { credentials: 'include' });
+        const response = await fetch(`${API}/auth/me`, {
+          credentials: "include",
+        });
         if (response.ok) {
           const data = await response.json();
-          set({ user: data.user, isAuthenticated: true, loading: false, error: null });
+          set({
+            user: data.user,
+            isAuthenticated: true,
+            loading: false,
+            error: null,
+          });
         } else {
-          set({ user: null, isAuthenticated: false, loading: false, error: null });
+          set({
+            user: null,
+            isAuthenticated: false,
+            loading: false,
+            error: null,
+          });
         }
       } catch {
-        set({ user: null, isAuthenticated: false, loading: false, error: null });
+        set({
+          user: null,
+          isAuthenticated: false,
+          loading: false,
+          error: null,
+        });
       }
     },
 
-    clearError: () => update(state => ({ ...state, error: null }))
+    clearError: () => update((state) => ({ ...state, error: null })),
   };
 };
 

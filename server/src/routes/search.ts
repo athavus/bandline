@@ -1,12 +1,15 @@
-import fetch from 'node-fetch';
-import { Router } from 'express';
+import fetch from "node-fetch";
+import { Router } from "express";
 import getSpotifyToken from "../config/spotifyToken.ts";
-import type { SpotifyArtist, SpotifyArtistsSearchResponse } from '../types/artists-types.ts';
+import type {
+  SpotifyArtist,
+  SpotifyArtistsSearchResponse,
+} from "../types/artists-types.ts";
 
 const router = Router();
 const token = await getSpotifyToken();
 
-router.get('', async (req, res) => {
+router.get("", async (req, res) => {
   try {
     const query = String(req.query.q);
 
@@ -14,19 +17,19 @@ router.get('', async (req, res) => {
       return res.json({ artists: [] });
     }
 
-    const url = new URL('https://api.spotify.com/v1/search');
-    url.searchParams.append('q', query);
-    url.searchParams.append('type', 'artist');
-    url.searchParams.append('limit', '10');
+    const url = new URL("https://api.spotify.com/v1/search");
+    url.searchParams.append("q", query);
+    url.searchParams.append("type", "artist");
+    url.searchParams.append("limit", "10");
 
     const response = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) {
-      throw new Error(`Erro: ${response.status}`)
+      throw new Error(`Erro: ${response.status}`);
     }
 
     const data = (await response.json()) as SpotifyArtistsSearchResponse;
@@ -37,7 +40,7 @@ router.get('', async (req, res) => {
       image: artist.images[0]?.url || null,
       popularity: artist.popularity,
       genres: artist.genres.slice(0, 3),
-      total_followers: artist.followers.total
+      total_followers: artist.followers.total,
     }));
 
     res.json({ artists });
@@ -45,6 +48,6 @@ router.get('', async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Erro ao buscar artistas" });
   }
-})
+});
 
 export default router;

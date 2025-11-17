@@ -4,26 +4,26 @@ export interface RelatedArtist {
 
 export interface SpotifyArtist {
   external_urls: {
-    spotify: string
-  },
+    spotify: string;
+  };
   followers: {
-    href: string | null,
-    total: number,
-  },
-  genres: string[],
-  id: string,
+    href: string | null;
+    total: number;
+  };
+  genres: string[];
+  id: string;
   images: {
-    url: string,
-    height: number,
-    width: number,
-  }[],
-  name: string,
-  popularity: number,
-  type: string,
-  uri: string,
-  description: string,
-  relatedArtists: RelatedArtist[]
-};
+    url: string;
+    height: number;
+    width: number;
+  }[];
+  name: string;
+  popularity: number;
+  type: string;
+  uri: string;
+  description: string;
+  relatedArtists: RelatedArtist[];
+}
 
 export interface SearchArtistResult {
   id: string;
@@ -33,5 +33,3 @@ export interface SearchArtistResult {
   genres: string[];
   total_followers: number;
 }
-
-

@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-import type { SpotifyTokenResponse } from '../types/spotify-token-types.ts';
+import fetch from "node-fetch";
+import dotenv from "dotenv";
+import type { SpotifyTokenResponse } from "../types/spotify-token-types.ts";
 
 dotenv.config();
 
@@ -20,21 +20,24 @@ async function getSpotifyToken(): Promise<string> {
     return cachedToken;
   }
 
-  const auth = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64');
+  const auth = Buffer.from(
+    `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`,
+  ).toString("base64");
 
-  const response = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
+  const response = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Basic ${auth}`
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${auth}`,
     },
-    body: new URLSearchParams({ grant_type: 'client_credentials' })
+    body: new URLSearchParams({ grant_type: "client_credentials" }),
   });
 
-  const data: SpotifyTokenResponse = await response.json() as SpotifyTokenResponse;
+  const data: SpotifyTokenResponse =
+    (await response.json()) as SpotifyTokenResponse;
 
   if (!response.ok) {
-    throw new Error(`Erro ao obter o token: ${response.statusText}`)
+    throw new Error(`Erro ao obter o token: ${response.statusText}`);
   }
 
   cachedToken = data.access_token;

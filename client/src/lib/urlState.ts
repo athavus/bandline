@@ -1,10 +1,10 @@
 // lib/urlState.ts
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 // Store para manter o estado sincronizado
 export const urlState = writable({
   artistId: null as string | null,
-  query: ''
+  query: "",
 });
 
 // Atualiza um parâmetro na URL
@@ -15,7 +15,7 @@ export function setQueryParam(key: string, value: string | null) {
   } else {
     url.searchParams.delete(key);
   }
-  window.history.pushState(null, '', url.toString());
+  window.history.pushState(null, "", url.toString());
 
   // Atualiza o store
   updateStoreFromURL();
@@ -39,7 +39,7 @@ export function setQueryParams(params: Record<string, string | null>) {
     }
   });
 
-  window.history.pushState(null, '', url.toString());
+  window.history.pushState(null, "", url.toString());
 
   // Atualiza o store
   updateStoreFromURL();
@@ -48,8 +48,8 @@ export function setQueryParams(params: Record<string, string | null>) {
 // Atualiza o store com base na URL atual
 export function updateStoreFromURL() {
   urlState.set({
-    artistId: getQueryParam('artist'),
-    query: getQueryParam('q') || ''
+    artistId: getQueryParam("artist"),
+    query: getQueryParam("q") || "",
   });
 }
 
@@ -58,7 +58,7 @@ export function initURLState() {
   updateStoreFromURL();
 
   // Listener para o botão voltar/avançar do navegador
-  window.addEventListener('popstate', () => {
+  window.addEventListener("popstate", () => {
     updateStoreFromURL();
   });
 }
@@ -66,7 +66,7 @@ export function initURLState() {
 // Limpa todos os parâmetros
 export function clearURLParams() {
   const url = new URL(window.location.href);
-  url.search = '';
-  window.history.pushState(null, '', url.toString());
+  url.search = "";
+  window.history.pushState(null, "", url.toString());
   updateStoreFromURL();
 }

@@ -1,4 +1,4 @@
-import { User as PrismaUser } from '@prisma/client';
+import { User as PrismaUser } from "@prisma/client";
 
 export interface LoginRequest {
   username: string;
@@ -27,8 +27,8 @@ export interface AuthResponse {
 // Extensão global do Express
 declare global {
   namespace Express {
-    interface User extends PrismaUser { }
+    interface User extends PrismaUser {}
   }
 }
 
-export { };
+export {};

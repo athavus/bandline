@@ -1,32 +1,32 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import "./SearchInput.css";
+    import { createEventDispatcher } from "svelte";
+    import "./SearchInput.css";
 
-  export let value = "";
-  export let placeholder = "Digite o nome do artista";
+    export let value = "";
+    export let placeholder = "Digite o nome do artista";
 
-  const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
-  function handleInput() {
-    dispatch("input", value);
-  }
+    function handleInput() {
+        dispatch("input", value);
+    }
 
-  function handleFocus() {
-    dispatch("focus");
-  }
+    function handleFocus() {
+        dispatch("focus");
+    }
 
-  function handleBlur() {
-    dispatch("blur");
-  }
+    function handleBlur() {
+        dispatch("blur");
+    }
 </script>
 
 <input
-  bind:value
-  on:input={handleInput}
-  on:focus={handleFocus}
-  on:blur={handleBlur}
-  type="text"
-  {placeholder}
-  id="search-input"
-  class="search-input"
+    bind:value
+    on:input={handleInput}
+    on:focus={handleFocus}
+    on:blur={handleBlur}
+    type="text"
+    {placeholder}
+    id="search-input"
+    class="search-input"
 />

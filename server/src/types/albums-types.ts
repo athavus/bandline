@@ -39,4 +39,3 @@ export interface SpotifyAlbums {
   total: number;
   items: SpotifyAlbum[];
 }
-

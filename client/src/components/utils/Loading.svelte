@@ -1,13 +1,13 @@
 <script lang="ts">
-  import "./Loading.css";
+    import "./Loading.css";
 
-  export let message = "Carregando...";
+    export let message = "Carregando...";
 </script>
 
 <div class="loading">
-  <div class="spinner-container">
-    <div class="spinner"></div>
-    <div class="spinner-ring"></div>
-  </div>
-  <p>{message}</p>
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <div class="spinner-ring"></div>
+    </div>
+    <p>{message}</p>
 </div>
