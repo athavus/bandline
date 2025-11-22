@@ -4,13 +4,21 @@
 
     let mounted = false;
     export let inline: boolean = false;
+    export let size: "small" | "medium" | "large" = "medium";
 
     onMount(() => {
         mounted = true;
     });
 </script>
 
-<div class="brand-title" class:inline class:mounted>
+<div
+    class="brand-title"
+    class:inline
+    class:mounted
+    class:small={size === "small"}
+    class:medium={size === "medium"}
+    class:large={size === "large"}
+>
     <div class="title-container" class:inline>
         <h1 class="title">
             <span class="title-band">Band</span><span class="title-line"

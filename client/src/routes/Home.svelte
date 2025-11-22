@@ -155,7 +155,7 @@
         on:logout={handleLogout}
     />
 
-    <BrandTitle />
+    <BrandTitle size="large" />
 
     <div class="search-container">
         <SearchInput

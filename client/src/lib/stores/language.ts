@@ -86,6 +86,9 @@ export interface Translations {
   welcomeDescription: string;
   getStarted: string;
 
+  firstHistoryWord: string;
+  lastHistoryWord: string;
+
   // Sidebar
   menu: string;
   home: string;
@@ -198,6 +201,10 @@ const translations: Record<Language, Translations> = {
       "Explore discographies, discover new music, and dive deep into the world of your favorite artists.",
     getStarted: "Get Started",
 
+    // History
+    firstHistoryWord: "Hist",
+    lastHistoryWord: "ory",
+
     // Sidebar
     menu: "Menu",
     home: "Home",
@@ -308,6 +315,10 @@ const translations: Record<Language, Translations> = {
       "Explore discografias, descubra novas músicas e mergulhe no mundo dos seus artistas favoritos.",
     getStarted: "Começar",
 
+    // History
+    firstHistoryWord: "Histó",
+    lastHistoryWord: "rico",
+
     // Sidebar
     menu: "Menu",
     home: "Início",
@@ -417,6 +428,10 @@ const translations: Record<Language, Translations> = {
     welcomeDescription:
       "Explora discografías, descubre nueva música y sumérgete en el mundo de tus artistas favoritos.",
     getStarted: "Comenzar",
+
+    // History
+    firstHistoryWord: "Hist",
+    lastHistoryWord: "oria",
 
     // Sidebar
     menu: "Menú",

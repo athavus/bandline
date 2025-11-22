@@ -1,7 +1,7 @@
 .brand-title {
     position: relative;
     width: 100%;
-    padding: 60px 0px 40px;
+    padding: 60px 0 40px;
     text-align: center;
     overflow: hidden;
     background: var(--bg-primary);
@@ -10,6 +10,13 @@
 .brand-title .music-wave {
     margin-top: 10px; /* Centralizado, abaixo do título */
     margin-left: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+    height: 24px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.6s forwards;
 }
 
 .gradient-bg {
@@ -63,13 +70,6 @@
     min-width: 0;
 }
 
-.brand-title.inline {
-    background: none !important;
-    box-shadow: none !important;
-    padding: 0 8px !important;
-    min-width: 0;
-}
-
 .brand-title.inline .title-container {
     display: flex !important;
     align-items: center;
@@ -87,7 +87,6 @@
 
 .brand-title.inline .title-band,
 .brand-title.inline .title-line {
-    /* Mantém o gradiente e o branco mesmo pequeno */
     font-size: 1.25rem !important;
     font-weight: 900 !important;
     text-shadow: none;
@@ -134,10 +133,72 @@
     display: none !important;
 }
 
+.brand-title.medium .music-wave {
+    gap: 4px;
+    margin-left: 18px !important;
+    margin-top: 0 !important;
+    opacity: 1;
+    animation: none;
+    top: 1px;
+    position: relative;
+}
+
+.brand-title.medium .wave-bar {
+    width: 2px;
+}
+
+.brand-title.medium .wave-bar:nth-child(1) {
+    height: 8px; /* maior que o pequeno */
+}
+
+.brand-title.medium .wave-bar:nth-child(2) {
+    height: 14px;
+}
+
+.brand-title.medium .wave-bar:nth-child(3) {
+    height: 18px;
+}
+
+.brand-title.medium .wave-bar:nth-child(4) {
+    height: 14px;
+}
+
+.brand-title.medium .wave-bar:nth-child(5) {
+    height: 8px;
+}
+
+/* Tamanhos small, medium e large para o título e seus elementos */
+.brand-title.small .title {
+    font-size: 1.25rem !important;
+}
+.brand-title.medium .title {
+    font-size: 2.5rem !important;
+}
+.brand-title.large .title {
+    font-size: 4.5rem !important;
+}
+
+.brand-title.small .title-band,
+.brand-title.small .title-line {
+    font-size: 1.25rem !important;
+    font-weight: 900 !important;
+}
+
+.brand-title.medium .title-band,
+.brand-title.medium .title-line {
+    font-size: 2.5rem !important;
+    font-weight: 900 !important;
+}
+
+.brand-title.large .title-band,
+.brand-title.large .title-line {
+    font-size: 4.5rem !important;
+    font-weight: 900 !important;
+}
+
 .title {
     margin: 0 0 16px 0;
     font-family: var(--font-heading);
-    font-size: 4.5rem;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.02em;
@@ -226,24 +287,7 @@
     }
 }
 
-.music-wave {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 4px;
-    height: 24px;
-    opacity: 0;
-    animation: fadeIn 0.8s ease-out 0.6s forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
-}
-
 .wave-bar {
-    width: 3px;
     background: linear-gradient(
         180deg,
         var(--accent-color),
@@ -251,6 +295,12 @@
     );
     border-radius: 2px;
     animation: wave 1.2s ease-in-out infinite;
+}
+
+/* Default wave bar width and animated heights */
+.wave-bar {
+    width: 3px;
+    animation-delay: initial;
 }
 
 .wave-bar:nth-child(1) {
@@ -288,7 +338,7 @@
     }
 }
 
-/* Responsive */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .brand-title {
         padding: 50px 20px 30px;
@@ -305,6 +355,7 @@
     .music-wave {
         height: 20px;
         margin-top: 12px;
+        gap: 4px;
     }
 }
 

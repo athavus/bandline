@@ -3,7 +3,7 @@
     import ThemeButton from "./utils/ThemeButton.svelte";
     import ThemePaletteButton from "./utils/ThemePaletteButton.svelte";
     import LanguageSelector from "./utils/LanguageSelector.svelte";
-
+    import BrandTitle from "./titles/BrandTitle.svelte";
     import { auth } from "../lib/stores/auth";
     import { t } from "../lib/stores/language";
 
@@ -42,19 +42,18 @@
         <ThemeButton />
         <ThemePaletteButton />
     </div>
-
+    <div class="header-center"><BrandTitle inline size="medium" /></div>
     <div class="header-right">
         <LanguageSelector />
         {#if authState.isAuthenticated}
             <div class="user-indicator">
-                <span class="user-welcome"
-                    >{t("hello")}, {authState.user?.username ||
-                        t("user")}!</span
-                >
+                <span class="user-welcome">
+                    {t("hello")}, {authState.user?.username || t("user")}!
+                </span>
                 <button
                     class="logout-btn"
                     title="logout"
-                    on:click={() => auth.logout()}
+                    on:click={handleLogout}
                 >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path
@@ -90,8 +89,8 @@
 
 <style>
     .app-header {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
         padding: 20px 24px;
         background: var(--bg-secondary);
@@ -99,20 +98,29 @@
         position: sticky;
         top: 0;
         z-index: 100;
+        min-height: 70px;
     }
-
     .header-left {
         display: flex;
         align-items: center;
         gap: 16px;
+        min-width: 0;
+        justify-self: start;
     }
-
+    .header-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        justify-self: center;
+        width: 100%;
+    }
     .header-right {
         display: flex;
         align-items: center;
         gap: 16px;
+        min-width: 0;
+        justify-self: end;
     }
-
     .menu-toggle {
         background: var(--bg-card);
         border: 1px solid var(--border-color);
@@ -127,13 +135,11 @@
         color: var(--text-primary);
         box-shadow: var(--shadow-sm);
     }
-
     .menu-toggle:hover {
         background: var(--bg-hover);
         border-color: var(--accent-color);
         transform: scale(1.05);
     }
-
     .user-indicator {
         display: flex;
         align-items: center;
@@ -144,14 +150,13 @@
         padding: 8px 16px;
         box-shadow: var(--shadow-sm);
     }
-
     .user-welcome {
         color: var(--text-primary);
         font-family: var(--font-primary);
         font-size: 0.9rem;
         font-weight: 500;
+        margin-right: 8px;
     }
-
     .logout-btn {
         background: none;
         border: none;
@@ -163,7 +168,6 @@
         display: flex;
         align-items: center;
     }
-
     .logout-btn:hover {
         color: var(--error-color);
         background: var(--bg-hover);
@@ -173,17 +177,14 @@
         .app-header {
             padding: 16px 20px;
         }
-
         .menu-toggle {
             width: 36px;
             height: 36px;
         }
-
         .user-indicator {
             padding: 6px 12px;
         }
     }
-
     @media (max-width: 480px) {
         .app-header {
             padding: 12px 16px;

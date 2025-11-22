@@ -4,6 +4,8 @@
     import Sidebar from "../components/Sidebar.svelte";
     import BrandTitle from "../components/titles/BrandTitle.svelte";
     import Loading from "../components/utils/Loading.svelte";
+    import BrandSubtitle from "../components/titles/BrandSubtitle.svelte";
+
     import type { SearchArtistResult, SpotifyArtist } from "../types/artist";
     import { auth } from "../lib/stores/auth";
     import { t } from "../lib/stores/language";
@@ -168,7 +170,10 @@
         on:logout={handleLogout}
     />
 
-    <BrandTitle />
+    <BrandSubtitle
+        firstWord={t("firstHistoryWord")}
+        secondWord={t("lastHistoryWord")}
+    />
 
     <div class="history-container">
         {#if loading}

@@ -36,7 +36,7 @@
 
 <aside class="sidebar" class:open>
     <SidebarHeader on:close={handleClose}>
-        <BrandTitle on:click={goHome} inline />
+        <BrandTitle on:click={goHome} inline size="small" />
     </SidebarHeader>
 
     <div class="sidebar-content">
