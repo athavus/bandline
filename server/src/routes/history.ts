@@ -13,12 +13,12 @@ function ensureAuthenticated(req: Request, res: Response, next: Function) {
 
 router.post("/", ensureAuthenticated, async (req: Request, res: Response) => {
   const user = req.user as { id: number };
-  const { artistId, artistName } = req.body;
+  const { artistId, artistName, artistAvatar } = req.body;
 
-  if (!artistId || !artistName) {
+  if (!artistId || !artistName || !artistAvatar) {
     return res
       .status(400)
-      .json({ error: "artistId e artistName são obrigatórios" });
+      .json({ error: "artistId, artistName e artistAvatar são obrigatórios" });
   }
 
   const history = await prisma.history.create({
@@ -26,6 +26,7 @@ router.post("/", ensureAuthenticated, async (req: Request, res: Response) => {
       userId: user.id,
       artistId,
       artistName,
+      artistAvatar,
     },
   });
 

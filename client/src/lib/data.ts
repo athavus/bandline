@@ -80,13 +80,17 @@ export async function getAlbumTracks(albumId: string) {
   }
 }
 
-export async function saveSearchHistory(artistId: string, artistName: string) {
+export async function saveSearchHistory(
+  artistId: string,
+  artistName: string,
+  artistAvatar?: string | null,
+) {
   const response = await fetch(`${API_URL}/history`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ artistId, artistName }),
+    body: JSON.stringify({ artistId, artistName, artistAvatar }),
     credentials: "include",
   });
 

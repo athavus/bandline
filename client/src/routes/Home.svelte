@@ -65,7 +65,7 @@
             q: artist.name,
         });
 
-        await saveSearchHistory(artist.id, artist.name);
+        await saveSearchHistory(artist.id, artist.name, artist.image);
 
         try {
             selectedArtist = await getArtistData(artist.id);
