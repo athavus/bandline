@@ -9,6 +9,7 @@
     export let album: any;
     export let position: number;
     export let active: boolean = false;
+    export let isFavorite: boolean = false;
 
     const dispatch = createEventDispatcher();
 
@@ -35,6 +36,75 @@
         e.stopPropagation();
         window.open(`https://open.spotify.com/album/${album.id}`, "_blank");
     }
+
+    async function toggleFavorite(e: Event) {
+        e.stopPropagation();
+
+        try {
+            const method = isFavorite ? "DELETE" : "POST";
+            const url = "http://localhost:3000/favorites";
+
+            console.log("=== DEBUG FAVORITOS ===");
+            console.log("URL completa:", url);
+            console.log("Método:", method);
+            console.log("Album ID:", album.id);
+            console.log("Album Name:", album.name);
+            console.log("Total Tracks:", album.total_tracks);
+            console.log("isFavorite atual:", isFavorite);
+
+            const response = await fetch(url, {
+                method,
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    albumId: album.id,
+                    albumName: album.name,
+                    albumImage: album.images?.[0]?.url ?? "",
+                    albumTracks: album.total_tracks || 0,
+                }),
+            });
+
+            console.log("Status da resposta:", response.status);
+            console.log("Headers:", response.headers.get("content-type"));
+
+            const contentType = response.headers.get("content-type");
+            const text = await response.text();
+
+            console.log("Resposta raw:", text);
+
+            if (!response.ok) {
+                let errorMessage = "Erro ao favoritar álbum";
+                try {
+                    const errorData = text ? JSON.parse(text) : {};
+                    errorMessage = errorData.error || errorMessage;
+                } catch (e) {
+                    errorMessage = text || errorMessage;
+                }
+                throw new Error(errorMessage);
+            }
+
+            let data = {};
+            if (text && contentType?.includes("application/json")) {
+                data = JSON.parse(text);
+            }
+
+            console.log("Dados parseados:", data);
+
+            isFavorite = !isFavorite;
+
+            dispatch("favoriteToggled", {
+                albumId: album.id,
+                isFavorite,
+            });
+
+            console.log("Favorito atualizado com sucesso!");
+        } catch (err) {
+            console.error("Erro no toggleFavorite:", err);
+            alert(`Erro: ${err.message}`);
+        }
+    }
 </script>
 
 <div
@@ -55,8 +125,17 @@
             <button class="icon-btn completed" aria-label="Mark as completed">
                 <Icon icon="mdi:check-circle" width="24" height="24" />
             </button>
-            <button class="icon-btn favorite" aria-label="Mark as favorite">
-                <Icon icon="mdi:heart" width="24" height="24" />
+            <button
+                class="icon-btn favorite"
+                aria-label="Mark as favorite"
+                on:click={toggleFavorite}
+                class:active={isFavorite}
+            >
+                <Icon
+                    icon={isFavorite ? "mdi:heart" : "mdi:heart-outline"}
+                    width="24"
+                    height="24"
+                />
             </button>
         </div>
         <SpotifyButton on:click={openAlbumInSpotify} />

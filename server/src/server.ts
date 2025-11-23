@@ -8,6 +8,7 @@ import searchArtistsRouter from "./routes/search";
 import artistAlbumsRouter from "./routes/albums";
 import albumTracksRouter from "./routes/tracks";
 import historyRouter from "./routes/history";
+import favoritesRouter from "./routes/favorites";
 
 import authRouter from "./routes/auth";
 
@@ -46,6 +47,7 @@ app.use("/artistAlbums", artistAlbumsRouter);
 app.use("/albumTracks", albumTracksRouter);
 app.use("/history", historyRouter);
 app.use("/auth", authRouter);
+app.use("/favorites", favoritesRouter);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

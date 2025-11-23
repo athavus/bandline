@@ -115,6 +115,10 @@
     box-shadow: 0 0 12px #e22134;
 }
 
+.icon-btn.favorite.active {
+    color: #e91e63; /* rosa para coração ativo */
+}
+
 .album-details {
     text-align: center;
     width: 150px;

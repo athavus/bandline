@@ -86,8 +86,16 @@ export interface Translations {
   welcomeDescription: string;
   getStarted: string;
 
+  // History
   firstHistoryWord: string;
   lastHistoryWord: string;
+
+  // Favorites
+  firstFavoritesWord: string;
+  lastFavoritesWord: string;
+  loadingFavorites: string;
+  retry: string;
+  noFavoritesYet: string;
 
   // Sidebar
   menu: string;
@@ -205,6 +213,13 @@ const translations: Record<Language, Translations> = {
     firstHistoryWord: "Hist",
     lastHistoryWord: "ory",
 
+    // Favorites
+    firstFavoritesWord: "Favo",
+    lastFavoritesWord: "rites",
+    loadingFavorites: "Loading Favorites...",
+    retry: "Try Again",
+    noFavoritesYet: "You haven't favorited any albums yet.",
+
     // Sidebar
     menu: "Menu",
     home: "Home",
@@ -319,6 +334,13 @@ const translations: Record<Language, Translations> = {
     firstHistoryWord: "Histó",
     lastHistoryWord: "rico",
 
+    // Favorites
+    firstFavoritesWord: "Favo",
+    lastFavoritesWord: "ritos",
+    loadingFavorites: "Carregando Favoritos...",
+    retry: "Tentar Novamente",
+    noFavoritesYet: "Você ainda não favoritou nenhum álbum.",
+
     // Sidebar
     menu: "Menu",
     home: "Início",
@@ -432,6 +454,13 @@ const translations: Record<Language, Translations> = {
     // History
     firstHistoryWord: "Hist",
     lastHistoryWord: "oria",
+
+    // Favorites
+    firstFavoritesWord: "Favo",
+    lastFavoritesWord: "ritos",
+    loadingFavorites: "Cargando favoritos...",
+    retry: "Intentar otra vez",
+    noFavoritesYet: "Aún no has añadido ningún álbum a favoritos.",
 
     // Sidebar
     menu: "Menú",

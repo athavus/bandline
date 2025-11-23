@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  username     String    @unique
-  email        String    @unique
+  id           Int         @id @default(autoincrement())
+  username     String      @unique
+  email        String      @unique
   passwordHash String
-  provider     String    @default("local")
+  provider     String      @default("local")
   avatarUrl    String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  histories    History[] // Novo campo para armazenar as histórias do usuário
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  histories    History[]
+  favorites    Favorites[]
 }
 
 model History {
@@ -27,4 +28,15 @@ model History {
   artistName   String
   artistAvatar String?
   searchedAt   DateTime @default(now())
+}
+
+model Favorites {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  albumId     String
+  albumName   String
+  albumImage  String?
+  albumTracks String
+  favoritedAt DateTime @default(now())
 }
