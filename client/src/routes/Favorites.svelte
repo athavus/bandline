@@ -14,7 +14,7 @@
         albumId: string;
         albumName: string;
         albumImage?: string;
-        albumTracks: string; // Agora é string (número de faixas)
+        albumTracks: string;
         favoritedAt: string;
     }
 
@@ -440,46 +440,58 @@
 
     .empty-state {
         text-align: center;
-        margin: 80px 0;
-        color: var(--text-secondary, #999);
+        margin: 80px auto;
+        padding: 60px 40px;
+        max-width: 500px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
+        gap: 20px;
     }
 
     .empty-state :global(svg) {
         color: rgba(255, 255, 255, 0.2);
+        margin-bottom: 8px;
     }
 
     .empty-state h3 {
         font-size: 1.5rem;
         color: var(--text-primary, #fff);
         margin: 0;
+        font-weight: 600;
     }
 
     .empty-state p {
         font-size: 1rem;
         margin: 0;
+        color: var(--text-secondary, #999);
+        line-height: 1.5;
     }
 
     .explore-button {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--accent-color, #1db954);
         color: white;
         text-decoration: none;
         padding: 14px 28px;
         border-radius: 8px;
         font-weight: 600;
-        margin-top: 16px;
+        font-size: 1rem;
+        margin-top: 8px;
         transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
     }
 
     .explore-button:hover {
+        background: var(--accent-hover, #1ed760);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 8px 20px rgba(29, 185, 84, 0.4);
     }
 
     @media (max-width: 768px) {
@@ -490,6 +502,19 @@
 
         .favorites-container {
             padding: 24px 16px;
+        }
+
+        .empty-state {
+            margin: 40px auto;
+            padding: 40px 24px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
         }
     }
 </style>

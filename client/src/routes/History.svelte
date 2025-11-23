@@ -5,11 +5,13 @@
     import BrandTitle from "../components/titles/BrandTitle.svelte";
     import Loading from "../components/utils/Loading.svelte";
     import BrandSubtitle from "../components/titles/BrandSubtitle.svelte";
+    import Icon from "@iconify/svelte";
 
     import type { SearchArtistResult, SpotifyArtist } from "../types/artist";
     import { auth } from "../lib/stores/auth";
     import { t } from "../lib/stores/language";
     import { setQueryParams } from "../lib/urlState";
+
     interface HistoryItem {
         id: number;
         artistId: string;
@@ -40,7 +42,6 @@
             return;
         }
 
-        // Carregar preferência de visualização do localStorage
         const savedViewMode = localStorage.getItem("historyViewMode");
         if (savedViewMode === "single" || savedViewMode === "double") {
             viewMode = savedViewMode;
@@ -180,15 +181,22 @@
             <Loading message="Carregando histórico..." />
         {:else if error}
             <div class="error-message">
+                <Icon icon="mdi:alert-circle" width="48" height="48" />
                 <p>{error}</p>
                 <button on:click={fetchHistory} class="retry-button">
+                    <Icon icon="mdi:refresh" width="20" height="20" />
                     Tentar Novamente
                 </button>
             </div>
         {:else if histories.length === 0}
             <div class="empty-state">
-                <p>Você ainda não pesquisou nenhum artista.</p>
-                <a href="/" class="home-link">Ir para Home</a>
+                <Icon icon="mdi:history" width="64" height="64" />
+                <h3>Nenhum histórico ainda</h3>
+                <p>Pesquise artistas e seu histórico aparecerá aqui!</p>
+                <a href="/" class="explore-button">
+                    <Icon icon="mdi:magnify" width="20" height="20" />
+                    Pesquisar Artistas
+                </a>
             </div>
         {:else}
             <div class="view-controls">
@@ -446,58 +454,98 @@
 
     .error-message {
         text-align: center;
-        padding: 40px 20px;
-        color: var(--text-secondary, #b3b3b3);
+        color: var(--text-secondary, #999);
+        margin-top: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .error-message :global(svg) {
+        color: #ff4757;
     }
 
     .error-message p {
-        font-size: 1.125rem;
-        margin-bottom: 20px;
+        font-size: 1rem;
+        margin: 0;
     }
 
     .retry-button {
-        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
         background: var(--accent-color, #1db954);
-        color: #ffffff;
+        color: white;
         border: none;
-        border-radius: 24px;
-        font-size: 1rem;
-        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 8px;
         cursor: pointer;
-        transition: all 0.2s ease;
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
     }
 
     .retry-button:hover {
         background: var(--accent-hover, #1ed760);
-        transform: scale(1.05);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(29, 185, 84, 0.4);
     }
 
     .empty-state {
         text-align: center;
-        padding: 60px 20px;
+        margin: 80px auto;
+        padding: 60px 40px;
+        max-width: 500px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .empty-state :global(svg) {
+        color: rgba(255, 255, 255, 0.2);
+        margin-bottom: 8px;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        color: var(--text-primary, #fff);
+        margin: 0;
+        font-weight: 600;
     }
 
     .empty-state p {
-        font-size: 1.125rem;
-        color: var(--text-secondary, #b3b3b3);
-        margin-bottom: 24px;
-    }
-
-    .home-link {
-        display: inline-block;
-        padding: 12px 32px;
-        background: var(--accent-color, #1db954);
-        color: #ffffff;
-        text-decoration: none;
-        border-radius: 24px;
         font-size: 1rem;
-        font-weight: 600;
-        transition: all 0.2s ease;
+        margin: 0;
+        color: var(--text-secondary, #999);
+        line-height: 1.5;
     }
 
-    .home-link:hover {
+    .explore-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--accent-color, #1db954);
+        color: white;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-top: 8px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .explore-button:hover {
         background: var(--accent-hover, #1ed760);
-        transform: scale(1.05);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(29, 185, 84, 0.4);
     }
 
     @media (max-width: 768px) {
@@ -547,6 +595,19 @@
 
         .search-time {
             font-size: 0.75rem;
+        }
+
+        .empty-state {
+            margin: 40px auto;
+            padding: 40px 24px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
         }
     }
 
