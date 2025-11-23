@@ -86,6 +86,7 @@
         {/if}
     </div>
 </header>
+<div class="header-spacer"></div>
 
 <style>
     .app-header {
@@ -95,10 +96,16 @@
         padding: 20px 24px;
         background: var(--bg-secondary);
         border-bottom: 1px solid var(--border-color);
-        position: sticky;
+        position: fixed;
         top: 0;
+        left: 0;
+        right: 0;
         z-index: 100;
         min-height: 70px;
+        box-sizing: border-box;
+    }
+    .header-spacer {
+        height: 70px;
     }
     .header-left {
         display: flex;

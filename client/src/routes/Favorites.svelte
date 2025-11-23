@@ -236,7 +236,7 @@
 <style>
     main {
         min-height: 100vh;
-        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        background: var(--bg-gradient-primary);
         padding-bottom: 40px;
     }
 

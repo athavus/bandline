@@ -211,7 +211,7 @@
         padding: 0;
         transition: margin-left 0.3s ease;
         min-height: 100vh;
-        background: var(--bg-primary);
+        background: var(--bg-gradient-primary);
         display: flex;
         flex-direction: column;
         width: 100%;
