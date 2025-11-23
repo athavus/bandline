@@ -44,12 +44,9 @@
             const method = isFavorite ? "DELETE" : "POST";
             const url = "http://localhost:3000/favorites";
 
-            console.log("=== DEBUG FAVORITOS ===");
-            console.log("URL completa:", url);
+            console.log("=== TOGGLE FAVORITO ===");
             console.log("Método:", method);
             console.log("Album ID:", album.id);
-            console.log("Album Name:", album.name);
-            console.log("Total Tracks:", album.total_tracks);
             console.log("isFavorite atual:", isFavorite);
 
             const response = await fetch(url, {
@@ -66,13 +63,19 @@
                 }),
             });
 
-            console.log("Status da resposta:", response.status);
-            console.log("Headers:", response.headers.get("content-type"));
-
             const contentType = response.headers.get("content-type");
             const text = await response.text();
 
-            console.log("Resposta raw:", text);
+            // Se já está favoritado (409) e estamos tentando adicionar, apenas inverte o estado
+            if (response.status === 409 && !isFavorite) {
+                console.log("Álbum já favoritado, atualizando UI");
+                isFavorite = true;
+                dispatch("favoriteToggled", {
+                    albumId: album.id,
+                    isFavorite: true,
+                });
+                return;
+            }
 
             if (!response.ok) {
                 let errorMessage = "Erro ao favoritar álbum";
@@ -90,8 +93,9 @@
                 data = JSON.parse(text);
             }
 
-            console.log("Dados parseados:", data);
+            console.log("Resposta:", data);
 
+            // Atualiza o estado
             isFavorite = !isFavorite;
 
             dispatch("favoriteToggled", {

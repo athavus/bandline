@@ -65,6 +65,38 @@ router.post("/", ensureAuthenticated, async (req: Request, res: Response) => {
   }
 });
 
+// Adicione essa rota no seu arquivo de rotas de favoritos
+router.post(
+  "/check",
+  ensureAuthenticated,
+  async (req: Request, res: Response) => {
+    try {
+      const user = req.user as { id: number };
+      const { albumIds } = req.body;
+
+      if (!albumIds || !Array.isArray(albumIds)) {
+        return res.status(400).json({
+          error: "albumIds é obrigatório e deve ser um array",
+        });
+      }
+
+      const favorites = await prisma.favorites.findMany({
+        where: {
+          userId: user.id,
+          albumId: { in: albumIds },
+        },
+        select: { albumId: true },
+      });
+
+      const favoriteIds = favorites.map((f) => f.albumId);
+      res.json({ favoriteIds });
+    } catch (error) {
+      console.error("Erro ao verificar favoritos:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  },
+);
+
 // Remover favorito
 router.delete("/", ensureAuthenticated, async (req: Request, res: Response) => {
   try {

@@ -19,11 +19,34 @@
     let tracksLoading = false;
     let error: string | null = null;
     let sliderElement: HTMLElement;
+    let favoriteAlbumIds: string[] = [];
 
-    // no dispatch usage
     const API_URL = import.meta.env.VITE_API_URL;
+
     function scroll(amount: number) {
         sliderElement?.scrollBy({ left: amount, behavior: "smooth" });
+    }
+
+    async function checkFavorites(albumIds: string[]) {
+        try {
+            const response = await fetch(`${API_URL}/favorites/check`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ albumIds }),
+            });
+
+            if (!response.ok) {
+                console.error("Erro ao verificar favoritos");
+                return [];
+            }
+
+            const data = await response.json();
+            return data.favoriteIds || [];
+        } catch (err) {
+            console.error("Erro ao verificar favoritos:", err);
+            return [];
+        }
     }
 
     async function loadAlbums() {
@@ -31,11 +54,20 @@
         loading = true;
         error = null;
         albums = null;
-        selectedAlbum = null; // Reset selected album
+        selectedAlbum = null;
+        favoriteAlbumIds = [];
+
         try {
             const res = await fetch(`${API_URL}/artistAlbums/${artistId}`);
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             albums = await res.json();
+
+            // Verificar quais álbuns estão favoritados
+            if (albums?.items?.length) {
+                const albumIds = albums.items.map((a) => a.id);
+                favoriteAlbumIds = await checkFavorites(albumIds);
+                console.log("Álbuns favoritados:", favoriteAlbumIds);
+            }
         } catch (err) {
             error = err instanceof Error ? err.message : "Erro desconhecido";
         } finally {
@@ -64,6 +96,22 @@
             selectedAlbum = album;
             loadAlbumTracks(album.id);
         }
+    }
+
+    function handleFavoriteToggled(event: CustomEvent) {
+        const { albumId, isFavorite } = event.detail;
+
+        if (isFavorite) {
+            // Adiciona aos favoritos
+            if (!favoriteAlbumIds.includes(albumId)) {
+                favoriteAlbumIds = [...favoriteAlbumIds, albumId];
+            }
+        } else {
+            // Remove dos favoritos
+            favoriteAlbumIds = favoriteAlbumIds.filter((id) => id !== albumId);
+        }
+
+        console.log("Favoritos atualizados:", favoriteAlbumIds);
     }
 
     function getTimelineX(i: number) {
@@ -119,7 +167,9 @@
                             {album}
                             position={getTimelineX(i) - 90}
                             active={selectedAlbum?.id === album.id}
+                            isFavorite={favoriteAlbumIds.includes(album.id)}
                             on:click={() => handleAlbumClick(album)}
+                            on:favoriteToggled={handleFavoriteToggled}
                         />
                     {/each}
                 </div>
