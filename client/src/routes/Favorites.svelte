@@ -252,12 +252,13 @@
         gap: 8px;
         margin-bottom: 24px;
         padding: 16px 20px;
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--bg-card);
         border-radius: 12px;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: var(--text-primary, #fff);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
         font-size: 0.95rem;
+        box-shadow: var(--shadow-sm);
     }
 
     .favorites-stats :global(svg) {
@@ -283,18 +284,19 @@
     }
 
     .album-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--bg-card);
         border-radius: 12px;
         overflow: hidden;
         transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         cursor: pointer;
+        box-shadow: var(--shadow-sm);
     }
 
     .album-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--border-light);
     }
 
     .album-cover {
@@ -302,7 +304,7 @@
         width: 100%;
         aspect-ratio: 1;
         overflow: hidden;
-        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        background: var(--bg-tertiary);
     }
 
     .album-cover img {
@@ -322,7 +324,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: rgba(255, 255, 255, 0.3);
+        color: var(--text-tertiary);
     }
 
     .album-overlay {
@@ -380,7 +382,7 @@
     .album-name {
         font-size: 1rem;
         font-weight: 600;
-        color: var(--text-primary, #fff);
+        color: var(--text-primary);
         margin: 0 0 8px 0;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -395,7 +397,7 @@
         flex-direction: column;
         gap: 4px;
         font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-secondary);
     }
 
     .album-meta span {
@@ -406,7 +408,7 @@
 
     .error-message {
         text-align: center;
-        color: var(--text-secondary, #999);
+        color: var(--text-secondary);
         margin-top: 80px;
         display: flex;
         flex-direction: column;
@@ -443,9 +445,10 @@
         margin: 80px auto;
         padding: 60px 40px;
         max-width: 500px;
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--bg-card);
         border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -453,13 +456,12 @@
     }
 
     .empty-state :global(svg) {
-        color: rgba(255, 255, 255, 0.2);
-        margin-bottom: 8px;
+        color: var(--text-tertiary);
     }
 
     .empty-state h3 {
         font-size: 1.5rem;
-        color: var(--text-primary, #fff);
+        color: var(--text-primary);
         margin: 0;
         font-weight: 600;
     }
@@ -467,7 +469,7 @@
     .empty-state p {
         font-size: 1rem;
         margin: 0;
-        color: var(--text-secondary, #999);
+        color: var(--text-secondary);
         line-height: 1.5;
     }
 
@@ -475,7 +477,7 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: var(--accent-color, #1db954);
+        background: var(--accent-color);
         color: white;
         text-decoration: none;
         padding: 14px 28px;
@@ -488,10 +490,14 @@
         cursor: pointer;
     }
 
+    .explore-button :global(svg) {
+        color: white;
+    }
+
     .explore-button:hover {
-        background: var(--accent-hover, #1ed760);
+        background: var(--accent-hover);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(29, 185, 84, 0.4);
+        box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.4);
     }
 
     @media (max-width: 768px) {
