@@ -15,16 +15,33 @@
         albumName: string;
         albumImage?: string;
         albumTracks: string;
+        albumReleaseDate?: string;
         favoritedAt: string;
     }
 
+    type SortOption = "recent" | "alphabetical" | "release" | "tracks";
+    type ViewMode = "grid" | "list";
+
     let favorites: FavoriteAlbum[] = [];
+    let filteredFavorites: FavoriteAlbum[] = [];
     let loading = true;
     let error: string | null = null;
     let sidebarOpen = false;
+    let searchQuery = "";
+    let sortBy: SortOption = "recent";
+    let viewMode: ViewMode = "grid";
 
     const API_URL = import.meta.env.VITE_API_URL;
     $: authState = $auth;
+
+    // Reativa: aplica filtro e ordenação sempre que mudar
+    $: {
+        filteredFavorites = filterAndSortFavorites(
+            favorites,
+            searchQuery,
+            sortBy,
+        );
+    }
 
     onMount(async () => {
         if (!authState.isAuthenticated) {
@@ -66,6 +83,54 @@
         } finally {
             loading = false;
         }
+    }
+
+    function filterAndSortFavorites(
+        albums: FavoriteAlbum[],
+        query: string,
+        sort: SortOption,
+    ): FavoriteAlbum[] {
+        // Filtrar por busca
+        let filtered = albums.filter((album) =>
+            album.albumName.toLowerCase().includes(query.toLowerCase()),
+        );
+
+        // Ordenar
+        switch (sort) {
+            case "alphabetical":
+                filtered.sort((a, b) =>
+                    a.albumName.localeCompare(b.albumName, "pt-BR"),
+                );
+                break;
+            case "release":
+                filtered.sort((a, b) => {
+                    const dateA = a.albumReleaseDate
+                        ? new Date(a.albumReleaseDate).getTime()
+                        : 0;
+                    const dateB = b.albumReleaseDate
+                        ? new Date(b.albumReleaseDate).getTime()
+                        : 0;
+                    return dateB - dateA;
+                });
+                break;
+            case "tracks":
+                filtered.sort((a, b) => {
+                    const tracksA = parseInt(a.albumTracks) || 0;
+                    const tracksB = parseInt(b.albumTracks) || 0;
+                    return tracksB - tracksA;
+                });
+                break;
+            case "recent":
+            default:
+                filtered.sort(
+                    (a, b) =>
+                        new Date(b.favoritedAt).getTime() -
+                        new Date(a.favoritedAt).getTime(),
+                );
+                break;
+        }
+
+        return filtered;
     }
 
     function toggleSidebar() {
@@ -115,6 +180,10 @@
             year: "numeric",
         });
     }
+
+    function clearSearch() {
+        searchQuery = "";
+    }
 </script>
 
 <Sidebar bind:open={sidebarOpen} on:action={handleSidebarAction} />
@@ -150,85 +219,224 @@
                 </a>
             </div>
         {:else}
-            <div class="favorites-stats">
-                <Icon icon="mdi:heart" width="20" height="20" />
-                <span
-                    >{favorites.length}
-                    {favorites.length === 1
-                        ? "álbum favoritado"
-                        : "álbuns favoritados"}</span
-                >
+            <!-- Barra de controles -->
+            <div class="controls-bar">
+                <div class="favorites-stats">
+                    <Icon icon="mdi:heart" width="20" height="20" />
+                    <span
+                        >{filteredFavorites.length} de {favorites.length}
+                        {favorites.length === 1 ? "álbum" : "álbuns"}</span
+                    >
+                </div>
+
+                <div class="search-bar">
+                    <Icon icon="mdi:magnify" width="20" height="20" />
+                    <input
+                        type="text"
+                        bind:value={searchQuery}
+                        placeholder="Pesquisar álbuns..."
+                        class="favorites-search-input"
+                    />
+                    {#if searchQuery}
+                        <button
+                            class="clear-search"
+                            on:click={clearSearch}
+                            title="Limpar busca"
+                        >
+                            <Icon icon="mdi:close" width="18" height="18" />
+                        </button>
+                    {/if}
+                </div>
+
+                <div class="view-controls">
+                    <div class="sort-dropdown">
+                        <Icon icon="mdi:sort" width="18" height="18" />
+                        <select bind:value={sortBy} class="sort-select">
+                            <option value="recent">Mais Recentes</option>
+                            <option value="alphabetical">A-Z</option>
+                            <option value="release">Lançamento</option>
+                            <option value="tracks">Mais Faixas</option>
+                        </select>
+                    </div>
+
+                    <div class="view-mode-buttons">
+                        <button
+                            class="view-btn"
+                            class:active={viewMode === "grid"}
+                            on:click={() => (viewMode = "grid")}
+                            title="Visualização em grade"
+                        >
+                            <Icon icon="mdi:grid" width="20" height="20" />
+                        </button>
+                        <button
+                            class="view-btn"
+                            class:active={viewMode === "list"}
+                            on:click={() => (viewMode = "list")}
+                            title="Visualização em lista"
+                        >
+                            <Icon
+                                icon="mdi:format-list-bulleted"
+                                width="20"
+                                height="20"
+                            />
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div class="favorites-grid">
-                {#each favorites as fav (fav.id)}
-                    <div class="album-card">
-                        <div class="album-cover">
-                            {#if fav.albumImage}
-                                <img
-                                    src={fav.albumImage}
-                                    alt={fav.albumName}
-                                    loading="lazy"
-                                />
-                            {:else}
-                                <div class="no-image">
-                                    <Icon
-                                        icon="mdi:music-note"
-                                        width="48"
-                                        height="48"
+            <!-- Lista de favoritos -->
+            {#if filteredFavorites.length === 0}
+                <div class="no-results">
+                    <Icon icon="mdi:album" width="48" height="48" />
+                    <p>Nenhum álbum encontrado com "{searchQuery}"</p>
+                </div>
+            {:else if viewMode === "grid"}
+                <div class="favorites-grid">
+                    {#each filteredFavorites as fav (fav.id)}
+                        <div class="album-card">
+                            <div class="album-cover">
+                                {#if fav.albumImage}
+                                    <img
+                                        src={fav.albumImage}
+                                        alt={fav.albumName}
+                                        loading="lazy"
                                     />
+                                {:else}
+                                    <div class="no-image">
+                                        <Icon
+                                            icon="mdi:music-note"
+                                            width="48"
+                                            height="48"
+                                        />
+                                    </div>
+                                {/if}
+                                <div class="album-overlay">
+                                    <button
+                                        class="action-btn spotify-btn"
+                                        on:click={() =>
+                                            openAlbumInSpotify(fav.albumId)}
+                                        title="Abrir no Spotify"
+                                    >
+                                        <Icon
+                                            icon="mdi:spotify"
+                                            width="24"
+                                            height="24"
+                                        />
+                                    </button>
+                                    <button
+                                        class="action-btn remove-btn"
+                                        on:click={() =>
+                                            removeFavorite(fav.albumId)}
+                                        title="Remover dos favoritos"
+                                    >
+                                        <Icon
+                                            icon="mdi:heart-off"
+                                            width="24"
+                                            height="24"
+                                        />
+                                    </button>
                                 </div>
-                            {/if}
-                            <div class="album-overlay">
+                            </div>
+                            <div class="album-info">
+                                <h3 class="album-name">{fav.albumName}</h3>
+                                <div class="album-meta">
+                                    <span class="track-count">
+                                        <Icon
+                                            icon="mdi:music"
+                                            width="14"
+                                            height="14"
+                                        />
+                                        {fav.albumTracks} faixas
+                                    </span>
+                                    <span class="favorite-date">
+                                        <Icon
+                                            icon="mdi:calendar"
+                                            width="14"
+                                            height="14"
+                                        />
+                                        {formatDate(fav.favoritedAt)}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    {/each}
+                </div>
+            {:else}
+                <div class="favorites-list">
+                    {#each filteredFavorites as fav (fav.id)}
+                        <div class="album-list-item">
+                            <div class="list-item-cover">
+                                {#if fav.albumImage}
+                                    <img
+                                        src={fav.albumImage}
+                                        alt={fav.albumName}
+                                        loading="lazy"
+                                    />
+                                {:else}
+                                    <div class="no-image-list">
+                                        <Icon
+                                            icon="mdi:music-note"
+                                            width="24"
+                                            height="24"
+                                        />
+                                    </div>
+                                {/if}
+                            </div>
+
+                            <div class="list-item-info">
+                                <h3 class="list-album-name">
+                                    {fav.albumName}
+                                </h3>
+                                <div class="list-album-meta">
+                                    <span>
+                                        <Icon
+                                            icon="mdi:music"
+                                            width="14"
+                                            height="14"
+                                        />
+                                        {fav.albumTracks} faixas
+                                    </span>
+                                    <span class="separator">•</span>
+                                    <span>
+                                        <Icon
+                                            icon="mdi:calendar"
+                                            width="14"
+                                            height="14"
+                                        />
+                                        {formatDate(fav.favoritedAt)}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="list-item-actions">
                                 <button
-                                    class="action-btn spotify-btn"
+                                    class="list-action-btn"
                                     on:click={() =>
                                         openAlbumInSpotify(fav.albumId)}
                                     title="Abrir no Spotify"
                                 >
                                     <Icon
                                         icon="mdi:spotify"
-                                        width="24"
-                                        height="24"
+                                        width="20"
+                                        height="20"
                                     />
                                 </button>
                                 <button
-                                    class="action-btn remove-btn"
+                                    class="list-action-btn list-remove-btn"
                                     on:click={() => removeFavorite(fav.albumId)}
                                     title="Remover dos favoritos"
                                 >
                                     <Icon
                                         icon="mdi:heart-off"
-                                        width="24"
-                                        height="24"
+                                        width="20"
+                                        height="20"
                                     />
                                 </button>
                             </div>
                         </div>
-                        <div class="album-info">
-                            <h3 class="album-name">{fav.albumName}</h3>
-                            <div class="album-meta">
-                                <span class="track-count">
-                                    <Icon
-                                        icon="mdi:music"
-                                        width="14"
-                                        height="14"
-                                    />
-                                    {fav.albumTracks} faixas
-                                </span>
-                                <span class="favorite-date">
-                                    <Icon
-                                        icon="mdi:calendar"
-                                        width="14"
-                                        height="14"
-                                    />
-                                    {formatDate(fav.favoritedAt)}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                {/each}
-            </div>
+                    {/each}
+                </div>
+            {/if}
         {/if}
     </div>
 </main>
@@ -246,12 +454,20 @@
         padding: 40px 20px;
     }
 
+    /* Barra de controles */
+    .controls-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 32px;
+        align-items: center;
+    }
+
     .favorites-stats {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-bottom: 24px;
-        padding: 16px 20px;
+        padding: 12px 20px;
         background: var(--bg-card);
         border-radius: 12px;
         backdrop-filter: blur(10px);
@@ -259,12 +475,136 @@
         color: var(--text-primary);
         font-size: 0.95rem;
         box-shadow: var(--shadow-sm);
+        white-space: nowrap;
     }
 
     .favorites-stats :global(svg) {
         color: #ff4757;
     }
 
+    .search-bar {
+        flex: 1;
+        min-width: 250px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        background: var(--bg-card);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .search-bar:focus-within {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+    }
+
+    .search-bar :global(svg) {
+        color: var(--text-tertiary);
+        flex-shrink: 0;
+    }
+
+    .favorites-search-input {
+        flex: 1;
+        border: none;
+        width: 50%;
+        background: transparent;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        outline: none;
+    }
+
+    .favorites-search-input::placeholder {
+        color: var(--text-tertiary);
+    }
+
+    .clear-search {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-tertiary);
+        transition: color 0.2s ease;
+        border-radius: 4px;
+    }
+
+    .clear-search:hover {
+        color: var(--text-primary);
+        background: var(--bg-tertiary);
+    }
+
+    .view-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .sort-dropdown {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: var(--bg-card);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+    }
+
+    .sort-dropdown :global(svg) {
+        color: var(--text-tertiary);
+    }
+
+    .sort-select {
+        border: none;
+        background: transparent;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        outline: none;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .sort-select option {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+    }
+
+    .view-mode-buttons {
+        display: flex;
+        gap: 4px;
+        padding: 4px;
+        background: var(--bg-card);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+    }
+
+    .view-btn {
+        padding: 8px 12px;
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--text-tertiary);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .view-btn:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+    }
+
+    .view-btn.active {
+        background: var(--accent-color);
+        color: white;
+    }
+
+    /* Grid view */
     .favorites-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -406,6 +746,142 @@
         gap: 6px;
     }
 
+    .favorites-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    .album-list-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: var(--bg-card);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .album-list-item:hover {
+        border-color: var(--border-light);
+        box-shadow: var(--shadow-md);
+        transform: translateX(4px);
+    }
+
+    .list-item-cover {
+        width: 64px;
+        height: 64px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: var(--bg-tertiary);
+    }
+
+    .list-item-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .no-image-list {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-tertiary);
+    }
+
+    .list-item-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .list-album-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0 0 6px 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .list-album-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .list-album-meta span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .separator {
+        color: var(--text-tertiary);
+    }
+
+    .list-item-actions {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+        align-items: center;
+    }
+
+    .list-action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease;
+        color: var(--text-secondary);
+        flex-shrink: 0;
+    }
+
+    .list-action-btn:hover {
+        background: #1db954;
+        border-color: #1db954;
+        color: white;
+    }
+
+    .list-action-btn.list-remove-btn:hover {
+        background: #ff4757;
+        border-color: #ff4757;
+        color: white;
+    }
+
+    /* Estados vazios e erro */
+    .no-results {
+        text-align: center;
+        padding: 80px 20px;
+        color: var(--text-secondary);
+    }
+
+    .no-results :global(svg) {
+        color: var(--text-tertiary);
+        margin-bottom: 16px;
+    }
+
+    .no-results p {
+        font-size: 1rem;
+        margin: 0;
+    }
+
     .error-message {
         text-align: center;
         color: var(--text-secondary);
@@ -500,6 +976,27 @@
         box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.4);
     }
 
+    /* Responsividade */
+    @media (max-width: 968px) {
+        .controls-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .favorites-stats {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .search-bar {
+            width: 100%;
+        }
+
+        .view-controls {
+            justify-content: space-between;
+        }
+    }
+
     @media (max-width: 768px) {
         .favorites-grid {
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -508,6 +1005,11 @@
 
         .favorites-container {
             padding: 24px 16px;
+        }
+
+        .controls-bar {
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .empty-state {
@@ -521,6 +1023,55 @@
 
         .empty-state p {
             font-size: 0.9rem;
+        }
+
+        .list-item-cover {
+            width: 56px;
+            height: 56px;
+        }
+
+        .list-album-name {
+            font-size: 0.95rem;
+        }
+
+        .list-album-meta {
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .list-action-btn {
+            width: 36px;
+            height: 36px;
+        }
+
+        .list-action-btn :global(svg) {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .sort-dropdown {
+            flex: 1;
+        }
+
+        .sort-select {
+            width: 100%;
+        }
+
+        .view-mode-buttons {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .album-list-item {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .list-item-actions {
+            width: 100%;
+            justify-content: flex-end;
         }
     }
 </style>
