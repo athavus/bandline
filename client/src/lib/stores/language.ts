@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
 
 export type Language = "en" | "pt" | "es";
 
@@ -492,6 +492,12 @@ const translations: Record<Language, Translations> = {
 
 const currentLanguage = writable<Language>("en");
 
+// Store derivada para traduções reativas
+export const translations$ = derived(
+  currentLanguage,
+  ($lang) => translations[$lang],
+);
+
 export const language = {
   subscribe: currentLanguage.subscribe,
   set: currentLanguage.set,
@@ -502,10 +508,20 @@ export const language = {
   },
 };
 
+// Função de tradução (uso direto)
 export function t(key: keyof Translations): string {
   let lang: Language = "en";
   currentLanguage.subscribe((value) => (lang = value))();
   return translations[lang][key] || translations.en[key] || key;
+}
+
+// Hook para componentes que precisam de reatividade
+export function useTranslations() {
+  return derived(currentLanguage, ($lang) => ({
+    t: (key: keyof Translations) =>
+      translations[$lang][key] || translations.en[key] || key,
+    lang: $lang,
+  }));
 }
 
 export function setLanguage(lang: Language) {
