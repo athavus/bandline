@@ -4,6 +4,8 @@
     import FavoritesSearch from "./FavoritesSearch.svelte";
     import FavoritesSortView from "./FavoritesSortView.svelte";
 
+    import "./FavoritesControls.css";
+
     export let totalFavorites: number;
     export let filteredCount: number;
     export let searchQuery: string;
@@ -39,27 +41,3 @@
         on:viewChange={handleViewChange}
     />
 </div>
-
-<style>
-    .controls-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-bottom: 32px;
-        align-items: center;
-    }
-
-    @media (max-width: 968px) {
-        .controls-bar {
-            flex-direction: column;
-            align-items: stretch;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .controls-bar {
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-    }
-</style>

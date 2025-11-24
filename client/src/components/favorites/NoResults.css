@@ -1,0 +1,15 @@
+.no-results {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-secondary);
+}
+
+.no-results :global(svg) {
+    color: var(--text-tertiary);
+    margin-bottom: 16px;
+}
+
+.no-results p {
+    font-size: 1rem;
+    margin: 0;
+}

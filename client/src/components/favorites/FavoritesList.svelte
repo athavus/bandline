@@ -2,6 +2,8 @@
     import AlbumListItem from "./AlbumListItem.svelte";
     import { createEventDispatcher } from "svelte";
 
+    import "./FavoritesList.css";
+
     interface FavoriteAlbum {
         id: number;
         albumId: string;
@@ -52,23 +54,3 @@
         </p>
     {/if}
 </div>
-
-<style>
-    .favorites-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        animation: fadeIn 0.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
