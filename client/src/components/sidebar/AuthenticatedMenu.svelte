@@ -69,10 +69,4 @@
         label={t("settings")}
         on:click={() => handleAction("settings")}
     />
-    <MenuItem
-        icon={menuIcons.logout}
-        label={t("logout")}
-        variant="danger"
-        on:click={() => handleAction("logout")}
-    />
 </MenuSection>
