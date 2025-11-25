@@ -89,6 +89,26 @@ export interface Translations {
   // History
   firstHistoryWord: string;
   lastHistoryWord: string;
+  loadingHistory: string;
+  errorLoadingHistory: string;
+  historyEmpty: string;
+  historyEmptyDescription: string;
+  discoverArtists: string;
+  errorOccurred: string;
+  noArtistsFound: string;
+  clearFilter: string;
+  searchArtistsHistory: string;
+  clearSearch: string;
+  artist: string;
+  artists: string;
+  gridView: string;
+  listView: string;
+  timeAgo: {
+    now: string;
+    minutesAgo: string;
+    hoursAgo: string;
+    daysAgo: string;
+  };
 
   // Favorites
   firstFavoritesWord: string;
@@ -212,6 +232,28 @@ const translations: Record<Language, Translations> = {
     // History
     firstHistoryWord: "Hist",
     lastHistoryWord: "ory",
+    loadingHistory: "Loading history...",
+    errorLoadingHistory:
+      "Could not load history. Please check if you are authenticated.",
+    historyEmpty: "Your history is empty",
+    historyEmptyDescription:
+      "Start exploring artists and build your musical journey!",
+    discoverArtists: "Discover Artists",
+    errorOccurred: "Oops! Something went wrong",
+    noArtistsFound: "No artists found with",
+    clearFilter: "Clear filter",
+    searchArtistsHistory: "Search artists...",
+    clearSearch: "Clear search",
+    artist: "artist",
+    artists: "artists",
+    gridView: "Grid view",
+    listView: "List view",
+    timeAgo: {
+      now: "Now",
+      minutesAgo: "min ago",
+      hoursAgo: "h ago",
+      daysAgo: "d ago",
+    },
 
     // Favorites
     firstFavoritesWord: "Favo",
@@ -333,6 +375,28 @@ const translations: Record<Language, Translations> = {
     // History
     firstHistoryWord: "Histó",
     lastHistoryWord: "rico",
+    loadingHistory: "Carregando histórico...",
+    errorLoadingHistory:
+      "Não foi possível carregar o histórico. Verifique se está autenticado.",
+    historyEmpty: "Seu histórico está vazio",
+    historyEmptyDescription:
+      "Comece a explorar artistas e construa sua jornada musical!",
+    discoverArtists: "Descobrir Artistas",
+    errorOccurred: "Ops! Algo deu errado",
+    noArtistsFound: "Nenhum artista encontrado com",
+    clearFilter: "Limpar filtro",
+    searchArtistsHistory: "Pesquisar artistas...",
+    clearSearch: "Limpar busca",
+    artist: "artista",
+    artists: "artistas",
+    gridView: "Visualização em grid",
+    listView: "Visualização em lista",
+    timeAgo: {
+      now: "Agora",
+      minutesAgo: "min atrás",
+      hoursAgo: "h atrás",
+      daysAgo: "d atrás",
+    },
 
     // Favorites
     firstFavoritesWord: "Favo",
@@ -454,6 +518,28 @@ const translations: Record<Language, Translations> = {
     // History
     firstHistoryWord: "Hist",
     lastHistoryWord: "oria",
+    loadingHistory: "Cargando historial...",
+    errorLoadingHistory:
+      "No se pudo cargar el historial. Verifica que estés autenticado.",
+    historyEmpty: "Tu historial está vacío",
+    historyEmptyDescription:
+      "¡Comienza a explorar artistas y construye tu viaje musical!",
+    discoverArtists: "Descubrir Artistas",
+    errorOccurred: "¡Ups! Algo salió mal",
+    noArtistsFound: "No se encontraron artistas con",
+    clearFilter: "Limpiar filtro",
+    searchArtistsHistory: "Buscar artistas...",
+    clearSearch: "Limpiar búsqueda",
+    artist: "artista",
+    artists: "artistas",
+    gridView: "Vista de cuadrícula",
+    listView: "Vista de lista",
+    timeAgo: {
+      now: "Ahora",
+      minutesAgo: "min atrás",
+      hoursAgo: "h atrás",
+      daysAgo: "d atrás",
+    },
 
     // Favorites
     firstFavoritesWord: "Favo",
