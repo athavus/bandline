@@ -4,10 +4,10 @@
 
     import "./AlbumCard.css";
 
-    export let albumId: string;
-    export let albumName: string;
-    export let albumImage: string | undefined;
-    export let albumTracks: string;
+    export let favoritesAlbumId: string;
+    export let favoritesAlbumName: string;
+    export let favoritesAlbumImage: string | undefined;
+    export let favoritesAlbumTracks: string;
     export let favoritedAt: string;
 
     const dispatch = createEventDispatcher();
@@ -22,24 +22,28 @@
     }
 
     function handleOpenSpotify() {
-        dispatch("openSpotify", albumId);
+        dispatch("openSpotify", favoritesAlbumId);
     }
 
     function handleRemove() {
-        dispatch("remove", albumId);
+        dispatch("remove", favoritesAlbumId);
     }
 </script>
 
-<div class="album-card">
-    <div class="album-cover">
-        {#if albumImage}
-            <img src={albumImage} alt={albumName} loading="lazy" />
+<div class="favorites-album-card">
+    <div class="favorites-album-cover">
+        {#if favoritesAlbumImage}
+            <img
+                src={favoritesAlbumImage}
+                alt={favoritesAlbumName}
+                loading="lazy"
+            />
         {:else}
             <div class="no-image">
                 <Icon icon="mdi:music-note" width="48" height="48" />
             </div>
         {/if}
-        <div class="album-overlay">
+        <div class="favorites-album-overlay">
             <button
                 class="action-btn spotify-btn"
                 on:click={handleOpenSpotify}
@@ -56,12 +60,12 @@
             </button>
         </div>
     </div>
-    <div class="album-info">
-        <h3 class="album-name">{albumName}</h3>
-        <div class="album-meta">
+    <div class="favorites-album-info">
+        <h3 class="favorites-album-name">{favoritesAlbumName}</h3>
+        <div class="favorites-album-meta">
             <span class="track-count">
                 <Icon icon="mdi:music" width="14" height="14" />
-                {albumTracks} faixas
+                {favoritesAlbumTracks} faixas
             </span>
             <span class="favorite-date">
                 <Icon icon="mdi:calendar" width="14" height="14" />

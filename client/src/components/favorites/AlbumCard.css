@@ -1,4 +1,4 @@
-.album-card {
+.favorites-album-card {
     background: var(--bg-card);
     border-radius: 12px;
     overflow: hidden;
@@ -8,13 +8,13 @@
     box-shadow: var(--shadow-sm);
 }
 
-.album-card:hover {
+.favorites-album-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
     border-color: var(--border-light);
 }
 
-.album-cover {
+.favorites-album-cover {
     position: relative;
     width: 100%;
     aspect-ratio: 1;
@@ -22,14 +22,14 @@
     background: var(--bg-tertiary);
 }
 
-.album-cover img {
+.favorites-album-cover img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
 
-.album-card:hover .album-cover img {
+.favorites-album-card:hover .favorites-album-cover img {
     transform: scale(1.1);
 }
 
@@ -42,7 +42,7 @@
     color: var(--text-tertiary);
 }
 
-.album-overlay {
+.favorites-album-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -61,7 +61,7 @@
     transition: opacity 0.3s ease;
 }
 
-.album-card:hover .album-overlay {
+.favorites-album-card:hover .favorites-album-overlay {
     opacity: 1;
 }
 
@@ -90,11 +90,11 @@
     transform: scale(1.1);
 }
 
-.album-info {
+.favorites-album-info {
     padding: 16px;
 }
 
-.album-name {
+.favorites-album-name {
     font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -108,7 +108,7 @@
     line-height: 1.3;
 }
 
-.album-meta {
+.favorites-album-meta {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -116,7 +116,7 @@
     color: var(--text-secondary);
 }
 
-.album-meta span {
+.favorites-album-meta span {
     display: flex;
     align-items: center;
     gap: 6px;
