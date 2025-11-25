@@ -2,6 +2,8 @@
     import HistoryCard from "./HistoryCard.svelte";
     import type { HistoryItem } from "../../types/history";
 
+    import "./HistoryGrid.css";
+
     export let histories: HistoryItem[];
     export let onArtistClick: (artistId: string, artistName: string) => void;
 </script>
@@ -11,17 +13,3 @@
         <HistoryCard {history} {index} {onArtistClick} />
     {/each}
 </div>
-
-<style>
-    .history-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 16px;
-    }
-
-    @media (max-width: 768px) {
-        .history-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
