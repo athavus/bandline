@@ -2,8 +2,6 @@
     import HistoryListItem from "./HistoryListItem.svelte";
     import type { HistoryItem } from "../../types/history";
 
-    import "./HistoryList.css";
-
     export let histories: HistoryItem[];
     export let onArtistClick: (artistId: string, artistName: string) => void;
 </script>
@@ -13,3 +11,13 @@
         <HistoryListItem {history} {index} {onArtistClick} />
     {/each}
 </div>
+
+<style>
+    .history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+</style>
