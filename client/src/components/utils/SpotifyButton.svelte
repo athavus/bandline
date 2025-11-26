@@ -1,6 +1,5 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import "./SpotifyButton.css";
 
     export let large: boolean = false;
 
@@ -24,3 +23,55 @@
         />
     </svg>
 </button>
+
+<style>
+    .spotify-btn {
+        position: absolute;
+        bottom: 12px;
+        right: 10px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(var(--accent-rgb), 0.95);
+        border: none;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transform: scale(0.8);
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+    .spotify-btn.large {
+        width: 50px;
+        height: 50px;
+        bottom: 5px;
+        right: 5px;
+    }
+
+    .spotify-btn svg {
+        width: 25px;
+        height: 25px;
+    }
+
+    .spotify-btn.large svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    :global(.album-item:hover .spotify-btn) {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .spotify-btn:hover {
+        background: var(--accent-color);
+        transform: scale(1.1);
+    }
+
+    .spotify-btn.large:hover {
+        transform: scale(1.15);
+    }
+</style>

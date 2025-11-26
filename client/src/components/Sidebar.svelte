@@ -7,7 +7,6 @@
     import SidebarHeader from "./sidebar/SidebarHeader.svelte";
     import AuthenticatedMenu from "./sidebar/AuthenticatedMenu.svelte";
     import UnauthenticatedMenu from "./sidebar/UnauthenticatedMenu.svelte";
-    import "./Sidebar.css";
 
     export let open = false;
 
@@ -50,3 +49,31 @@
         {/if}
     </div>
 </aside>
+
+<style>
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 280px;
+        background: var(--bg-card);
+        border-right: 1.5px solid var(--border-color);
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-content {
+        flex: 1;
+        padding: 20px 0;
+        overflow-y: auto;
+    }
+</style>

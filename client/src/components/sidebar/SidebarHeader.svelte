@@ -1,6 +1,5 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import "./SidebarHeader.css";
     import { replace } from "svelte-spa-router";
     const dispatch = createEventDispatcher();
 
@@ -43,3 +42,35 @@
         </svg>
     </button>
 </div>
+
+<style>
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+    }
+
+    .sidebar-close {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .sidebar-close:hover {
+        color: var(--text-primary);
+        background: var(--bg-hover);
+    }
+</style>
