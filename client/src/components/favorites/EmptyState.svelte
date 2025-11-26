@@ -1,8 +1,6 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { t } from "../../lib/stores/language";
-
-    import "./EmptyState.css";
 </script>
 
 <div class="empty-state">
@@ -14,3 +12,80 @@
         Explorar Álbuns
     </a>
 </div>
+
+<style>
+    .empty-state {
+        text-align: center;
+        margin: 80px auto;
+        padding: 60px 40px;
+        max-width: 500px;
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .empty-state :global(svg) {
+        color: var(--text-tertiary);
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        color: var(--text-primary);
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .empty-state p {
+        font-size: 1rem;
+        margin: 0;
+        color: var(--text-secondary);
+        line-height: 1.5;
+    }
+
+    .explore-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--accent-color);
+        color: white;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-top: 8px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .explore-button :global(svg) {
+        color: white;
+    }
+
+    .explore-button:hover {
+        background: var(--accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .empty-state {
+            margin: 40px auto;
+            padding: 40px 24px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+        }
+    }
+</style>
