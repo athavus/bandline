@@ -23,14 +23,6 @@
     function handleRemove(event: CustomEvent<string>) {
         dispatch("remove", event.detail);
     }
-
-    // Debug
-    $: console.log(
-        "FavoritesList - favorites:",
-        favorites,
-        "length:",
-        favorites?.length,
-    );
 </script>
 
 <div class="favorites-list">

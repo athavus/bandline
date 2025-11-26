@@ -2,10 +2,11 @@
     import Icon from "@iconify/svelte";
     import { createEventDispatcher } from "svelte";
 
-    export let favoritesAlbumId: string;
-    export let favoritesAlbumName: string;
-    export let favoritesAlbumImage: string | undefined;
-    export let favoritesAlbumTracks: string;
+    // Props renomeadas para coincidir com o uso no FavoritesList
+    export let albumId: string;
+    export let albumName: string;
+    export let albumImage: string | undefined;
+    export let albumTracks: string;
     export let favoritedAt: string;
 
     const dispatch = createEventDispatcher();
@@ -20,22 +21,18 @@
     }
 
     function handleOpenSpotify() {
-        dispatch("openSpotify", favoritesAlbumId);
+        dispatch("openSpotify", albumId);
     }
 
     function handleRemove() {
-        dispatch("remove", favoritesAlbumId);
+        dispatch("remove", albumId);
     }
 </script>
 
 <div class="favorites-album-card">
     <div class="favorites-album-cover">
-        {#if favoritesAlbumImage}
-            <img
-                src={favoritesAlbumImage}
-                alt={favoritesAlbumName}
-                loading="lazy"
-            />
+        {#if albumImage}
+            <img src={albumImage} alt={albumName} loading="lazy" />
         {:else}
             <div class="no-image">
                 <Icon icon="mdi:music-note" width="48" height="48" />
@@ -59,11 +56,11 @@
         </div>
     </div>
     <div class="favorites-album-info">
-        <h3 class="favorites-album-name">{favoritesAlbumName}</h3>
+        <h3 class="favorites-album-name">{albumName}</h3>
         <div class="favorites-album-meta">
             <span class="track-count">
                 <Icon icon="mdi:music" width="14" height="14" />
-                {favoritesAlbumTracks} faixas
+                {albumTracks} faixas
             </span>
             <span class="favorite-date">
                 <Icon icon="mdi:calendar" width="14" height="14" />

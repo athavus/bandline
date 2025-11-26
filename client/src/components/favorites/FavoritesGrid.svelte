@@ -1,5 +1,6 @@
 <script lang="ts">
     import AlbumCard from "./AlbumCard.svelte";
+
     import { createEventDispatcher } from "svelte";
 
     interface FavoriteAlbum {
@@ -12,7 +13,7 @@
         favoritedAt: string;
     }
 
-    export let favorites: FavoriteAlbum[];
+    export let favorites: FavoriteAlbum[] = [];
 
     const dispatch = createEventDispatcher();
 
@@ -23,20 +24,34 @@
     function handleRemove(event: CustomEvent<string>) {
         dispatch("remove", event.detail);
     }
+
+    // Debug
+    $: console.log(
+        "FavoritesList - favorites:",
+        favorites,
+        "length:",
+        favorites?.length,
+    );
 </script>
 
 <div class="favorites-grid">
-    {#each favorites as fav (fav.id)}
-        <AlbumCard
-            albumId={fav.albumId}
-            albumName={fav.albumName}
-            albumImage={fav.albumImage}
-            albumTracks={fav.albumTracks}
-            favoritedAt={fav.favoritedAt}
-            on:openSpotify={handleOpenSpotify}
-            on:remove={handleRemove}
-        />
-    {/each}
+    {#if favorites && favorites.length > 0}
+        {#each favorites as fav (fav.id)}
+            <AlbumCard
+                albumId={fav.albumId}
+                albumName={fav.albumName}
+                albumImage={fav.albumImage}
+                albumTracks={fav.albumTracks}
+                favoritedAt={fav.favoritedAt}
+                on:openSpotify={handleOpenSpotify}
+                on:remove={handleRemove}
+            />
+        {/each}
+    {:else}
+        <p style="color: var(--text-secondary); padding: 20px;">
+            Nenhum item para exibir (Debug)
+        </p>
+    {/if}
 </div>
 
 <style>
