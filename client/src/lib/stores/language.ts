@@ -14,7 +14,7 @@ export interface Translations {
   next: string;
   previous: string;
   search: string;
-  login: string;
+  login: string; // não faz sentido mas isso aqui na realidade é a palavra "buscas" em todas as línguas.
   logout: string;
   register: string;
   username: string;
@@ -100,7 +100,7 @@ export interface Translations {
   searchArtistsHistory: string;
   clearSearch: string;
   artist: string;
-  artists: string;
+  artists: string; // não faz sentido mas isso aqui na realidade é a palavra "buscas" em todas as línguas.
   gridView: string;
   listView: string;
   timeAgo: {
@@ -245,7 +245,7 @@ const translations: Record<Language, Translations> = {
     searchArtistsHistory: "Search artists...",
     clearSearch: "Clear search",
     artist: "artist",
-    artists: "artists",
+    artists: "buscas",
     gridView: "Grid view",
     listView: "List view",
     timeAgo: {
@@ -388,7 +388,7 @@ const translations: Record<Language, Translations> = {
     searchArtistsHistory: "Pesquisar artistas...",
     clearSearch: "Limpar busca",
     artist: "artista",
-    artists: "artistas",
+    artists: "buscas",
     gridView: "Visualização em grid",
     listView: "Visualização em lista",
     timeAgo: {
@@ -531,7 +531,7 @@ const translations: Record<Language, Translations> = {
     searchArtistsHistory: "Buscar artistas...",
     clearSearch: "Limpiar búsqueda",
     artist: "artista",
-    artists: "artistas",
+    artists: "búsquedas",
     gridView: "Vista de cuadrícula",
     listView: "Vista de lista",
     timeAgo: {
