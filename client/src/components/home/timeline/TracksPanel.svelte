@@ -43,25 +43,6 @@
                     {:else}
                         <div class="no-image-large">♫</div>
                     {/if}
-                    <div class="timeline-album-actions">
-                        <button
-                            class="timeline-icon-btn completed"
-                            aria-label="Mark as completed"
-                        >
-                            <Icon
-                                icon="mdi:check-circle"
-                                width="24"
-                                height="24"
-                            />
-                        </button>
-                        <button
-                            class="timeline-icon-btn favorite"
-                            aria-label="Mark as favorite"
-                        >
-                            <Icon icon="mdi:heart" width="24" height="24" />
-                        </button>
-                    </div>
-
                     <div class="spotify-button-wrapper">
                         <SpotifyButton large on:click={openAlbumInSpotify} />
                     </div>
