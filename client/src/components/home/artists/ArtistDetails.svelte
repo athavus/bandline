@@ -217,23 +217,6 @@
         transition: transform 0.3s ease;
     }
 
-    .spotify-button {
-        display: inline-block;
-        background: var(--accent-color);
-        color: #fff;
-        font-weight: 600;
-        padding: 10px 18px;
-        border-radius: 8px;
-        text-decoration: none;
-        transition: background 0.3s ease;
-        margin-bottom: 16px;
-        width: fit-content;
-    }
-
-    .spotify-button:hover {
-        background: rgba(var(--accent-rgb), 0.8);
-    }
-
     .info-item {
         background: var(--bg-tertiary);
         border-radius: 10px;
@@ -282,28 +265,6 @@
         background: var(--gradient-primary);
         border-radius: 3px;
         transition: width 0.3s ease;
-    }
-
-    .image-gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 10px;
-        margin-top: 24px;
-    }
-
-    .gallery-img {
-        width: 100%;
-        aspect-ratio: 1/1;
-        border-radius: 8px;
-        object-fit: cover;
-        transition:
-            transform 0.3s ease,
-            box-shadow 0.3s ease;
-    }
-
-    .gallery-img:hover {
-        transform: scale(1.04);
-        box-shadow: var(--shadow-lg);
     }
 
     @keyframes fadeIn {

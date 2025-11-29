@@ -183,10 +183,6 @@
         transform: translateY(-1px);
     }
 
-    .label {
-        white-space: nowrap;
-    }
-
     .backdrop {
         position: fixed;
         inset: 0;

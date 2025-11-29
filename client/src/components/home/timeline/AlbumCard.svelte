@@ -239,19 +239,10 @@
             transform 0.3s ease;
     }
 
-    .icon-btn svg {
-        fill: white;
-        transition: fill 0.3s ease;
-    }
-
     .icon-btn:hover {
         background: var(--accent-color);
         box-shadow: 0 0 8px var(--accent-color);
         transform: scale(1.1);
-    }
-
-    .icon-btn:hover svg {
-        fill: white;
     }
 
     .icon-btn.completed {

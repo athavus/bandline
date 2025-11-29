@@ -297,22 +297,6 @@
         }
     }
 
-    .subtitle-wrapper {
-        position: relative;
-        display: inline-block;
-    }
-
-    .subtitle {
-        margin: 0;
-        color: var(--text-secondary);
-        font-family: var(--font-primary);
-        font-size: 1.1rem;
-        font-weight: 400;
-        letter-spacing: 0.01em;
-        opacity: 0;
-        animation: fadeInUp 0.8s ease-out 0.4s forwards;
-    }
-
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -385,10 +369,6 @@
             font-size: 3.5rem;
         }
 
-        .subtitle {
-            font-size: 1rem;
-        }
-
         .music-wave {
             height: 20px;
             margin-top: 12px;
@@ -408,10 +388,6 @@
         .title-line::after {
             height: 3px;
             bottom: 6px;
-        }
-
-        .subtitle {
-            font-size: 0.95rem;
         }
 
         .music-wave {
