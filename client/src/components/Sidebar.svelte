@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { auth } from "../lib/stores/auth";
-    import { replace } from "svelte-spa-router";
+    import { replace } from "../lib/router";
     import BrandTitle from "./titles/BrandTitle.svelte";
     import SidebarOverlay from "./sidebar/SidebarOverlay.svelte";
     import SidebarHeader from "./sidebar/SidebarHeader.svelte";

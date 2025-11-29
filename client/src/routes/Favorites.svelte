@@ -15,6 +15,8 @@
 
     import { auth } from "../lib/stores/auth";
     import { t } from "../lib/stores/language";
+    import { getQueryParam, setQueryParam } from "../lib/urlState";
+    import { replace } from "../lib/router";
 
     interface FavoriteAlbum {
         id: number;
@@ -41,6 +43,8 @@
     const API_URL = import.meta.env.VITE_API_URL;
     $: authState = $auth;
 
+    let isInitialized = false;
+
     // Reativa: aplica filtro e ordenação sempre que mudar
     $: {
         filteredFavorites = filterAndSortFavorites(
@@ -50,13 +54,70 @@
         );
     }
 
+    // Atualiza a URL quando o estado mudar (após inicialização)
+    $: if (isInitialized && typeof window !== "undefined") {
+        setQueryParam("favoritesSearch", searchQuery || null);
+    }
+    $: if (isInitialized && typeof window !== "undefined") {
+        setQueryParam("favoritesSort", sortBy !== "recent" ? sortBy : null);
+    }
+    $: if (isInitialized && typeof window !== "undefined") {
+        setQueryParam("favoritesView", viewMode !== "grid" ? viewMode : null);
+    }
+
     onMount(async () => {
-        if (!authState.isAuthenticated) {
-            window.location.href = "/";
+        // Aguarda a autenticação estar pronta
+        await auth.checkAuth();
+        
+        // Usa $auth diretamente para garantir que está atualizado
+        if (!$auth.isAuthenticated) {
+            replace("/");
             return;
         }
+
+        // Restaura o estado da URL
+        const urlSearch = getQueryParam("favoritesSearch");
+        const urlSort = getQueryParam("favoritesSort");
+        const urlView = getQueryParam("favoritesView");
+
+        if (urlSearch !== null) {
+            searchQuery = urlSearch;
+        }
+        if (urlSort && ["recent", "alphabetical", "release", "tracks"].includes(urlSort)) {
+            sortBy = urlSort as SortOption;
+        }
+        if (urlView && (urlView === "grid" || urlView === "list")) {
+            viewMode = urlView;
+        }
+
         await fetchFavorites();
+
+        // Marca como inicializado após restaurar o estado da URL
+        isInitialized = true;
+
+        // Listener para mudanças na URL (botão voltar/avançar)
+        window.addEventListener("urlstatechange", handleURLStateChange);
+        
+        return () => {
+            window.removeEventListener("urlstatechange", handleURLStateChange);
+        };
     });
+
+    function handleURLStateChange() {
+        const urlSearch = getQueryParam("favoritesSearch");
+        const urlSort = getQueryParam("favoritesSort");
+        const urlView = getQueryParam("favoritesView");
+
+        if (urlSearch !== null && urlSearch !== searchQuery) {
+            searchQuery = urlSearch;
+        }
+        if (urlSort && urlSort !== sortBy && ["recent", "alphabetical", "release", "tracks"].includes(urlSort)) {
+            sortBy = urlSort as SortOption;
+        }
+        if (urlView && urlView !== viewMode && (urlView === "grid" || urlView === "list")) {
+            viewMode = urlView;
+        }
+    }
 
     async function fetchFavorites() {
         loading = true;

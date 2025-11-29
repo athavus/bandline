@@ -1,69 +1,19 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import Router from "svelte-spa-router";
+    import { location, path, init as initRouter } from "./lib/router";
 
     import Home from "./routes/Home.svelte";
     import History from "./routes/History.svelte";
-
-    import { getArtistData } from "./lib/data";
-    import { auth } from "./lib/stores/auth";
-    import { initLanguage } from "./lib/stores/language";
-    import {
-        initURLState,
-        setQueryParams,
-        getQueryParam,
-    } from "./lib/urlState";
-
-    import type { SpotifyArtist } from "./types/artist";
     import Profile from "./routes/Profile.svelte";
     import Config from "./routes/Config.svelte";
-
     import Favorites from "./routes/Favorites.svelte";
     import Playlists from "./routes/Playlists.svelte";
 
-    let query = "";
-    let selectedArtist: SpotifyArtist | null = null;
-    let loading = false;
-    let showTimeline = false;
-    $: authState = $auth;
+    import { auth } from "./lib/stores/auth";
+    import { initLanguage } from "./lib/stores/language";
+    import { initURLState } from "./lib/urlState";
 
-    onMount(async () => {
-        initLanguage();
-        await auth.checkAuth();
-        initURLState();
-
-        const artistId = getQueryParam("artist");
-        const urlQuery = getQueryParam("q");
-
-        if (artistId && authState.isAuthenticated) {
-            await loadArtistFromURL(artistId);
-        }
-
-        if (urlQuery) {
-            query = urlQuery;
-        }
-    });
-
-    export async function loadArtistFromURL(artistId: string) {
-        if (!authState.isAuthenticated) return;
-
-        loading = true;
-        selectedArtist = null;
-        showTimeline = false;
-
-        try {
-            selectedArtist = await getArtistData(artistId);
-            query = selectedArtist.name;
-        } catch (error) {
-            console.error("Erro ao carregar artista da URL:", error);
-            // Limpa a URL se houver erro
-            setQueryParams({ artist: null, q: null });
-        } finally {
-            loading = false;
-        }
-    }
-
-    const routes = {
+    const routes: Record<string, any> = {
         "/": Home,
         "/history": History,
         "/profile": Profile,
@@ -71,6 +21,41 @@
         "/favorites": Favorites,
         "/playlist": Playlists,
     };
+
+    // Obtém o path inicial diretamente da URL
+    function getInitialPath(): string {
+        if (typeof window === "undefined") return "/";
+        return window.location.pathname;
+    }
+    
+    // Inicializa o router (já inicializa automaticamente no módulo, mas garante)
+    initRouter();
+    
+    // Inicializa com o path da URL atual
+    let currentPath = getInitialPath();
+    let CurrentComponent = routes[currentPath] || Home;
+
+    onMount(async () => {
+        initLanguage();
+        await auth.checkAuth();
+        initURLState();
+        
+        // Garante que o componente está correto após tudo inicializar
+        const urlPath = getInitialPath();
+        if (urlPath !== currentPath) {
+            currentPath = urlPath;
+            CurrentComponent = routes[currentPath] || Home;
+        }
+    });
+
+    // Reativo: atualiza quando a rota muda (via store)
+    $: {
+        // Usa o path do store se disponível e diferente do atual
+        if ($path && $path !== currentPath) {
+            currentPath = $path;
+            CurrentComponent = routes[currentPath] || Home;
+        }
+    }
 </script>
 
-<Router {routes} />
+<svelte:component this={CurrentComponent} />

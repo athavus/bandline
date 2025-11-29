@@ -5,6 +5,11 @@ import { writable } from "svelte/store";
 export const urlState = writable({
   artistId: null as string | null,
   query: "",
+  favoritesSearch: "",
+  favoritesSort: null as string | null,
+  favoritesView: null as string | null,
+  historySearch: "",
+  historyView: null as string | null,
 });
 
 // Atualiza um parâmetro na URL
@@ -50,6 +55,11 @@ export function updateStoreFromURL() {
   urlState.set({
     artistId: getQueryParam("artist"),
     query: getQueryParam("q") || "",
+    favoritesSearch: getQueryParam("favoritesSearch") || "",
+    favoritesSort: getQueryParam("favoritesSort"),
+    favoritesView: getQueryParam("favoritesView"),
+    historySearch: getQueryParam("historySearch") || "",
+    historyView: getQueryParam("historyView"),
   });
 }
 
@@ -60,6 +70,8 @@ export function initURLState() {
   // Listener para o botão voltar/avançar do navegador
   window.addEventListener("popstate", () => {
     updateStoreFromURL();
+    // Dispara um evento customizado para notificar os componentes
+    window.dispatchEvent(new CustomEvent("urlstatechange"));
   });
 }
 

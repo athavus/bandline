@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import { replace } from "svelte-spa-router";
+    import { replace } from "../../lib/router";
     const dispatch = createEventDispatcher();
 
     function handleClose() {

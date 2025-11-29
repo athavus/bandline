@@ -16,7 +16,8 @@
     import type { HistoryItem } from "../types/history";
     import { auth } from "../lib/stores/auth";
     import { translations$ } from "../lib/stores/language";
-    import { setQueryParams } from "../lib/urlState";
+    import { setQueryParams, getQueryParam, setQueryParam } from "../lib/urlState";
+    import { replace } from "../lib/router";
 
     let sidebarOpen = false;
     let histories: HistoryItem[] = [];
@@ -24,6 +25,7 @@
     let error: string | null = null;
     let viewMode: "grid" | "list" = "grid";
     let searchQuery: string = "";
+    let isInitialized = false;
 
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -33,18 +35,55 @@
     );
 
     onMount(async () => {
+        // Aguarda a autenticação estar pronta
+        await auth.checkAuth();
+        
         if (!authState.isAuthenticated) {
-            window.location.href = "/";
+            replace("/");
             return;
         }
 
-        const savedViewMode = localStorage.getItem("historyViewMode");
-        if (savedViewMode === "grid" || savedViewMode === "list") {
-            viewMode = savedViewMode;
+        // Restaura o estado da URL
+        const urlSearch = getQueryParam("historySearch");
+        const urlView = getQueryParam("historyView");
+
+        if (urlSearch !== null) {
+            searchQuery = urlSearch;
+        }
+        if (urlView && (urlView === "grid" || urlView === "list")) {
+            viewMode = urlView;
+        } else {
+            // Fallback para localStorage se não houver na URL
+            const savedViewMode = localStorage.getItem("historyViewMode");
+            if (savedViewMode === "grid" || savedViewMode === "list") {
+                viewMode = savedViewMode;
+            }
         }
 
         await fetchHistory();
+
+        // Marca como inicializado após restaurar o estado da URL
+        isInitialized = true;
+
+        // Listener para mudanças na URL (botão voltar/avançar)
+        window.addEventListener("urlstatechange", handleURLStateChange);
+        
+        return () => {
+            window.removeEventListener("urlstatechange", handleURLStateChange);
+        };
     });
+
+    function handleURLStateChange() {
+        const urlSearch = getQueryParam("historySearch");
+        const urlView = getQueryParam("historyView");
+
+        if (urlSearch !== null && urlSearch !== searchQuery) {
+            searchQuery = urlSearch;
+        }
+        if (urlView && urlView !== viewMode && (urlView === "grid" || urlView === "list")) {
+            viewMode = urlView;
+        }
+    }
 
     async function fetchHistory() {
         loading = true;
@@ -113,10 +152,17 @@
     function handleViewModeChange(mode: "grid" | "list") {
         viewMode = mode;
         localStorage.setItem("historyViewMode", mode);
+        setQueryParam("historyView", mode !== "grid" ? mode : null);
     }
 
     function handleClearSearch() {
         searchQuery = "";
+        setQueryParam("historySearch", null);
+    }
+
+    // Atualiza a URL quando o estado mudar (após inicialização)
+    $: if (isInitialized && typeof window !== "undefined") {
+        setQueryParam("historySearch", searchQuery || null);
     }
 </script>
 

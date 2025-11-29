@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import SearchInput from "../components/home/SearchInput.svelte";
     import ArtistList from "../components/home/artists/ArtistList.svelte";
     import ArtistDetails from "../components/home/artists/ArtistDetails.svelte";
@@ -9,8 +10,6 @@
     import WelcomeSection from "../components/home/WelcomeSection.svelte";
     import BrandTitle from "../components/titles/BrandTitle.svelte";
     import Header from "../components/Header.svelte";
-    import loadArtistFromURL from "../App.svelte";
-
     import {
         searchArtists,
         getArtistData,
@@ -31,6 +30,83 @@
     let showAuthModal = false;
     let authMode: "login" | "register" = "login";
     $: authState = $auth;
+
+    onMount(async () => {
+        // Aguarda a autenticação estar pronta
+        await auth.checkAuth();
+        
+        // Restaura o estado da URL ao montar o componente
+        const urlQuery = getQueryParam("q");
+        const artistId = getQueryParam("artist");
+        const timelineParam = getQueryParam("timeline");
+
+        if (urlQuery) {
+            query = urlQuery;
+        }
+
+        if (authState.isAuthenticated) {
+            if (artistId) {
+                await loadArtistFromURL(artistId);
+                if (timelineParam === "true") {
+                    showTimeline = true;
+                }
+            } else if (urlQuery) {
+                // Se há uma query mas não um artista, faz a busca
+                await handleInput();
+            }
+        }
+
+        // Listener para mudanças na URL (botão voltar/avançar)
+        window.addEventListener("urlstatechange", handleURLStateChange);
+        
+        return () => {
+            window.removeEventListener("urlstatechange", handleURLStateChange);
+        };
+    });
+
+    async function handleURLStateChange() {
+        const urlQuery = getQueryParam("q");
+        const artistId = getQueryParam("artist");
+        const timelineParam = getQueryParam("timeline");
+
+        if (urlQuery !== query) {
+            query = urlQuery || "";
+        }
+
+        if (authState.isAuthenticated) {
+            if (artistId && (!selectedArtist || selectedArtist.id !== artistId)) {
+                await loadArtistFromURL(artistId);
+            } else if (!artistId && selectedArtist) {
+                selectedArtist = null;
+                showTimeline = false;
+            }
+
+            if (timelineParam === "true" && selectedArtist) {
+                showTimeline = true;
+            } else if (timelineParam !== "true") {
+                showTimeline = false;
+            }
+        }
+    }
+
+    async function loadArtistFromURL(artistId: string) {
+        if (!authState.isAuthenticated) return;
+
+        loading = true;
+        selectedArtist = null;
+        showTimeline = false;
+
+        try {
+            selectedArtist = await getArtistData(artistId);
+            query = selectedArtist.name;
+        } catch (error) {
+            console.error("Erro ao carregar artista da URL:", error);
+            // Limpa a URL se houver erro
+            setQueryParams({ artist: null, q: null, timeline: null });
+        } finally {
+            loading = false;
+        }
+    }
 
     async function handleInput() {
         if (!authState.isAuthenticated) {
@@ -83,10 +159,12 @@
             return;
         }
         showTimeline = true;
+        setQueryParams({ timeline: "true" });
     }
 
     function handleBackToArtist() {
         showTimeline = false;
+        setQueryParams({ timeline: null });
     }
 
     function handleFocus() {
@@ -127,21 +205,26 @@
         showTimeline = false;
         query = "";
         artists = [];
-        setQueryParams({ artist: null, q: null });
+        setQueryParams({ artist: null, q: null, timeline: null });
     }
 
     function handleAuthModalClose() {
         showAuthModal = false;
     }
 
-    function handleLoginSuccess() {
+    async function handleLoginSuccess() {
         showAuthModal = false;
 
         const artistId = getQueryParam("artist");
+        const timelineParam = getQueryParam("timeline");
+        
         if (artistId) {
-            loadArtistFromURL(artistId);
+            await loadArtistFromURL(artistId);
+            if (timelineParam === "true") {
+                showTimeline = true;
+            }
         } else if (query) {
-            handleInput();
+            await handleInput();
         }
     }
 </script>
