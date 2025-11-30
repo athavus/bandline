@@ -11,7 +11,6 @@ function ensureAuthenticated(req: Request, res: Response, next: Function) {
   }
 }
 
-// Adicionar favorito
 router.post("/", ensureAuthenticated, async (req: Request, res: Response) => {
   try {
     const user = req.user as { id: number };
@@ -65,7 +64,6 @@ router.post("/", ensureAuthenticated, async (req: Request, res: Response) => {
   }
 });
 
-// Adicione essa rota no seu arquivo de rotas de favoritos
 router.post(
   "/check",
   ensureAuthenticated,
@@ -97,7 +95,6 @@ router.post(
   },
 );
 
-// Remover favorito
 router.delete("/", ensureAuthenticated, async (req: Request, res: Response) => {
   try {
     const user = req.user as { id: number };
