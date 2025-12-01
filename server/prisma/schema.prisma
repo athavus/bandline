@@ -8,17 +8,18 @@ datasource db {
 }
 
 model User {
-  id           Int         @id @default(autoincrement())
-  username     String      @unique
-  email        String      @unique
-  bio          String?
-  passwordHash String
-  provider     String      @default("local")
-  avatarUrl    String?
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  histories    History[]
-  favorites    Favorites[]
+  id              Int               @id @default(autoincrement())
+  username        String            @unique
+  email           String            @unique
+  bio             String?
+  passwordHash    String
+  provider        String            @default("local")
+  avatarUrl       String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  histories       History[]
+  favorites       Favorites[]
+  completedAlbuns completedAlbums[]
 }
 
 model History {
@@ -40,4 +41,15 @@ model Favorites {
   albumImage  String?
   albumTracks String
   favoritedAt DateTime @default(now())
+}
+
+model completedAlbums {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  albumId     String
+  albumName   String
+  albumImage  String?
+  albumTracks String
+  completedAt DateTime @default(now())
 }
