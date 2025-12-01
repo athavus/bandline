@@ -1,0 +1,1099 @@
+openapi: 3.1.0
+info:
+  title: Bandline API
+  description: API para gerenciamento de artistas, álbuns, músicas, histórico e favoritos integrada com Spotify e Last.fm
+  version: 1.0.0
+  contact:
+    name: Bandline
+servers:
+  - url: http://localhost:3000
+    description: Servidor de desenvolvimento
+
+tags:
+  - name: Autenticação
+    description: Endpoints para autenticação e gerenciamento de usuários
+  - name: Artistas
+    description: Endpoints para buscar e obter informações sobre artistas
+  - name: Álbuns
+    description: Endpoints para obter álbuns de artistas
+  - name: Músicas
+    description: Endpoints para obter faixas de álbuns
+  - name: Histórico
+    description: Endpoints para gerenciar histórico de buscas
+  - name: Favoritos
+    description: Endpoints para gerenciar álbuns favoritos
+
+paths:
+  # ==================== AUTENTICAÇÃO ====================
+  /auth/register:
+    post:
+      tags:
+        - Autenticação
+      summary: Registrar novo usuário
+      description: Cria uma nova conta de usuário com email, username e senha
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              username: "johndoe"
+              email: "john@example.com"
+              password: "senhaSegura123"
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              example:
+                message: "Usuário criado"
+                user:
+                  id: 1
+                  username: "johndoe"
+                  email: "john@example.com"
+                  avatarUrl: null
+        '400':
+          description: Erro na requisição (campos faltando ou usuário já existe)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                camposFaltando:
+                  value:
+                    message: "Faltam campos"
+                usuarioExiste:
+                  value:
+                    message: "Usuário já existe"
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      tags:
+        - Autenticação
+      summary: Fazer login
+      description: Autentica um usuário com username e senha
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: "johndoe"
+              password: "senhaSegura123"
+      responses:
+        '200':
+          description: Login bem-sucedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              example:
+                message: "Login bem-sucedido"
+                user:
+                  id: 1
+                  username: "johndoe"
+                  email: "john@example.com"
+                  avatarUrl: null
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Credenciais inválidas"
+
+  /auth/me:
+    get:
+      tags:
+        - Autenticação
+      summary: Obter usuário atual
+      description: Retorna informações do usuário autenticado
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Informações do usuário
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/PublicUser'
+              example:
+                user:
+                  id: 1
+                  username: "johndoe"
+                  email: "john@example.com"
+                  avatarUrl: "https://example.com/avatar.jpg"
+        '401':
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Não autenticado"
+
+  /auth/logout:
+    post:
+      tags:
+        - Autenticação
+      summary: Fazer logout
+      description: Encerra a sessão do usuário
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Logout realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Logout realizado com sucesso"
+        '500':
+          description: Erro no logout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/google:
+    get:
+      tags:
+        - Autenticação
+      summary: Iniciar autenticação OAuth Google
+      description: Redireciona para a página de autenticação do Google
+      responses:
+        '302':
+          description: Redirecionamento para Google OAuth
+
+  /auth/google/callback:
+    get:
+      tags:
+        - Autenticação
+      summary: Callback OAuth Google
+      description: Endpoint de callback após autenticação Google
+      responses:
+        '302':
+          description: Redirecionamento após autenticação bem-sucedida ou falha
+
+  # ==================== ARTISTAS ====================
+  /artists/{id}:
+    get:
+      tags:
+        - Artistas
+      summary: Obter detalhes do artista
+      description: Retorna informações detalhadas de um artista, incluindo descrição e artistas relacionados
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do artista no Spotify
+          schema:
+            type: string
+          example: "4Z8W4fKeB5YxbusRsdQVPb"
+        - name: lang
+          in: query
+          required: false
+          description: Idioma para a descrição (en, pt, es)
+          schema:
+            type: string
+            enum: [en, pt, es]
+            default: en
+          example: "pt"
+      responses:
+        '200':
+          description: Detalhes do artista
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistDetails'
+              example:
+                id: "4Z8W4fKeB5YxbusRsdQVPb"
+                name: "Radiohead"
+                total_followers: 8500000
+                popularity: 85
+                image: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                genres: ["alternative rock", "art rock", "britpop"]
+                description: "Radiohead é uma banda de rock alternativo..."
+                relatedArtists:
+                  - name: "The Smashing Pumpkins"
+                  - name: "Pixies"
+        '500':
+          description: Erro ao buscar artista
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ==================== BUSCA ====================
+  /searchArtists:
+    get:
+      tags:
+        - Artistas
+      summary: Buscar artistas
+      description: Busca artistas no Spotify baseado em uma query
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Termo de busca
+          schema:
+            type: string
+            minLength: 2
+          example: "Radiohead"
+      responses:
+        '200':
+          description: Lista de artistas encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ArtistSearchResult'
+              example:
+                artists:
+                  - id: "4Z8W4fKeB5YxbusRsdQVPb"
+                    name: "Radiohead"
+                    image: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                    popularity: 85
+                    genres: ["alternative rock", "art rock"]
+                    total_followers: 8500000
+        '500':
+          description: Erro ao buscar artistas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ==================== ÁLBUNS ====================
+  /artistAlbums/{id}:
+    get:
+      tags:
+        - Álbuns
+      summary: Obter álbuns do artista
+      description: Retorna todos os álbuns de um artista ordenados por data de lançamento
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do artista no Spotify
+          schema:
+            type: string
+          example: "4Z8W4fKeB5YxbusRsdQVPb"
+      responses:
+        '200':
+          description: Lista de álbuns
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumsResponse'
+              example:
+                total_amount: 15
+                items:
+                  - id: "1To7kv722A8SpZF7M07D4p"
+                    name: "OK Computer"
+                    release_date: "1997-05-21"
+                    total_tracks: 12
+                    href: "https://api.spotify.com/v1/albums/1To7kv722A8SpZF7M07D4p"
+                    images:
+                      - url: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                        height: 640
+                        width: 640
+                    artists:
+                      - id: "4Z8W4fKeB5YxbusRsdQVPb"
+                        name: "Radiohead"
+                        href: "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb"
+        '500':
+          description: Erro ao buscar álbuns
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ==================== MÚSICAS ====================
+  /albumTracks/{id}:
+    get:
+      tags:
+        - Músicas
+      summary: Obter faixas do álbum
+      description: Retorna todas as faixas de um álbum
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do álbum no Spotify
+          schema:
+            type: string
+          example: "1To7kv722A8SpZF7M07D4p"
+      responses:
+        '200':
+          description: Lista de faixas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TracksResponse'
+              example:
+                total_tracks: 12
+                items:
+                  - id: "3n3Ppam7vgaVa1oRU5vZ4Y"
+                    name: "Airbag"
+                    track_number: 1
+                    duration_ms: 284000
+                    href: "https://api.spotify.com/v1/tracks/3n3Ppam7vgaVa1oRU5vZ4Y"
+                    artists:
+                      - id: "4Z8W4fKeB5YxbusRsdQVPb"
+                        name: "Radiohead"
+                        href: "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb"
+        '500':
+          description: Erro ao buscar faixas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ==================== HISTÓRICO ====================
+  /history:
+    post:
+      tags:
+        - Histórico
+      summary: Adicionar ao histórico
+      description: Adiciona uma busca de artista ao histórico do usuário
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HistoryCreateRequest'
+            example:
+              artistId: "4Z8W4fKeB5YxbusRsdQVPb"
+              artistName: "Radiohead"
+              artistAvatar: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+      responses:
+        '200':
+          description: Histórico criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  history:
+                    $ref: '#/components/schemas/History'
+              example:
+                history:
+                  id: 1
+                  userId: 1
+                  artistId: "4Z8W4fKeB5YxbusRsdQVPb"
+                  artistName: "Radiohead"
+                  artistAvatar: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                  searchedAt: "2024-01-15T10:30:00Z"
+        '400':
+          description: Campos obrigatórios faltando
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Histórico
+      summary: Obter histórico
+      description: Retorna o histórico de buscas do usuário (últimas 50)
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista de histórico
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  histories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/History'
+              example:
+                histories:
+                  - id: 1
+                    userId: 1
+                    artistId: "4Z8W4fKeB5YxbusRsdQVPb"
+                    artistName: "Radiohead"
+                    artistAvatar: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                    searchedAt: "2024-01-15T10:30:00Z"
+        '401':
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ==================== FAVORITOS ====================
+  /favorites:
+    post:
+      tags:
+        - Favoritos
+      summary: Adicionar favorito
+      description: Adiciona um álbum aos favoritos do usuário
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteCreateRequest'
+            example:
+              albumId: "1To7kv722A8SpZF7M07D4p"
+              albumName: "OK Computer"
+              albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+              albumTracks: ["track1", "track2", "track3"]
+      responses:
+        '200':
+          description: Favorito adicionado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favorite:
+                    $ref: '#/components/schemas/Favorite'
+                  message:
+                    type: string
+              example:
+                favorite:
+                  id: 1
+                  userId: 1
+                  albumId: "1To7kv722A8SpZF7M07D4p"
+                  albumName: "OK Computer"
+                  albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                  albumTracks: "3"
+                  favoritedAt: "2024-01-15T10:30:00Z"
+                message: "Álbum favoritado com sucesso"
+        '400':
+          description: Campos obrigatórios faltando
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Álbum já está nos favoritos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  favorite:
+                    $ref: '#/components/schemas/Favorite'
+        '401':
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Favoritos
+      summary: Listar favoritos
+      description: Retorna todos os favoritos do usuário (últimos 50)
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista de favoritos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favorites:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Favorite'
+              example:
+                favorites:
+                  - id: 1
+                    userId: 1
+                    albumId: "1To7kv722A8SpZF7M07D4p"
+                    albumName: "OK Computer"
+                    albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                    albumTracks: "12"
+                    favoritedAt: "2024-01-15T10:30:00Z"
+        '401':
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - Favoritos
+      summary: Remover favorito
+      description: Remove um álbum dos favoritos do usuário
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - albumId
+              properties:
+                albumId:
+                  type: string
+                  description: ID do álbum no Spotify
+            example:
+              albumId: "1To7kv722A8SpZF7M07D4p"
+      responses:
+        '200':
+          description: Favorito removido com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  deleted:
+                    type: object
+                    properties:
+                      count:
+                        type: number
+              example:
+                message: "Favorito removido com sucesso"
+                deleted:
+                  count: 1
+        '400':
+          description: albumId é obrigatório
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Favorito não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /favorites/check:
+    post:
+      tags:
+        - Favoritos
+      summary: Verificar favoritos
+      description: Verifica quais álbuns de uma lista estão nos favoritos do usuário
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - albumIds
+              properties:
+                albumIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Lista de IDs de álbuns para verificar
+            example:
+              albumIds: ["1To7kv722A8SpZF7M07D4p", "2To7kv722A8SpZF7M07D4p"]
+      responses:
+        '200':
+          description: Lista de IDs que estão nos favoritos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favoriteIds:
+                    type: array
+                    items:
+                      type: string
+              example:
+                favoriteIds: ["1To7kv722A8SpZF7M07D4p"]
+        '400':
+          description: albumIds é obrigatório e deve ser um array
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+      description: Autenticação via cookie de sessão
+
+  schemas:
+    # Autenticação
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          description: Nome de usuário único
+          example: "johndoe"
+        email:
+          type: string
+          format: email
+          description: Email do usuário
+          example: "john@example.com"
+        password:
+          type: string
+          format: password
+          description: Senha do usuário
+          example: "senhaSegura123"
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: Nome de usuário ou email
+          example: "johndoe"
+        password:
+          type: string
+          format: password
+          description: Senha do usuário
+          example: "senhaSegura123"
+
+    PublicUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do usuário
+          example: 1
+        username:
+          type: string
+          description: Nome de usuário
+          example: "johndoe"
+        email:
+          type: string
+          format: email
+          description: Email do usuário
+          example: "john@example.com"
+        avatarUrl:
+          type: string
+          nullable: true
+          description: URL do avatar do usuário
+          example: "https://example.com/avatar.jpg"
+
+    AuthResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensagem de resposta
+          example: "Login bem-sucedido"
+        user:
+          $ref: '#/components/schemas/PublicUser'
+        error:
+          type: string
+          description: Mensagem de erro (se houver)
+
+    # Artistas
+    ArtistDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID do artista no Spotify
+          example: "4Z8W4fKeB5YxbusRsdQVPb"
+        name:
+          type: string
+          description: Nome do artista
+          example: "Radiohead"
+        total_followers:
+          type: integer
+          description: Número total de seguidores
+          example: 8500000
+        popularity:
+          type: integer
+          description: Popularidade do artista (0-100)
+          example: 85
+        image:
+          type: string
+          nullable: true
+          description: URL da imagem do artista
+          example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+        genres:
+          type: array
+          items:
+            type: string
+          description: Gêneros musicais do artista
+          example: ["alternative rock", "art rock", "britpop"]
+        description:
+          type: string
+          nullable: true
+          description: Descrição do artista (do Last.fm)
+          example: "Radiohead é uma banda de rock alternativo..."
+        relatedArtists:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Nome do artista relacionado
+                example: "The Smashing Pumpkins"
+          description: Lista de artistas relacionados
+
+    ArtistSearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID do artista no Spotify
+          example: "4Z8W4fKeB5YxbusRsdQVPb"
+        name:
+          type: string
+          description: Nome do artista
+          example: "Radiohead"
+        image:
+          type: string
+          nullable: true
+          description: URL da imagem do artista
+          example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+        popularity:
+          type: integer
+          description: Popularidade do artista (0-100)
+          example: 85
+        genres:
+          type: array
+          items:
+            type: string
+          description: Gêneros musicais (máximo 3)
+          example: ["alternative rock", "art rock"]
+        total_followers:
+          type: integer
+          description: Número total de seguidores
+          example: 8500000
+
+    # Álbuns
+    Album:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID do álbum no Spotify
+          example: "1To7kv722A8SpZF7M07D4p"
+        name:
+          type: string
+          description: Nome do álbum
+          example: "OK Computer"
+        release_date:
+          type: string
+          description: Data de lançamento (formato YYYY-MM-DD, YYYY-MM ou YYYY)
+          example: "1997-05-21"
+        total_tracks:
+          type: integer
+          description: Número total de faixas
+          example: 12
+        href:
+          type: string
+          description: URL da API do Spotify para o álbum
+          example: "https://api.spotify.com/v1/albums/1To7kv722A8SpZF7M07D4p"
+        images:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+              height:
+                type: integer
+                example: 640
+              width:
+                type: integer
+                example: 640
+          description: Imagens do álbum
+        artists:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "4Z8W4fKeB5YxbusRsdQVPb"
+              name:
+                type: string
+                example: "Radiohead"
+              href:
+                type: string
+                example: "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb"
+          description: Artistas do álbum
+
+    AlbumsResponse:
+      type: object
+      properties:
+        total_amount:
+          type: integer
+          description: Número total de álbuns
+          example: 15
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Album'
+          description: Lista de álbuns ordenados por data de lançamento
+
+    # Músicas
+    Track:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID da faixa no Spotify
+          example: "3n3Ppam7vgaVa1oRU5vZ4Y"
+        name:
+          type: string
+          description: Nome da faixa
+          example: "Airbag"
+        track_number:
+          type: integer
+          description: Número da faixa no álbum
+          example: 1
+        duration_ms:
+          type: integer
+          description: Duração em milissegundos
+          example: 284000
+        href:
+          type: string
+          description: URL da API do Spotify para a faixa
+          example: "https://api.spotify.com/v1/tracks/3n3Ppam7vgaVa1oRU5vZ4Y"
+        artists:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "4Z8W4fKeB5YxbusRsdQVPb"
+              name:
+                type: string
+                example: "Radiohead"
+              href:
+                type: string
+                example: "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb"
+          description: Artistas da faixa
+
+    TracksResponse:
+      type: object
+      properties:
+        total_tracks:
+          type: integer
+          description: Número total de faixas
+          example: 12
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Track'
+          description: Lista de faixas do álbum
+
+    # Histórico
+    HistoryCreateRequest:
+      type: object
+      required:
+        - artistId
+        - artistName
+        - artistAvatar
+      properties:
+        artistId:
+          type: string
+          description: ID do artista no Spotify
+          example: "4Z8W4fKeB5YxbusRsdQVPb"
+        artistName:
+          type: string
+          description: Nome do artista
+          example: "Radiohead"
+        artistAvatar:
+          type: string
+          nullable: true
+          description: URL do avatar do artista
+          example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+
+    History:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do registro de histórico
+          example: 1
+        userId:
+          type: integer
+          description: ID do usuário
+          example: 1
+        artistId:
+          type: string
+          description: ID do artista no Spotify
+          example: "4Z8W4fKeB5YxbusRsdQVPb"
+        artistName:
+          type: string
+          description: Nome do artista
+          example: "Radiohead"
+        artistAvatar:
+          type: string
+          nullable: true
+          description: URL do avatar do artista
+          example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+        searchedAt:
+          type: string
+          format: date-time
+          description: Data e hora da busca
+          example: "2024-01-15T10:30:00Z"
+
+    # Favoritos
+    FavoriteCreateRequest:
+      type: object
+      required:
+        - albumId
+        - albumName
+      properties:
+        albumId:
+          type: string
+          description: ID do álbum no Spotify
+          example: "1To7kv722A8SpZF7M07D4p"
+        albumName:
+          type: string
+          description: Nome do álbum
+          example: "OK Computer"
+        albumImage:
+          type: string
+          nullable: true
+          description: URL da imagem do álbum
+          example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+        albumTracks:
+          oneOf:
+            - type: array
+              items:
+                type: string
+            - type: string
+          description: Lista de faixas ou número de faixas
+          example: ["track1", "track2", "track3"]
+
+    Favorite:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do favorito
+          example: 1
+        userId:
+          type: integer
+          description: ID do usuário
+          example: 1
+        albumId:
+          type: string
+          description: ID do álbum no Spotify
+          example: "1To7kv722A8SpZF7M07D4p"
+        albumName:
+          type: string
+          description: Nome do álbum
+          example: "OK Computer"
+        albumImage:
+          type: string
+          nullable: true
+          description: URL da imagem do álbum
+          example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+        albumTracks:
+          type: string
+          description: Número de faixas (armazenado como string)
+          example: "12"
+        favoritedAt:
+          type: string
+          format: date-time
+          description: Data e hora em que foi favoritado
+          example: "2024-01-15T10:30:00Z"
+
+    # Erros
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Mensagem de erro
+          example: "Não autenticado"
+        message:
+          type: string
+          description: Mensagem de erro alternativa
+          example: "Erro ao processar requisição"
+
