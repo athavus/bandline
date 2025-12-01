@@ -28,6 +28,3 @@ dist-ssr
 server/.env
 server/.cert/
 server/node_modules/
-
-*storybook.log
-storybook-static
