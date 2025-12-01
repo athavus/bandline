@@ -389,7 +389,7 @@
         height: 180px;
         border-radius: 50%;
         overflow: hidden;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        box-shadow: var(--shadow-lg);
     }
 
     .profile-avatar img {
@@ -401,7 +401,7 @@
     .avatar-placeholder {
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+        background: var(--gradient-primary);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -420,15 +420,16 @@
         font-size: 12px;
         font-weight: 600;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
     }
 
     .profile-username {
         font-size: 72px;
         font-weight: 700;
-        color: white;
+        color: var(--text-primary);
         margin: 0;
         line-height: 1;
+        font-family: var(--font-heading);
     }
 
     .profile-stats {
@@ -436,17 +437,18 @@
         align-items: center;
         gap: 8px;
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
         margin-top: 8px;
     }
 
     /* Bio Section */
     .bio-section {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
         padding: 24px;
         margin-bottom: 40px;
-        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-sm);
     }
 
     .bio-display {
@@ -458,7 +460,7 @@
 
     .bio-text {
         flex: 1;
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--text-primary);
         font-size: 16px;
         line-height: 1.6;
         margin: 0;
@@ -466,7 +468,7 @@
 
     .bio-empty {
         flex: 1;
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-tertiary);
         font-size: 16px;
         font-style: italic;
         margin: 0;
@@ -474,10 +476,10 @@
 
     .edit-bio-btn {
         padding: 8px 16px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: var(--bg-hover);
+        border: 1px solid var(--border-color);
         border-radius: 20px;
-        color: white;
+        color: var(--text-primary);
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
@@ -485,27 +487,33 @@
     }
 
     .edit-bio-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.3);
+        background: var(--bg-tertiary);
+        border-color: var(--border-light);
+        transform: scale(1.02);
     }
 
     .bio-edit textarea {
         width: 100%;
         min-height: 100px;
         padding: 12px;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: var(--bg-input);
+        border: 1px solid var(--border-color);
         border-radius: 8px;
-        color: white;
+        color: var(--text-primary);
         font-size: 16px;
-        font-family: inherit;
+        font-family: var(--font-primary);
         resize: vertical;
         margin-bottom: 12px;
+        transition: border-color 0.2s;
     }
 
     .bio-edit textarea:focus {
         outline: none;
-        border-color: #1db954;
+        border-color: var(--accent-color);
+    }
+
+    .bio-edit textarea::placeholder {
+        color: var(--text-tertiary);
     }
 
     .bio-actions {
@@ -525,22 +533,23 @@
     }
 
     .save-btn {
-        background: #1db954;
+        background: var(--accent-color);
         color: white;
     }
 
     .save-btn:hover {
-        background: #1ed760;
+        background: var(--accent-hover);
         transform: scale(1.05);
     }
 
     .cancel-btn {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
+        background: var(--bg-hover);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
     }
 
     .cancel-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: var(--bg-tertiary);
     }
 
     /* Content Sections */
@@ -558,12 +567,12 @@
     .section-header h2 {
         font-size: 28px;
         font-weight: 700;
-        color: white;
+        color: var(--text-primary);
         margin: 0;
     }
 
     .see-all {
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
         font-size: 14px;
         font-weight: 600;
         text-decoration: none;
@@ -571,7 +580,7 @@
     }
 
     .see-all:hover {
-        color: white;
+        color: var(--text-primary);
     }
 
     /* Albums Grid */
@@ -582,17 +591,20 @@
     }
 
     .album-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
         border-radius: 8px;
         padding: 16px;
         cursor: pointer;
         transition: all 0.3s;
-        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-sm);
     }
 
     .album-card:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--bg-hover);
+        border-color: var(--border-light);
         transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
     }
 
     .album-image {
@@ -601,19 +613,19 @@
         object-fit: cover;
         border-radius: 4px;
         margin-bottom: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow-sm);
     }
 
     .album-placeholder {
         width: 100%;
         aspect-ratio: 1;
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--bg-tertiary);
         border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 12px;
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-tertiary);
     }
 
     .album-info {
@@ -625,7 +637,7 @@
     .album-name {
         font-size: 16px;
         font-weight: 600;
-        color: white;
+        color: var(--text-primary);
         margin: 0;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -634,7 +646,7 @@
 
     .album-tracks {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-secondary);
         margin: 0;
     }
 
@@ -646,17 +658,20 @@
     }
 
     .artist-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
         border-radius: 8px;
         padding: 16px;
         cursor: pointer;
         transition: all 0.3s;
-        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-sm);
     }
 
     .artist-card:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--bg-hover);
+        border-color: var(--border-light);
         transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
     }
 
     .artist-image {
@@ -665,19 +680,19 @@
         object-fit: cover;
         border-radius: 50%;
         margin-bottom: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow-sm);
     }
 
     .artist-placeholder {
         width: 100%;
         aspect-ratio: 1;
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--bg-tertiary);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 12px;
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-tertiary);
     }
 
     .artist-info {
@@ -690,7 +705,7 @@
     .artist-name {
         font-size: 16px;
         font-weight: 600;
-        color: white;
+        color: var(--text-primary);
         margin: 0;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -699,7 +714,7 @@
 
     .artist-label {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-secondary);
         margin: 0;
     }
 
@@ -707,18 +722,19 @@
     .empty-profile {
         text-align: center;
         padding: 80px 20px;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-secondary);
     }
 
     .empty-profile svg {
         margin-bottom: 24px;
         opacity: 0.5;
+        stroke: var(--text-secondary);
     }
 
     .empty-profile h3 {
         font-size: 24px;
         font-weight: 600;
-        color: white;
+        color: var(--text-primary);
         margin: 0 0 12px 0;
     }
 
@@ -734,14 +750,14 @@
     }
 
     .error-message {
-        color: #ff6b6b;
+        color: var(--error-color);
         font-size: 18px;
         margin-bottom: 24px;
     }
 
     .retry-btn {
         padding: 12px 32px;
-        background: #1db954;
+        background: var(--accent-color);
         color: white;
         border: none;
         border-radius: 24px;
@@ -752,7 +768,7 @@
     }
 
     .retry-btn:hover {
-        background: #1ed760;
+        background: var(--accent-hover);
         transform: scale(1.05);
     }
 
