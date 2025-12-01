@@ -1,8 +1,11 @@
+// Imports de configuração da API
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import session from "express-session";
 import passport from "./config/passport";
+
+// Imports das rotas da API
 import artistsRouter from "./routes/artists";
 import searchArtistsRouter from "./routes/search";
 import artistAlbumsRouter from "./routes/albums";
@@ -10,12 +13,19 @@ import albumTracksRouter from "./routes/tracks";
 import historyRouter from "./routes/history";
 import favoritesRouter from "./routes/favorites";
 import authRouter from "./routes/auth";
+import profileRouter from "./routes/profile";
+
+// Imports da documentação do Scalar
 import { apiReference } from "@scalar/express-api-reference";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-dotenv.config({ quiet: true });
+const dotenvOptions = {
+  quiet: true,
+};
+
+dotenv.config(dotenvOptions);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -85,6 +95,8 @@ app.use("/auth", authRouter);
 
 // Rotas relacionadas a álbuns favoritos do usuário
 app.use("/favorites", favoritesRouter);
+
+app.use("/profile", profileRouter);
 
 app.listen(PORT, () => {
   console.log("\n=======================================================");
