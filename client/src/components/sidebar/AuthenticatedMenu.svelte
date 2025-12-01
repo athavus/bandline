@@ -21,7 +21,6 @@
             history: "/history",
             playlists: "/playlist",
             profile: "/profile",
-            settings: "/config",
             logout: "/logout",
         } as const;
 
@@ -63,10 +62,5 @@
         icon={menuIcons.profile}
         label={t("profile")}
         on:click={() => handleAction("profile")}
-    />
-    <MenuItem
-        icon={menuIcons.settings}
-        label={t("settings")}
-        on:click={() => handleAction("settings")}
     />
 </MenuSection>

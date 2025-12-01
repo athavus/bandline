@@ -5,7 +5,6 @@
     import Home from "./routes/Home.svelte";
     import History from "./routes/History.svelte";
     import Profile from "./routes/Profile.svelte";
-    import Config from "./routes/Config.svelte";
     import Favorites from "./routes/Favorites.svelte";
     import Playlists from "./routes/Playlists.svelte";
 
@@ -17,7 +16,6 @@
         "/": Home,
         "/history": History,
         "/profile": Profile,
-        "/config": Config,
         "/favorites": Favorites,
         "/playlist": Playlists,
     };
@@ -27,10 +25,10 @@
         if (typeof window === "undefined") return "/";
         return window.location.pathname;
     }
-    
+
     // Inicializa o router (já inicializa automaticamente no módulo, mas garante)
     initRouter();
-    
+
     // Inicializa com o path da URL atual
     let currentPath = getInitialPath();
     let CurrentComponent = routes[currentPath] || Home;
@@ -39,7 +37,7 @@
         initLanguage();
         await auth.checkAuth();
         initURLState();
-        
+
         // Garante que o componente está correto após tudo inicializar
         const urlPath = getInitialPath();
         if (urlPath !== currentPath) {

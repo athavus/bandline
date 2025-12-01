@@ -120,7 +120,6 @@ export interface Translations {
   // Sidebar
   menu: string;
   home: string;
-  settings: string;
   aboutApp: string;
   favorites: string;
   history: string;
@@ -265,7 +264,6 @@ const translations: Record<Language, Translations> = {
     // Sidebar
     menu: "Menu",
     home: "Home",
-    settings: "Settings",
     aboutApp: "About",
     favorites: "Favorites",
     history: "History",
@@ -408,7 +406,6 @@ const translations: Record<Language, Translations> = {
     // Sidebar
     menu: "Menu",
     home: "Início",
-    settings: "Configurações",
     aboutApp: "Sobre",
     favorites: "Favoritos",
     history: "Histórico",
@@ -551,7 +548,6 @@ const translations: Record<Language, Translations> = {
     // Sidebar
     menu: "Menú",
     home: "Inicio",
-    settings: "Configuración",
     aboutApp: "Acerca de",
     favorites: "Favoritos",
     history: "Historial",
