@@ -42,19 +42,26 @@ router.get("/:id", async (req, res) => {
           name: artist.name,
         })),
       }))
+
       .sort((a, b) => {
-        const dateA =
-          a.release_date.length === 4
-            ? `${a.release_date}-01-01`
-            : a.release_date.length === 7
-              ? `${a.release_date}-01`
-              : a.release_date;
-        const dateB =
-          b.release_date.length === 4
-            ? `${b.release_date}-01-01`
-            : b.release_date.length === 7
-              ? `${b.release_date}-01`
-              : b.release_date;
+        let dateA;
+        if (a.release_date.length === 4) {
+          dateA = `${a.release_date}-01-01`;
+        } else if (a.release_date.length === 7) {
+          dateA = `${a.release_date}-01`;
+        } else {
+          dateA = a.release_date;
+        }
+
+        let dateB;
+        if (b.release_date.length === 4) {
+          dateB = `${b.release_date}-01-01`;
+        } else if (b.release_date.length === 7) {
+          dateB = `${b.release_date}-01`;
+        } else {
+          dateB = b.release_date;
+        }
+
         return new Date(dateA).getTime() - new Date(dateB).getTime();
       });
 
