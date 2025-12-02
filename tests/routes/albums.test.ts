@@ -1,17 +1,23 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mockSpotifyAlbumsResponse, mockSpotifyToken } from "../setup/mocks";
+// Removi o mockSpotifyToken daqui pois vamos definir direto no mock abaixo
+import { mockSpotifyAlbumsResponse } from "../setup/mocks";
 
-// Mock do node-fetch antes da importação do fetch real
+// Mock do node-fetch
 vi.mock("node-fetch", () => ({
   default: vi.fn(),
 }));
 
-// Mock do getSpotifyToken antes do import que o usa
+// Mock do getSpotifyToken CORRIGIDO (Inlinado)
+// Removemos a dependência da variável externa para evitar o ReferenceError
 vi.mock("../../server/src/config/spotifyToken", () => ({
-  default: async () => mockSpotifyToken,
+  default: async () => ({
+    access_token: "mock_test_token",
+    token_type: "Bearer",
+    expires_in: 3600,
+  }),
 }));
 
-import fetch from "node-fetch"; // Agora é mockado corretamente
+import fetch from "node-fetch";
 import request from "supertest";
 import { createTestApp } from "../setup/test-app";
 
@@ -85,9 +91,18 @@ describe("GET /artistAlbums/:id", () => {
       .expect(200);
 
     const items = response.body.items;
+
+    // Verificação de ordenação
     if (items.length >= 2) {
       const date1 = new Date(items[0].release_date);
       const date2 = new Date(items[1].release_date);
+
+      // O teste original verificava se o primeiro é menor que o segundo (crescente ou decrescente?)
+      // Se sua API ordena do mais recente para o mais antigo (descrescente),
+      // a data1 (índice 0) deveria ser MAIOR ou IGUAL a data2.
+      // Se a API ordena do mais antigo para o novo (crescente),
+      // a data1 deveria ser MENOR ou IGUAL a data2.
+      // Mantive sua lógica original:
       expect(date1.getTime()).toBeLessThanOrEqual(date2.getTime());
     }
   });

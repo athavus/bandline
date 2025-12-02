@@ -5,16 +5,18 @@ import {
   mockSpotifyArtistResponse,
   mockLastFmArtistInfoResponse,
   mockLastFmSimilarArtistsResponse,
-  mockSpotifyToken,
 } from "../setup/mocks";
 import fetch from "node-fetch";
 
-const app = createTestApp();
-
-// Mock do getSpotifyToken
 vi.mock("../../server/src/config/spotifyToken", () => ({
-  default: async () => mockSpotifyToken,
+  default: async () => ({
+    access_token: "mock_token_12345",
+    token_type: "Bearer",
+    expires_in: 3600,
+  }),
 }));
+
+const app = createTestApp();
 
 describe("GET /artists/:id", () => {
   beforeEach(() => {

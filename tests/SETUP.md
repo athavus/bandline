@@ -60,14 +60,14 @@ Antes de executar os testes pela primeira vez, você precisa executar as migraç
 
 ```bash
 cd ../server
-DATABASE_URL="postgresql://user:password@localhost:5432/bandline_test" pnpm prisma migrate deploy
+TEST_DATABASE_URL="postgresql://test:test@localhost:5432/test" pnpm prisma migrate deploy
 ```
 
 Ou criar o schema diretamente:
 
 ```bash
 cd ../server
-DATABASE_URL="postgresql://user:password@localhost:5432/bandline_test" pnpm prisma db push
+TEST_DATABASE_URL="postgresql://test:test@localhost:5432/test" pnpm prisma db push
 ```
 
 ## Executando os Testes
