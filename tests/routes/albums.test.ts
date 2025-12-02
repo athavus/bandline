@@ -1,14 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-// Removi o mockSpotifyToken daqui pois vamos definir direto no mock abaixo
 import { mockSpotifyAlbumsResponse } from "../setup/mocks";
 
-// Mock do node-fetch
 vi.mock("node-fetch", () => ({
   default: vi.fn(),
 }));
 
-// Mock do getSpotifyToken CORRIGIDO (Inlinado)
-// Removemos a dependência da variável externa para evitar o ReferenceError
 vi.mock("../../server/src/config/spotifyToken", () => ({
   default: async () => ({
     access_token: "mock_test_token",

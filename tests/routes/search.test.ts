@@ -1,17 +1,23 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { mockSpotifyArtistsSearchResponse } from "../setup/mocks";
+
+vi.mock("node-fetch", () => ({
+  default: vi.fn(),
+}));
+
+vi.mock("../../server/src/config/spotifyToken", () => ({
+  default: async () => ({
+    access_token: "mock_test_token",
+    token_type: "Bearer",
+    expires_in: 3600,
+  }),
+}));
+
+import fetch from "node-fetch";
 import request from "supertest";
 import { createTestApp } from "../setup/test-app";
-import {
-  mockSpotifyArtistsSearchResponse,
-  mockSpotifyToken,
-} from "../setup/mocks";
-import fetch from "node-fetch";
 
 const app = createTestApp();
-// Mock do getSpotifyToken
-vi.mock("../../server/src/config/spotifyToken", () => ({
-  default: async () => mockSpotifyToken,
-}));
 
 describe("GET /searchArtists", () => {
   beforeEach(() => {
