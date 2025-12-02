@@ -5,13 +5,13 @@ Este diretório contém os testes de controle para todas as rotas do backend do 
 ## Estrutura
 
 ```
-tests/
+tests/ 
 ├── setup/               # Configuração e helpers de testes
-│   ├── test-setup.ts   # Setup global dos testes
-│   ├── test-app.ts     # Criação da instância Express para testes
-│   ├── test-helpers.ts # Funções auxiliares para criar dados de teste
-│   └── mocks.ts        # Mocks para APIs externas (Spotify, Last.fm)
-├── routes/             # Testes para cada rota
+│   ├── test-setup.ts    # Setup global dos testes
+│   ├── test-app.ts      # Criação da instância Express para testes
+│   ├── test-helpers.ts  # Funções auxiliares para criar dados de teste
+│   └── mocks.ts         # Mocks para APIs externas (Spotify, Last.fm)
+├── routes/              # Testes para cada rota
 │   ├── auth.test.ts
 │   ├── artists.test.ts
 │   ├── search.test.ts
@@ -27,20 +27,14 @@ tests/
 
 ## Instalação
 
-1. Instale as dependências (isso também gerará o Prisma Client automaticamente):
-
-```bash
-cd tests
-pnpm install
 ```
 
-Se o Prisma Client não for gerado automaticamente, execute:
+1. Rode o shellscript para configuração do projeto
 
-```bash
-pnpm prisma:generate
-```
+chmod +x setup-tests.sh
+./setup-tests.sh
 
-2. Configure as variáveis de ambiente:
+2. Crie o .env do projeto 
 
 Crie um arquivo `.env` na pasta `tests/` ou configure as variáveis de ambiente:
 
@@ -81,38 +75,38 @@ pnpm test:coverage
 ## Cobertura dos Testes
 
 Os testes cobrem:
-
+ 
 ### Autenticação (`/auth`)
-- ✅ POST /auth/register - Registro de novo usuário
-- ✅ POST /auth/login - Login de usuário
-- ✅ GET /auth/me - Obter usuário atual
-- ✅ POST /auth/logout - Logout
-
+- POST /auth/register - Registro de novo usuário
+- POST /auth/login - Login de usuário
+- GET /auth/me - Obter usuário atual
+- POST /auth/logout - Logout
+ 
 ### Artistas (`/artists`)
-- ✅ GET /artists/:id - Obter detalhes do artista
-
+- GET /artists/:id - Obter detalhes do artista
+ 
 ### Busca (`/searchArtists`)
-- ✅ GET /searchArtists - Buscar artistas
-
+- GET /searchArtists - Buscar artistas
+ 
 ### Álbuns (`/artistAlbums`)
-- ✅ GET /artistAlbums/:id - Obter álbuns do artista
-
+- GET /artistAlbums/:id - Obter álbuns do artista
+ 
 ### Músicas (`/albumTracks`)
-- ✅ GET /albumTracks/:id - Obter faixas do álbum
-
+- GET /albumTracks/:id - Obter faixas do álbum
+ 
 ### Histórico (`/history`)
-- ✅ POST /history - Adicionar ao histórico
-- ✅ GET /history - Obter histórico do usuário
-
+- POST /history - Adicionar ao histórico
+- GET /history - Obter histórico do usuário
+ 
 ### Favoritos (`/favorites`)
-- ✅ POST /favorites - Adicionar favorito
-- ✅ GET /favorites - Listar favoritos
-- ✅ DELETE /favorites - Remover favorito
-- ✅ POST /favorites/check - Verificar favoritos
-
+- POST /favorites - Adicionar favorito
+- GET /favorites - Listar favoritos
+- DELETE /favorites - Remover favorito
+- POST /favorites/check - Verificar favoritos
+ 
 ### Perfil (`/profile`)
-- ✅ GET /profile - Obter perfil do usuário
-- ✅ PUT /profile - Atualizar perfil
+- GET /profile - Obter perfil do usuário
+- PUT /profile - Atualizar perfil
 
 ## Observações
 
@@ -120,12 +114,3 @@ Os testes cobrem:
 - As APIs externas (Spotify, Last.fm) são mockadas nos testes
 - Cada teste limpa o banco de dados antes de executar
 - Os testes de autenticação usam cookies de sessão para simular sessões reais
-
-## Próximos Passos
-
-Para melhorar ainda mais a cobertura:
-
-1. Adicionar testes de edge cases
-2. Adicionar testes de performance
-3. Adicionar testes de integração end-to-end
-4. Adicionar testes de segurança (SQL injection, XSS, etc.)
