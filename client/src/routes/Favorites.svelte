@@ -4,68 +4,138 @@
     import Sidebar from "../components/Sidebar.svelte";
     import BrandSubtitle from "../components/titles/BrandSubtitle.svelte";
     import Loading from "../components/utils/Loading.svelte";
+
+    // Componentes de Favoritos
+    import FavoritesControls from "../components/favorites/FavoritesControls.svelte";
+    import FavoritesGrid from "../components/favorites/FavoritesGrid.svelte";
+    import FavoritesList from "../components/favorites/FavoritesList.svelte";
+    import EmptyState from "../components/favorites/EmptyState.svelte";
+    import ErrorState from "../components/favorites/ErrorState.svelte";
+    import NoResults from "../components/favorites/NoResults.svelte";
+
     import { auth } from "../lib/stores/auth";
     import { t } from "../lib/stores/language";
+    import { getQueryParam, setQueryParam } from "../lib/urlState";
     import { replace } from "../lib/router";
 
-    interface History {
-        id: number;
-        artistId: string;
-        artistName: string;
-        artistAvatar?: string;
-        searchedAt: string;
-    }
-
-    interface Favorite {
+    interface FavoriteAlbum {
         id: number;
         albumId: string;
         albumName: string;
         albumImage?: string;
         albumTracks: string;
+        albumReleaseDate?: string;
         favoritedAt: string;
     }
 
-    interface Profile {
-        id: number;
-        username: string;
-        email: string;
-        bio?: string;
-        avatarUrl?: string;
-        createdAt: string;
-        histories: History[];
-        favorites: Favorite[];
-    }
+    type SortOption = "recent" | "alphabetical" | "release" | "tracks";
+    type ViewMode = "grid" | "list";
 
-    const API_URL = import.meta.env.VITE_API_URL;
-
-    let profile: Profile | null = null;
+    let favorites: FavoriteAlbum[] = [];
+    let filteredFavorites: FavoriteAlbum[] = [];
     let loading = true;
     let error: string | null = null;
     let sidebarOpen = false;
-    let isEditing = false;
-    let editBio = "";
+    let searchQuery = "";
+    let sortBy: SortOption = "recent";
+    let viewMode: ViewMode = "grid";
 
+    const API_URL = import.meta.env.VITE_API_URL;
     $: authState = $auth;
-    $: pinnedFavorites = profile?.favorites.slice(0, 6) || [];
-    $: recentHistory = profile?.histories.slice(0, 10) || [];
+
+    let isInitialized = false;
+
+    // Reativa: aplica filtro e ordenação sempre que mudar
+    $: {
+        filteredFavorites = filterAndSortFavorites(
+            favorites,
+            searchQuery,
+            sortBy,
+        );
+    }
+
+    // Atualiza a URL quando o estado mudar (após inicialização)
+    $: if (isInitialized && typeof window !== "undefined") {
+        setQueryParam("favoritesSearch", searchQuery || null);
+    }
+    $: if (isInitialized && typeof window !== "undefined") {
+        setQueryParam("favoritesSort", sortBy !== "recent" ? sortBy : null);
+    }
+    $: if (isInitialized && typeof window !== "undefined") {
+        setQueryParam("favoritesView", viewMode !== "grid" ? viewMode : null);
+    }
 
     onMount(async () => {
+        // Aguarda a autenticação estar pronta
         await auth.checkAuth();
 
+        // Usa $auth diretamente para garantir que está atualizado
         if (!$auth.isAuthenticated) {
             replace("/");
             return;
         }
 
-        await fetchProfile();
+        // Restaura o estado da URL
+        const urlSearch = getQueryParam("favoritesSearch");
+        const urlSort = getQueryParam("favoritesSort");
+        const urlView = getQueryParam("favoritesView");
+
+        if (urlSearch !== null) {
+            searchQuery = urlSearch;
+        }
+        if (
+            urlSort &&
+            ["recent", "alphabetical", "release", "tracks"].includes(urlSort)
+        ) {
+            sortBy = urlSort as SortOption;
+        }
+        if (urlView && (urlView === "grid" || urlView === "list")) {
+            viewMode = urlView;
+        }
+
+        await fetchFavorites();
+
+        // Marca como inicializado após restaurar o estado da URL
+        isInitialized = true;
+
+        // Listener para mudanças na URL (botão voltar/avançar)
+        window.addEventListener("urlstatechange", handleURLStateChange);
+
+        return () => {
+            window.removeEventListener("urlstatechange", handleURLStateChange);
+        };
     });
 
-    async function fetchProfile() {
+    function handleURLStateChange() {
+        const urlSearch = getQueryParam("favoritesSearch");
+        const urlSort = getQueryParam("favoritesSort");
+        const urlView = getQueryParam("favoritesView");
+
+        if (urlSearch !== null && urlSearch !== searchQuery) {
+            searchQuery = urlSearch;
+        }
+        if (
+            urlSort &&
+            urlSort !== sortBy &&
+            ["recent", "alphabetical", "release", "tracks"].includes(urlSort)
+        ) {
+            sortBy = urlSort as SortOption;
+        }
+        if (
+            urlView &&
+            urlView !== viewMode &&
+            (urlView === "grid" || urlView === "list")
+        ) {
+            viewMode = urlView;
+        }
+    }
+
+    async function fetchFavorites() {
         loading = true;
         error = null;
 
         try {
-            const response = await fetch(`${API_URL}/profile`, {
+            const response = await fetch(`${API_URL}/favorites`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -80,44 +150,66 @@
             }
 
             if (!response.ok) {
-                throw new Error(`Erro ao buscar perfil: ${response.status}`);
+                throw new Error(`Erro ao buscar favoritos: ${response.status}`);
             }
 
             const data = await response.json();
-            profile = data.profile;
-            editBio = profile?.bio || "";
+            favorites = data.favorites || [];
         } catch (err) {
-            console.error("Erro ao buscar perfil:", err);
-            error = "Não foi possível carregar o perfil.";
+            console.error("Erro ao buscar favoritos:", err);
+            error =
+                "Não foi possível carregar os favoritos. Verifique se está autenticado.";
         } finally {
             loading = false;
         }
     }
 
-    async function saveBio() {
-        if (!profile) return;
+    function filterAndSortFavorites(
+        albums: FavoriteAlbum[],
+        query: string,
+        sort: SortOption,
+    ): FavoriteAlbum[] {
+        // Filtrar por busca
+        let filtered = albums.filter((album) =>
+            album.albumName.toLowerCase().includes(query.toLowerCase()),
+        );
 
-        try {
-            const response = await fetch(`${API_URL}/profile`, {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ bio: editBio }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Erro ao atualizar bio");
-            }
-
-            const data = await response.json();
-            profile.bio = editBio;
-            isEditing = false;
-        } catch (err) {
-            console.error("Erro ao atualizar bio:", err);
-            alert("Erro ao atualizar bio.");
+        // Ordenar
+        switch (sort) {
+            case "alphabetical":
+                filtered.sort((a, b) =>
+                    a.albumName.localeCompare(b.albumName, "pt-BR"),
+                );
+                break;
+            case "release":
+                filtered.sort((a, b) => {
+                    const dateA = a.albumReleaseDate
+                        ? new Date(a.albumReleaseDate).getTime()
+                        : 0;
+                    const dateB = b.albumReleaseDate
+                        ? new Date(b.albumReleaseDate).getTime()
+                        : 0;
+                    return dateB - dateA;
+                });
+                break;
+            case "tracks":
+                filtered.sort((a, b) => {
+                    const tracksA = parseInt(a.albumTracks) || 0;
+                    const tracksB = parseInt(b.albumTracks) || 0;
+                    return tracksB - tracksA;
+                });
+                break;
+            case "recent":
+            default:
+                filtered.sort(
+                    (a, b) =>
+                        new Date(b.favoritedAt).getTime() -
+                        new Date(a.favoritedAt).getTime(),
+                );
+                break;
         }
+
+        return filtered;
     }
 
     function toggleSidebar() {
@@ -133,21 +225,38 @@
         sidebarOpen = false;
     }
 
+    async function removeFavorite(albumId: string) {
+        try {
+            const response = await fetch(`${API_URL}/favorites`, {
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ albumId }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao remover favorito");
+            }
+
+            await fetchFavorites();
+        } catch (err) {
+            console.error("Erro ao remover favorito:", err);
+            alert("Erro ao remover favorito.");
+        }
+    }
+
     function openAlbumInSpotify(albumId: string) {
         window.open(`https://open.spotify.com/album/${albumId}`, "_blank");
     }
 
-    function openArtistInSpotify(artistId: string) {
-        window.open(`https://open.spotify.com/artist/${artistId}`, "_blank");
+    function handleOpenSpotify(event: CustomEvent<string>) {
+        openAlbumInSpotify(event.detail);
     }
 
-    function formatDate(dateString: string): string {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("pt-BR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        });
+    function handleRemove(event: CustomEvent<string>) {
+        removeFavorite(event.detail);
     }
 </script>
 
@@ -156,207 +265,41 @@
 <main class:sidebar-open={sidebarOpen}>
     <Header bind:sidebarOpen on:toggleSidebar={toggleSidebar} />
 
-    <div class="profile-container">
+    <BrandSubtitle
+        firstWord={t("firstFavoritesWord")}
+        secondWord={t("lastFavoritesWord")}
+    />
+
+    <div class="favorites-container">
         {#if loading}
-            <Loading message="Carregando perfil..." />
+            <Loading message={t("loadingFavorites")} />
         {:else if error}
-            <div class="error-state">
-                <p class="error-message">{error}</p>
-                <button class="retry-btn" on:click={fetchProfile}>
-                    Tentar novamente
-                </button>
-            </div>
-        {:else if profile}
-            <!-- Profile Header -->
-            <div class="profile-header">
-                <div class="profile-avatar">
-                    {#if profile.avatarUrl}
-                        <img src={profile.avatarUrl} alt={profile.username} />
-                    {:else}
-                        <div class="avatar-placeholder">
-                            {profile.username.charAt(0).toUpperCase()}
-                        </div>
-                    {/if}
-                </div>
+            <ErrorState {error} on:retry={fetchFavorites} />
+        {:else if favorites.length === 0}
+            <EmptyState />
+        {:else}
+            <FavoritesControls
+                totalFavorites={favorites.length}
+                filteredCount={filteredFavorites.length}
+                bind:searchQuery
+                bind:sortBy
+                bind:viewMode
+            />
 
-                <div class="profile-info">
-                    <span class="profile-label">Perfil</span>
-                    <h1 class="profile-username">{profile.username}</h1>
-
-                    <div class="profile-stats">
-                        <span>{profile.favorites.length} álbuns favoritos</span>
-                        <span>•</span>
-                        <span>Desde {formatDate(profile.createdAt)}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bio Section -->
-            <div class="bio-section">
-                {#if isEditing}
-                    <div class="bio-edit">
-                        <textarea
-                            bind:value={editBio}
-                            placeholder="Escreva algo sobre você..."
-                            maxlength="200"
-                        ></textarea>
-                        <div class="bio-actions">
-                            <button class="save-btn" on:click={saveBio}>
-                                Salvar
-                            </button>
-                            <button
-                                class="cancel-btn"
-                                on:click={() => {
-                                    isEditing = false;
-                                    editBio = profile?.bio || "";
-                                }}
-                            >
-                                Cancelar
-                            </button>
-                        </div>
-                    </div>
-                {:else}
-                    <div class="bio-display">
-                        {#if profile.bio}
-                            <p class="bio-text">{profile.bio}</p>
-                        {:else}
-                            <p class="bio-empty">Sem bio ainda</p>
-                        {/if}
-                        <button
-                            class="edit-bio-btn"
-                            on:click={() => (isEditing = true)}
-                        >
-                            Editar bio
-                        </button>
-                    </div>
-                {/if}
-            </div>
-
-            <!-- Pinned Favorites -->
-            {#if pinnedFavorites.length > 0}
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2>Álbuns Favoritos</h2>
-                        {#if profile.favorites.length > 6}
-                            <a href="/favorites" class="see-all">Ver todos</a>
-                        {/if}
-                    </div>
-
-                    <div class="albums-grid">
-                        {#each pinnedFavorites as favorite}
-                            <div
-                                class="album-card"
-                                on:click={() =>
-                                    openAlbumInSpotify(favorite.albumId)}
-                                on:keydown={(e) =>
-                                    e.key === "Enter" &&
-                                    openAlbumInSpotify(favorite.albumId)}
-                                role="button"
-                                tabindex="0"
-                            >
-                                {#if favorite.albumImage}
-                                    <img
-                                        src={favorite.albumImage}
-                                        alt={favorite.albumName}
-                                        class="album-image"
-                                    />
-                                {:else}
-                                    <div class="album-placeholder">
-                                        <svg
-                                            width="48"
-                                            height="48"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                d="M9 18V5l12-2v13M9 18c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm12-2c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z"
-                                            />
-                                        </svg>
-                                    </div>
-                                {/if}
-                                <div class="album-info">
-                                    <h3 class="album-name">
-                                        {favorite.albumName}
-                                    </h3>
-                                    <p class="album-tracks">
-                                        {favorite.albumTracks} faixas
-                                    </p>
-                                </div>
-                            </div>
-                        {/each}
-                    </div>
-                </section>
-            {/if}
-
-            <!-- Recent History -->
-            {#if recentHistory.length > 0}
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2>Histórico Recente</h2>
-                    </div>
-
-                    <div class="history-grid">
-                        {#each recentHistory as history}
-                            <div
-                                class="artist-card"
-                                on:click={() =>
-                                    openArtistInSpotify(history.artistId)}
-                                on:keydown={(e) =>
-                                    e.key === "Enter" &&
-                                    openArtistInSpotify(history.artistId)}
-                                role="button"
-                                tabindex="0"
-                            >
-                                {#if history.artistAvatar}
-                                    <img
-                                        src={history.artistAvatar}
-                                        alt={history.artistName}
-                                        class="artist-image"
-                                    />
-                                {:else}
-                                    <div class="artist-placeholder">
-                                        <svg
-                                            width="48"
-                                            height="48"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
-                                            />
-                                            <circle cx="12" cy="7" r="4" />
-                                        </svg>
-                                    </div>
-                                {/if}
-                                <div class="artist-info">
-                                    <h3 class="artist-name">
-                                        {history.artistName}
-                                    </h3>
-                                    <p class="artist-label">Artista</p>
-                                </div>
-                            </div>
-                        {/each}
-                    </div>
-                </section>
-            {/if}
-
-            {#if pinnedFavorites.length === 0 && recentHistory.length === 0}
-                <div class="empty-profile">
-                    <svg
-                        width="64"
-                        height="64"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M12 6v6l4 2" />
-                    </svg>
-                    <h3>Seu perfil está vazio</h3>
-                    <p>Comece a explorar e adicionar álbuns aos favoritos!</p>
-                </div>
+            {#if filteredFavorites.length === 0}
+                <NoResults {searchQuery} />
+            {:else if viewMode === "grid"}
+                <FavoritesGrid
+                    favorites={filteredFavorites}
+                    on:openSpotify={handleOpenSpotify}
+                    on:remove={handleRemove}
+                />
+            {:else}
+                <FavoritesList
+                    favorites={filteredFavorites}
+                    on:openSpotify={handleOpenSpotify}
+                    on:remove={handleRemove}
+                />
             {/if}
         {/if}
     </div>
@@ -369,422 +312,15 @@
         padding-bottom: 40px;
     }
 
-    .profile-container {
+    .favorites-container {
         max-width: 1400px;
         margin: 0 auto;
         padding: 40px 20px;
     }
 
-    /* Profile Header */
-    .profile-header {
-        display: flex;
-        align-items: flex-end;
-        gap: 24px;
-        margin-bottom: 32px;
-        padding: 0 0 24px 0;
-    }
-
-    .profile-avatar {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        overflow: hidden;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-
-    .profile-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .avatar-placeholder {
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 64px;
-        font-weight: 700;
-        color: white;
-    }
-
-    .profile-info {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .profile-label {
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    .profile-username {
-        font-size: 72px;
-        font-weight: 700;
-        color: white;
-        margin: 0;
-        line-height: 1;
-    }
-
-    .profile-stats {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.7);
-        margin-top: 8px;
-    }
-
-    /* Bio Section */
-    .bio-section {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 12px;
-        padding: 24px;
-        margin-bottom: 40px;
-        backdrop-filter: blur(10px);
-    }
-
-    .bio-display {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 16px;
-    }
-
-    .bio-text {
-        flex: 1;
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 16px;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    .bio-empty {
-        flex: 1;
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 16px;
-        font-style: italic;
-        margin: 0;
-    }
-
-    .edit-bio-btn {
-        padding: 8px 16px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 20px;
-        color: white;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .edit-bio-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .bio-edit textarea {
-        width: 100%;
-        min-height: 100px;
-        padding: 12px;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        color: white;
-        font-size: 16px;
-        font-family: inherit;
-        resize: vertical;
-        margin-bottom: 12px;
-    }
-
-    .bio-edit textarea:focus {
-        outline: none;
-        border-color: #1db954;
-    }
-
-    .bio-actions {
-        display: flex;
-        gap: 12px;
-    }
-
-    .save-btn,
-    .cancel-btn {
-        padding: 10px 24px;
-        border-radius: 20px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        border: none;
-    }
-
-    .save-btn {
-        background: #1db954;
-        color: white;
-    }
-
-    .save-btn:hover {
-        background: #1ed760;
-        transform: scale(1.05);
-    }
-
-    .cancel-btn {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-    }
-
-    .cancel-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Content Sections */
-    .content-section {
-        margin-bottom: 48px;
-    }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-    }
-
-    .section-header h2 {
-        font-size: 28px;
-        font-weight: 700;
-        color: white;
-        margin: 0;
-    }
-
-    .see-all {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 14px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-
-    .see-all:hover {
-        color: white;
-    }
-
-    /* Albums Grid */
-    .albums-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 24px;
-    }
-
-    .album-card {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        padding: 16px;
-        cursor: pointer;
-        transition: all 0.3s;
-        backdrop-filter: blur(10px);
-    }
-
-    .album-card:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-4px);
-    }
-
-    .album-image {
-        width: 100%;
-        aspect-ratio: 1;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-bottom: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .album-placeholder {
-        width: 100%;
-        aspect-ratio: 1;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 12px;
-        color: rgba(255, 255, 255, 0.4);
-    }
-
-    .album-info {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    .album-name {
-        font-size: 16px;
-        font-weight: 600;
-        color: white;
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .album-tracks {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
-        margin: 0;
-    }
-
-    /* History Grid */
-    .history-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 24px;
-    }
-
-    .artist-card {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        padding: 16px;
-        cursor: pointer;
-        transition: all 0.3s;
-        backdrop-filter: blur(10px);
-    }
-
-    .artist-card:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-4px);
-    }
-
-    .artist-image {
-        width: 100%;
-        aspect-ratio: 1;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-bottom: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .artist-placeholder {
-        width: 100%;
-        aspect-ratio: 1;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 12px;
-        color: rgba(255, 255, 255, 0.4);
-    }
-
-    .artist-info {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        text-align: center;
-    }
-
-    .artist-name {
-        font-size: 16px;
-        font-weight: 600;
-        color: white;
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .artist-label {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
-        margin: 0;
-    }
-
-    /* Empty State */
-    .empty-profile {
-        text-align: center;
-        padding: 80px 20px;
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    .empty-profile svg {
-        margin-bottom: 24px;
-        opacity: 0.5;
-    }
-
-    .empty-profile h3 {
-        font-size: 24px;
-        font-weight: 600;
-        color: white;
-        margin: 0 0 12px 0;
-    }
-
-    .empty-profile p {
-        font-size: 16px;
-        margin: 0;
-    }
-
-    /* Error State */
-    .error-state {
-        text-align: center;
-        padding: 80px 20px;
-    }
-
-    .error-message {
-        color: #ff6b6b;
-        font-size: 18px;
-        margin-bottom: 24px;
-    }
-
-    .retry-btn {
-        padding: 12px 32px;
-        background: #1db954;
-        color: white;
-        border: none;
-        border-radius: 24px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .retry-btn:hover {
-        background: #1ed760;
-        transform: scale(1.05);
-    }
-
-    /* Responsive */
     @media (max-width: 768px) {
-        .profile-container {
+        .favorites-container {
             padding: 24px 16px;
-        }
-
-        .profile-header {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .profile-avatar {
-            width: 140px;
-            height: 140px;
-        }
-
-        .profile-username {
-            font-size: 48px;
-        }
-
-        .albums-grid,
-        .history-grid {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
-        }
-
-        .bio-display {
-            flex-direction: column;
         }
     }
 </style>

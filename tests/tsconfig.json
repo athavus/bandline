@@ -1,0 +1,14 @@
+{
+  "extends": "../server/tsconfig.json",
+  "compilerOptions": {
+    "types": ["vitest/globals", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@config/*": ["../server/src/config/*"],
+      "@routes/*": ["../server/src/routes/*"]
+    }
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
