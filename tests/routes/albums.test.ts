@@ -1,18 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import request from "supertest";
-import { createTestApp } from "../setup/test-app";
 import { mockSpotifyAlbumsResponse, mockSpotifyToken } from "../setup/mocks";
-import fetch from "node-fetch";
 
-// Mock do fetch
+// Mock do node-fetch antes da importação do fetch real
 vi.mock("node-fetch", () => ({
   default: vi.fn(),
 }));
 
-// Mock do getSpotifyToken
+// Mock do getSpotifyToken antes do import que o usa
 vi.mock("../../server/src/config/spotifyToken", () => ({
   default: async () => mockSpotifyToken,
 }));
+
+import fetch from "node-fetch"; // Agora é mockado corretamente
+import request from "supertest";
+import { createTestApp } from "../setup/test-app";
 
 const app = createTestApp();
 

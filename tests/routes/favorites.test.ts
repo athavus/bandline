@@ -39,7 +39,8 @@ describe("POST /favorites", () => {
     const favoriteData = {
       albumId: "1To7kv722A8SpZF7M07D4p",
       albumName: "OK Computer",
-      albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526",
+      albumImage:
+        "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526",
       albumTracks: ["track1", "track2", "track3"],
     };
 
@@ -398,6 +399,8 @@ describe("POST /favorites/check", () => {
       })
       .expect(400);
 
-    expect(response.body.error).toBe("albumIds é obrigatório e deve ser um array");
+    expect(response.body.error).toBe(
+      "albumIds é obrigatório e deve ser um array",
+    );
   });
 });

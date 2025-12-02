@@ -41,7 +41,8 @@ describe("POST /history", () => {
     const historyData = {
       artistId: "4Z8W4fKeB5YxbusRsdQVPb",
       artistName: "Radiohead",
-      artistAvatar: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526",
+      artistAvatar:
+        "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526",
     };
 
     const response = await request(app)

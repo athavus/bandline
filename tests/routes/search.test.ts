@@ -7,17 +7,11 @@ import {
 } from "../setup/mocks";
 import fetch from "node-fetch";
 
-// Mock do fetch
-vi.mock("node-fetch", () => ({
-  default: vi.fn(),
-}));
-
+const app = createTestApp();
 // Mock do getSpotifyToken
 vi.mock("../../server/src/config/spotifyToken", () => ({
   default: async () => mockSpotifyToken,
 }));
-
-const app = createTestApp();
 
 describe("GET /searchArtists", () => {
   beforeEach(() => {
@@ -25,9 +19,7 @@ describe("GET /searchArtists", () => {
   });
 
   it("deve retornar lista vazia quando query é muito curta", async () => {
-    const response = await request(app)
-      .get("/searchArtists?q=a")
-      .expect(200);
+    const response = await request(app).get("/searchArtists?q=a").expect(200);
 
     expect(response.body.artists).toEqual([]);
   });

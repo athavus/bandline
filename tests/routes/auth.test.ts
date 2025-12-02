@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import request from "supertest";
 import { createTestApp } from "../setup/test-app";
 import { createTestUser } from "../setup/test-helpers";
-import { testPrisma } from "../setup/test-setup";
 
 const app = createTestApp();
 
@@ -129,9 +128,7 @@ describe("POST /auth/login", () => {
 
 describe("GET /auth/me", () => {
   it("deve retornar erro 401 quando não autenticado", async () => {
-    const response = await request(app)
-      .get("/auth/me")
-      .expect(401);
+    const response = await request(app).get("/auth/me").expect(401);
 
     expect(response.body.error).toBe("Não autenticado");
   });

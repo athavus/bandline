@@ -4,17 +4,12 @@ import { createTestApp } from "../setup/test-app";
 import { mockSpotifyTracksResponse, mockSpotifyToken } from "../setup/mocks";
 import fetch from "node-fetch";
 
-// Mock do fetch
-vi.mock("node-fetch", () => ({
-  default: vi.fn(),
-}));
+const app = createTestApp();
 
 // Mock do getSpotifyToken
 vi.mock("../../server/src/config/spotifyToken", () => ({
   default: async () => mockSpotifyToken,
 }));
-
-const app = createTestApp();
 
 describe("GET /albumTracks/:id", () => {
   beforeEach(() => {

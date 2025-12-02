@@ -9,17 +9,12 @@ import {
 } from "../setup/mocks";
 import fetch from "node-fetch";
 
-// Mock do fetch
-vi.mock("node-fetch", () => ({
-  default: vi.fn(),
-}));
+const app = createTestApp();
 
 // Mock do getSpotifyToken
 vi.mock("../../server/src/config/spotifyToken", () => ({
   default: async () => mockSpotifyToken,
 }));
-
-const app = createTestApp();
 
 describe("GET /artists/:id", () => {
   beforeEach(() => {
@@ -44,9 +39,7 @@ describe("GET /artists/:id", () => {
         json: async () => mockLastFmSimilarArtistsResponse,
       });
 
-    const response = await request(app)
-      .get(`/artists/${artistId}`)
-      .expect(200);
+    const response = await request(app).get(`/artists/${artistId}`).expect(200);
 
     expect(response.body).toMatchObject({
       id: artistId,
@@ -92,9 +85,7 @@ describe("GET /artists/:id", () => {
       json: async () => ({ error: "Not found" }),
     });
 
-    const response = await request(app)
-      .get(`/artists/${artistId}`)
-      .expect(500);
+    const response = await request(app).get(`/artists/${artistId}`).expect(500);
 
     expect(response.body.error).toBeDefined();
   });
