@@ -43,7 +43,10 @@
     let error: string | null = null;
     let sidebarOpen = false;
     let isEditing = false;
+    let isEditingProfile = false;
     let editBio = "";
+    let editUsername = "";
+    let editAvatarUrl = "";
 
     $: authState = $auth;
     $: pinnedFavorites = profile?.favorites.slice(0, 6) || [];
@@ -86,6 +89,8 @@
             const data = await response.json();
             profile = data.profile;
             editBio = profile?.bio || "";
+            editUsername = profile?.username || "";
+            editAvatarUrl = profile?.avatarUrl || "";
         } catch (err) {
             console.error("Erro ao buscar perfil:", err);
             error = "Não foi possível carregar o perfil.";
@@ -120,6 +125,42 @@
         }
     }
 
+    async function saveProfile() {
+        if (!profile) return;
+
+        if (!editUsername.trim()) {
+            alert("O nome de usuário não pode estar vazio.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/profile`, {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: editUsername,
+                    avatarUrl: editAvatarUrl || null,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Erro ao atualizar perfil");
+            }
+
+            const data = await response.json();
+            profile.username = editUsername;
+            profile.avatarUrl = editAvatarUrl || undefined;
+            isEditingProfile = false;
+        } catch (err: any) {
+            console.error("Erro ao atualizar perfil:", err);
+            alert(err.message || "Erro ao atualizar perfil.");
+        }
+    }
+
     function toggleSidebar() {
         sidebarOpen = !sidebarOpen;
     }
@@ -149,6 +190,18 @@
             day: "numeric",
         });
     }
+
+    function startEditingProfile() {
+        editUsername = profile?.username || "";
+        editAvatarUrl = profile?.avatarUrl || "";
+        isEditingProfile = true;
+    }
+
+    function cancelEditingProfile() {
+        editUsername = profile?.username || "";
+        editAvatarUrl = profile?.avatarUrl || "";
+        isEditingProfile = false;
+    }
 </script>
 
 <Sidebar bind:open={sidebarOpen} on:action={handleSidebarAction} />
@@ -170,7 +223,17 @@
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="profile-avatar">
-                    {#if profile.avatarUrl}
+                    {#if isEditingProfile}
+                        <div class="avatar-edit">
+                            {#if editAvatarUrl}
+                                <img src={editAvatarUrl} alt="Preview" />
+                            {:else}
+                                <div class="avatar-placeholder">
+                                    {editUsername.charAt(0).toUpperCase()}
+                                </div>
+                            {/if}
+                        </div>
+                    {:else if profile.avatarUrl}
                         <img src={profile.avatarUrl} alt={profile.username} />
                     {:else}
                         <div class="avatar-placeholder">
@@ -181,13 +244,75 @@
 
                 <div class="profile-info">
                     <span class="profile-label">Perfil</span>
-                    <h1 class="profile-username">{profile.username}</h1>
 
-                    <div class="profile-stats">
-                        <span>{profile.favorites.length} álbuns favoritos</span>
-                        <span>•</span>
-                        <span>Desde {formatDate(profile.createdAt)}</span>
-                    </div>
+                    {#if isEditingProfile}
+                        <div class="profile-edit-form">
+                            <div class="profile-edit-inputs">
+                                <p class="artist-label">Nome do Usuário</p>
+                                <input
+                                    type="text"
+                                    bind:value={editUsername}
+                                    placeholder="Nome de usuário"
+                                    class="username-input"
+                                    maxlength="50"
+                                />
+                                <p class="artist-label url-photo">
+                                    URL da foto de perfil
+                                </p>
+                                <input
+                                    type="url"
+                                    bind:value={editAvatarUrl}
+                                    placeholder="URL da imagem de perfil (opcional)"
+                                    class="avatar-input"
+                                />
+                            </div>
+
+                            <div class="profile-edit-actions">
+                                <button class="save-btn" on:click={saveProfile}>
+                                    Salvar
+                                </button>
+                                <button
+                                    class="cancel-btn"
+                                    on:click={cancelEditingProfile}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    {:else}
+                        <h1 class="profile-username">{profile.username}</h1>
+                        <button
+                            class="edit-profile-btn"
+                            on:click={startEditingProfile}
+                        >
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                                />
+                                <path
+                                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                                />
+                            </svg>
+                            Editar perfil
+                        </button>
+                    {/if}
+
+                    {#if !isEditingProfile}
+                        <div class="profile-stats">
+                            <span
+                                >{profile.favorites.length} álbuns favoritos</span
+                            >
+                            <span>•</span>
+                            <span>Desde {formatDate(profile.createdAt)}</span>
+                        </div>
+                    {/if}
                 </div>
             </div>
 
@@ -410,10 +535,26 @@
         color: white;
     }
 
+    .avatar-edit {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .avatar-edit img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
     .profile-info {
         display: flex;
         flex-direction: column;
         gap: 8px;
+        flex: 1;
     }
 
     .profile-label {
@@ -439,6 +580,80 @@
         font-size: 14px;
         color: var(--text-secondary);
         margin-top: 8px;
+    }
+
+    /* Profile Edit Form */
+    .profile-edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 2%;
+        max-width: 500px;
+    }
+
+    .profile-edit-inputs {
+        display: block ruby;
+    }
+
+    .username-input,
+    .avatar-input {
+        width: 80%;
+        padding: 8px 8px;
+        background: var(--bg-input);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        margin-left: 12px;
+        color: var(--text-primary);
+        font-size: 16px;
+        font-family: var(--font-primary);
+        transition: all 0.2s;
+    }
+
+    .url-photo {
+        margin-left: 5% !important;
+    }
+
+    .username-input:focus,
+    .avatar-input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        background: var(--bg-hover);
+    }
+
+    .username-input::placeholder,
+    .avatar-input::placeholder {
+        color: var(--text-tertiary);
+    }
+
+    .profile-edit-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .edit-profile-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: var(--bg-hover);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        color: var(--text-primary);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 12px;
+    }
+
+    .edit-profile-btn:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--border-light);
+        transform: scale(1.02);
+    }
+
+    .edit-profile-btn svg {
+        flex-shrink: 0;
     }
 
     /* Bio Section */
@@ -793,6 +1008,10 @@
             font-size: 48px;
         }
 
+        .profile-edit-form {
+            max-width: 100%;
+        }
+
         .albums-grid,
         .history-grid {
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -801,6 +1020,10 @@
 
         .bio-display {
             flex-direction: column;
+        }
+
+        .avatar-placeholder {
+            font-size: 48px;
         }
     }
 </style>
