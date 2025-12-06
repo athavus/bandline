@@ -16,10 +16,6 @@ router.post("/", ensureAuthenticated, async (req: Request, res: Response) => {
     const user = req.user as { id: number };
     const { albumId, albumName, albumImage, albumTracks } = req.body;
 
-    console.log("POST /completedAlbums chamado!");
-    console.log("Body:", req.body);
-    console.log("User:", req.user);
-
     if (!albumId || !albumName) {
       return res.status(400).json({
         error: "albumId e albumName são obrigatórios",
