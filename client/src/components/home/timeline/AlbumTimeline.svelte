@@ -19,6 +19,7 @@
     let error: string | null = null;
     let sliderElement: HTMLElement;
     let favoriteAlbumIds: string[] = [];
+    let completedAlbumIds: string[] = [];
 
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -48,6 +49,28 @@
         }
     }
 
+    async function checkCompleted(albumIds: string[]) {
+        try {
+            const response = await fetch(`${API_URL}/completedAlbums/check`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ albumIds }),
+            });
+
+            if (!response.ok) {
+                console.error("Erro ao verificar completados");
+                return [];
+            }
+
+            const data = await response.json();
+            return data.completedIds || [];
+        } catch (err) {
+            console.error("Erro ao verificar completados:", err);
+            return [];
+        }
+    }
+
     async function loadAlbums() {
         if (!artistId) return;
         loading = true;
@@ -66,6 +89,9 @@
                 const albumIds = albums.items.map((a) => a.id);
                 favoriteAlbumIds = await checkFavorites(albumIds);
                 console.log("Álbuns favoritados:", favoriteAlbumIds);
+
+                completedAlbumIds = await checkCompleted(albumIds);
+                console.log("Álbuns completados:", completedAlbumIds);
             }
         } catch (err) {
             error = err instanceof Error ? err.message : "Erro desconhecido";
@@ -111,6 +137,22 @@
         }
 
         console.log("Favoritos atualizados:", favoriteAlbumIds);
+    }
+
+    function handleCompletedToggled(event: CustomEvent) {
+        const { albumId, isCompleted } = event.detail;
+
+        if (isCompleted) {
+            // Adiciona aos completados
+            if (!completedAlbumIds.includes(albumId)) {
+                completedAlbumIds = [...completedAlbumIds, albumId];
+            }
+        } else {
+            // Remove dos completados
+            completedAlbumIds = completedAlbumIds.filter((id) => id !== albumId);
+        }
+
+        console.log("Completados atualizados:", completedAlbumIds);
     }
 
     function getTimelineX(i: number) {
@@ -167,8 +209,10 @@
                             position={getTimelineX(i) - 90}
                             active={selectedAlbum?.id === album.id}
                             isFavorite={favoriteAlbumIds.includes(album.id)}
+                            isCompleted={completedAlbumIds.includes(album.id)}
                             on:click={() => handleAlbumClick(album)}
                             on:favoriteToggled={handleFavoriteToggled}
+                            on:completedToggled={handleCompletedToggled}
                         />
                     {/each}
                 </div>

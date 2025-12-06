@@ -117,6 +117,10 @@ export interface Translations {
   retry: string;
   noFavoritesYet: string;
 
+  // CompletedAlbums
+  firstCompletedWord: string;
+  lastCompletedWord: string;
+
   // Sidebar
   menu: string;
   home: string;
@@ -261,6 +265,10 @@ const translations: Record<Language, Translations> = {
     retry: "Try Again",
     noFavoritesYet: "You haven't favorited any albums yet.",
 
+    // Completed Albums
+    firstCompletedWord: "My",
+    lastCompletedWord: "Collection",
+
     // Sidebar
     menu: "Menu",
     home: "Home",
@@ -403,6 +411,10 @@ const translations: Record<Language, Translations> = {
     retry: "Tentar Novamente",
     noFavoritesYet: "Você ainda não favoritou nenhum álbum.",
 
+    // Completed Albums
+    firstCompletedWord: "Minha",
+    lastCompletedWord: "Coleção",
+
     // Sidebar
     menu: "Menu",
     home: "Início",
@@ -544,6 +556,10 @@ const translations: Record<Language, Translations> = {
     loadingFavorites: "Cargando favoritos...",
     retry: "Intentar otra vez",
     noFavoritesYet: "Aún no has añadido ningún álbum a favoritos.",
+
+    // Completed Albums
+    firstCompletedWord: "Mi",
+    lastCompletedWord: "Colección",
 
     // Sidebar
     menu: "Menú",

@@ -12,6 +12,7 @@ import artistAlbumsRouter from "./routes/albums";
 import albumTracksRouter from "./routes/tracks";
 import historyRouter from "./routes/history";
 import favoritesRouter from "./routes/favorites";
+import completedAlbumsRouter from "./routes/completedAlbums";
 import authRouter from "./routes/auth";
 import profileRouter from "./routes/profile";
 
@@ -95,6 +96,9 @@ app.use("/auth", authRouter);
 
 // Rotas relacionadas a álbuns favoritos do usuário
 app.use("/favorites", favoritesRouter);
+
+// Rotas relacionadas a álbuns completados do usuário
+app.use("/completedAlbums", completedAlbumsRouter);
 
 app.use("/profile", profileRouter);
 

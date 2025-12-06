@@ -8,6 +8,7 @@
     export let position: number;
     export let active: boolean = false;
     export let isFavorite: boolean = false;
+    export let isCompleted: boolean = false;
 
     const dispatch = createEventDispatcher();
 
@@ -107,6 +108,79 @@
             alert(`Erro: ${err.message}`);
         }
     }
+
+    async function toggleCompleted(e: Event) {
+        e.stopPropagation();
+
+        try {
+            const method = isCompleted ? "DELETE" : "POST";
+            const url = "http://localhost:3000/completedAlbums";
+
+            console.log("=== TOGGLE COMPLETADO ===");
+            console.log("Método:", method);
+            console.log("Album ID:", album.id);
+            console.log("isCompleted atual:", isCompleted);
+
+            const response = await fetch(url, {
+                method,
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    albumId: album.id,
+                    albumName: album.name,
+                    albumImage: album.images?.[0]?.url ?? "",
+                    albumTracks: album.total_tracks || 0,
+                }),
+            });
+
+            const contentType = response.headers.get("content-type");
+            const text = await response.text();
+
+            // Se já está completado (409) e estamos tentando adicionar, apenas inverte o estado
+            if (response.status === 409 && !isCompleted) {
+                console.log("Álbum já completado, atualizando UI");
+                isCompleted = true;
+                dispatch("completedToggled", {
+                    albumId: album.id,
+                    isCompleted: true,
+                });
+                return;
+            }
+
+            if (!response.ok) {
+                let errorMessage = "Erro ao marcar como completo";
+                try {
+                    const errorData = text ? JSON.parse(text) : {};
+                    errorMessage = errorData.error || errorMessage;
+                } catch (e) {
+                    errorMessage = text || errorMessage;
+                }
+                throw new Error(errorMessage);
+            }
+
+            let data = {};
+            if (text && contentType?.includes("application/json")) {
+                data = JSON.parse(text);
+            }
+
+            console.log("Resposta:", data);
+
+            // Atualiza o estado
+            isCompleted = !isCompleted;
+
+            dispatch("completedToggled", {
+                albumId: album.id,
+                isCompleted,
+            });
+
+            console.log("Completado atualizado com sucesso!");
+        } catch (err) {
+            console.error("Erro no toggleCompleted:", err);
+            alert(`Erro: ${err.message}`);
+        }
+    }
 </script>
 
 <div
@@ -124,8 +198,17 @@
             <div class="no-image">♫</div>
         {/if}
         <div class="album-actions">
-            <button class="icon-btn completed" aria-label="Mark as completed">
-                <Icon icon="mdi:check-circle" width="24" height="24" />
+            <button
+                class="icon-btn completed"
+                aria-label={isCompleted ? "Remove from completed" : "Mark as completed"}
+                on:click={toggleCompleted}
+                class:active={isCompleted}
+            >
+                <Icon
+                    icon={isCompleted ? "mdi:check-circle-outline" : "mdi:check-circle"}
+                    width="24"
+                    height="24"
+                />
             </button>
             <button
                 class="icon-btn favorite"
@@ -246,12 +329,28 @@
     }
 
     .icon-btn.completed {
-        background: rgba(34, 139, 34, 0.6);
+        background: #1db954;
+        border: 2px solid #1db954;
+        transition: all 0.3s ease;
     }
 
     .icon-btn.completed:hover {
-        background: #1db954;
-        box-shadow: 0 0 12px #1db954;
+        background: #1ed760;
+        box-shadow: 0 0 12px #1ed760;
+        transform: scale(1.1);
+    }
+
+    .icon-btn.completed.active {
+        background: transparent !important;
+        box-shadow: none;
+        border: 2px solid #1db954;
+        transform: scale(1.05);
+    }
+
+    .icon-btn.completed.active:hover {
+        background: rgba(29, 185, 84, 0.2) !important;
+        box-shadow: 0 0 12px rgba(29, 185, 84, 0.3);
+        transform: scale(1.15);
     }
 
     .icon-btn.favorite {
@@ -265,6 +364,16 @@
 
     .icon-btn.favorite.active {
         color: black;
+        background: #e22134 !important;
+        box-shadow: 0 0 16px #e22134;
+        border: 2px solid #e22134;
+        transform: scale(1.05);
+    }
+
+    .icon-btn.favorite.active:hover {
+        background: #ff4757 !important;
+        box-shadow: 0 0 20px #ff4757;
+        transform: scale(1.15);
     }
 
     .album-details {
