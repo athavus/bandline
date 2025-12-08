@@ -4,17 +4,20 @@ import { Router } from "express";
 import type { SpotifyAlbumTracks } from "../types/tracks-types.ts";
 
 const router = Router();
-const token = await getSpotifyToken();
 
 async function getAlbumTracks(albumId: string) {
+  const token = await getSpotifyToken(); // ← MOVIDO PARA CÁ
+
   const url = new URL(`https://api.spotify.com/v1/albums/${albumId}/tracks`);
   url.searchParams.append("limit", "50");
+
   const albumTracksResponse = await fetch(url, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
   const albumTracksData = await albumTracksResponse.json();
   return albumTracksData;
 }
@@ -22,6 +25,7 @@ async function getAlbumTracks(albumId: string) {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
     const rawTracks: SpotifyAlbumTracks = (await getAlbumTracks(
       id,
     )) as SpotifyAlbumTracks;
