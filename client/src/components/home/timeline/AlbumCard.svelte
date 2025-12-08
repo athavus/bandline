@@ -200,12 +200,16 @@
         <div class="album-actions">
             <button
                 class="icon-btn completed"
-                aria-label={isCompleted ? "Remove from completed" : "Mark as completed"}
+                aria-label={isCompleted
+                    ? "Remove from completed"
+                    : "Mark as completed"}
                 on:click={toggleCompleted}
                 class:active={isCompleted}
             >
                 <Icon
-                    icon={isCompleted ? "mdi:check-circle-outline" : "mdi:check-circle"}
+                    icon={isCompleted
+                        ? "mdi:check-circle"
+                        : "mdi:check-circle-outline"}
                     width="24"
                     height="24"
                 />
@@ -341,7 +345,6 @@
     }
 
     .icon-btn.completed.active {
-        background: transparent !important;
         box-shadow: none;
         border: 2px solid #1db954;
         transform: scale(1.05);
