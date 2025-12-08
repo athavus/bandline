@@ -6,11 +6,7 @@ vi.mock("node-fetch", () => ({
 }));
 
 vi.mock("../../server/src/config/spotifyToken", () => ({
-  default: async () => ({
-    access_token: "mock_test_token",
-    token_type: "Bearer",
-    expires_in: 3600,
-  }),
+  default: async () => "mock_test_token",
 }));
 
 import fetch from "node-fetch";

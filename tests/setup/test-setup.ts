@@ -1,5 +1,8 @@
-import { beforeAll, afterAll, beforeEach, afterEach } from "vitest";
+import { beforeAll, afterAll, beforeEach, afterEach, vi } from "vitest";
 import { PrismaClient } from "@prisma/client";
+
+// Garantir ambiente de teste
+process.env.NODE_ENV = "test";
 
 // Criar instância do Prisma para testes
 // Usa DATABASE_URL do ambiente ou padrão de teste
@@ -13,6 +16,11 @@ export const testPrisma = new PrismaClient({
     },
   },
 });
+
+// Substitui o prisma do servidor pelo prisma de teste em todos os módulos
+vi.mock("../../server/src/config/prisma", () => ({
+  prisma: testPrisma,
+}));
 
 // Limpar banco antes de cada teste
 beforeEach(async () => {

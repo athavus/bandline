@@ -11,14 +11,14 @@ const token = await getSpotifyToken();
 
 router.get("", async (req, res) => {
   try {
-    const query = String(req.query.q);
+    const queryParam = typeof req.query.q === "string" ? req.query.q : "";
 
-    if (!query || query.length < 2) {
+    if (!queryParam || queryParam.length < 2) {
       return res.json({ artists: [] });
     }
 
     const url = new URL("https://api.spotify.com/v1/search");
-    url.searchParams.append("q", query);
+    url.searchParams.append("q", queryParam);
     url.searchParams.append("type", "artist");
     url.searchParams.append("limit", "10");
 

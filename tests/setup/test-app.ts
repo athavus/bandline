@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import session from "express-session";
-import passport from "passport";
+import passport from "../../server/src/config/passport";
 import { testPrisma } from "./test-setup";
 
 // Importar as rotas
@@ -11,6 +11,7 @@ import artistAlbumsRouter from "../../server/src/routes/albums";
 import albumTracksRouter from "../../server/src/routes/tracks";
 import historyRouter from "../../server/src/routes/history";
 import favoritesRouter from "../../server/src/routes/favorites";
+import completedAlbumsRouter from "../../server/src/routes/completedAlbums";
 import authRouter from "../../server/src/routes/auth";
 import profileRouter from "../../server/src/routes/profile";
 
@@ -52,6 +53,7 @@ export function createTestApp() {
   app.use("/albumTracks", albumTracksRouter);
   app.use("/history", historyRouter);
   app.use("/favorites", favoritesRouter);
+  app.use("/completedAlbums", completedAlbumsRouter);
   app.use("/auth", authRouter);
   app.use("/profile", profileRouter);
 

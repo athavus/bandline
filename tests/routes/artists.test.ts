@@ -8,12 +8,12 @@ import {
 } from "../setup/mocks";
 import fetch from "node-fetch";
 
+vi.mock("node-fetch", () => ({
+  default: vi.fn(),
+}));
+
 vi.mock("../../server/src/config/spotifyToken", () => ({
-  default: async () => ({
-    access_token: "mock_token_12345",
-    token_type: "Bearer",
-    expires_in: 3600,
-  }),
+  default: async () => "mock_token_12345",
 }));
 
 const app = createTestApp();

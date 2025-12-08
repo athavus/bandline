@@ -4,14 +4,16 @@ import { prisma } from "@config/prisma";
 const router = Router();
 
 function ensureAuthenticated(req: Request, res: Response, next: Function) {
-  if (req.isAuthenticated() && req.isAuthenticated()) {
-    next();
-  } else {
-    res.status(401).json({ error: "Não Autenticado" });
+  if (typeof req.isAuthenticated === "function" && req.isAuthenticated()) {
+    return next();
   }
+  return res.status(401).json({ error: "Não Autenticado" });
 }
 
 router.post("/", ensureAuthenticated, async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Não Autenticado" });
+  }
   const user = req.user as { id: number };
   const { artistId, artistName, artistAvatar } = req.body;
 
@@ -34,6 +36,9 @@ router.post("/", ensureAuthenticated, async (req: Request, res: Response) => {
 });
 
 router.get("/", ensureAuthenticated, async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Não Autenticado" });
+  }
   const user = req.user as { id: number };
   const histories = await prisma.history.findMany({
     where: { userId: user.id },

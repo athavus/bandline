@@ -4,14 +4,20 @@ import { prisma } from "@config/prisma";
 const router = Router();
 
 function ensureAuthenticated(req: Request, res: Response, next: Function) {
-  if (req.isAuthenticated && req.isAuthenticated()) {
-    next();
-  } else {
-    res.status(401).json({ error: "Não autenticado, ação não permitida" });
+  if (typeof req.isAuthenticated === "function" && req.isAuthenticated()) {
+    return next();
   }
+  return res
+    .status(401)
+    .json({ error: "Não autenticado, ação não permitida" });
 }
 
 router.get("/", ensureAuthenticated, async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res
+      .status(401)
+      .json({ error: "Não autenticado, ação não permitida" });
+  }
   const user = req.user as { id: number };
 
   try {
@@ -49,6 +55,11 @@ router.get("/", ensureAuthenticated, async (req: Request, res: Response) => {
 });
 
 router.put("/", ensureAuthenticated, async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res
+      .status(401)
+      .json({ error: "Não autenticado, ação não permitida" });
+  }
   const user = req.user as { id: number };
   const { username, email, avatarUrl, bio } = req.body;
 

@@ -14,6 +14,11 @@ let cachedToken: string | null = null;
 let tokenExpiresAt = 0;
 
 async function getSpotifyToken(): Promise<string> {
+  // Curto-circuito para ambiente de teste
+  if (process.env.NODE_ENV === "test") {
+    return "mock_test_token";
+  }
+
   const now = Date.now();
 
   if (cachedToken && now < tokenExpiresAt) {

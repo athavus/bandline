@@ -28,9 +28,10 @@ passport.use(
       try {
         const user = await prisma.user.findUnique({ where: { username } });
         if (!user)
-          return done(null, false, { message: "Usuário não encontrado" });
+          return done(null, false, { message: "Credenciais inválidas" });
         const match = await bcrypt.compare(password, user.passwordHash);
-        if (!match) return done(null, false, { message: "Senha incorreta" });
+        if (!match)
+          return done(null, false, { message: "Credenciais inválidas" });
         return done(null, user);
       } catch (err) {
         return done(err);
