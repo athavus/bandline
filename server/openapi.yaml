@@ -22,6 +22,8 @@ tags:
     description: Endpoints para gerenciar histórico de buscas
   - name: Favoritos
     description: Endpoints para gerenciar álbuns favoritos
+  - name: Álbuns Completos
+    description: Endpoints para gerenciar álbuns marcados como completos
 
 paths:
   # ==================== AUTENTICAÇÃO ====================
@@ -36,18 +38,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterRequest'
+              $ref: "#/components/schemas/RegisterRequest"
             example:
               username: "johndoe"
               email: "john@example.com"
               password: "senhaSegura123"
       responses:
-        '201':
+        "201":
           description: Usuário criado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: "#/components/schemas/AuthResponse"
               example:
                 message: "Usuário criado"
                 user:
@@ -55,12 +57,12 @@ paths:
                   username: "johndoe"
                   email: "john@example.com"
                   avatarUrl: null
-        '400':
+        "400":
           description: Erro na requisição (campos faltando ou usuário já existe)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               examples:
                 camposFaltando:
                   value:
@@ -68,12 +70,12 @@ paths:
                 usuarioExiste:
                   value:
                     message: "Usuário já existe"
-        '500':
+        "500":
           description: Erro interno do servidor
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /auth/login:
     post:
@@ -86,17 +88,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
             example:
               username: "johndoe"
               password: "senhaSegura123"
       responses:
-        '200':
+        "200":
           description: Login bem-sucedido
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: "#/components/schemas/AuthResponse"
               example:
                 message: "Login bem-sucedido"
                 user:
@@ -104,12 +106,12 @@ paths:
                   username: "johndoe"
                   email: "john@example.com"
                   avatarUrl: null
-        '401':
+        "401":
           description: Credenciais inválidas
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 message: "Credenciais inválidas"
 
@@ -122,7 +124,7 @@ paths:
       security:
         - cookieAuth: []
       responses:
-        '200':
+        "200":
           description: Informações do usuário
           content:
             application/json:
@@ -130,19 +132,19 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '#/components/schemas/PublicUser'
+                    $ref: "#/components/schemas/PublicUser"
               example:
                 user:
                   id: 1
                   username: "johndoe"
                   email: "john@example.com"
                   avatarUrl: "https://example.com/avatar.jpg"
-        '401':
+        "401":
           description: Não autenticado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: "Não autenticado"
 
@@ -155,20 +157,20 @@ paths:
       security:
         - cookieAuth: []
       responses:
-        '200':
+        "200":
           description: Logout realizado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 message: "Logout realizado com sucesso"
-        '500':
+        "500":
           description: Erro no logout
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /auth/google:
     get:
@@ -177,7 +179,7 @@ paths:
       summary: Iniciar autenticação OAuth Google
       description: Redireciona para a página de autenticação do Google
       responses:
-        '302':
+        "302":
           description: Redirecionamento para Google OAuth
 
   /auth/google/callback:
@@ -187,7 +189,7 @@ paths:
       summary: Callback OAuth Google
       description: Endpoint de callback após autenticação Google
       responses:
-        '302':
+        "302":
           description: Redirecionamento após autenticação bem-sucedida ou falha
 
   # ==================== ARTISTAS ====================
@@ -215,12 +217,12 @@ paths:
             default: en
           example: "pt"
       responses:
-        '200':
+        "200":
           description: Detalhes do artista
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArtistDetails'
+                $ref: "#/components/schemas/ArtistDetails"
               example:
                 id: "4Z8W4fKeB5YxbusRsdQVPb"
                 name: "Radiohead"
@@ -232,12 +234,12 @@ paths:
                 relatedArtists:
                   - name: "The Smashing Pumpkins"
                   - name: "Pixies"
-        '500':
+        "500":
           description: Erro ao buscar artista
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   # ==================== BUSCA ====================
   /searchArtists:
@@ -256,7 +258,7 @@ paths:
             minLength: 2
           example: "Radiohead"
       responses:
-        '200':
+        "200":
           description: Lista de artistas encontrados
           content:
             application/json:
@@ -266,7 +268,7 @@ paths:
                   artists:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ArtistSearchResult'
+                      $ref: "#/components/schemas/ArtistSearchResult"
               example:
                 artists:
                   - id: "4Z8W4fKeB5YxbusRsdQVPb"
@@ -275,12 +277,12 @@ paths:
                     popularity: 85
                     genres: ["alternative rock", "art rock"]
                     total_followers: 8500000
-        '500':
+        "500":
           description: Erro ao buscar artistas
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   # ==================== ÁLBUNS ====================
   /artistAlbums/{id}:
@@ -298,12 +300,12 @@ paths:
             type: string
           example: "4Z8W4fKeB5YxbusRsdQVPb"
       responses:
-        '200':
+        "200":
           description: Lista de álbuns
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AlbumsResponse'
+                $ref: "#/components/schemas/AlbumsResponse"
               example:
                 total_amount: 15
                 items:
@@ -320,12 +322,12 @@ paths:
                       - id: "4Z8W4fKeB5YxbusRsdQVPb"
                         name: "Radiohead"
                         href: "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb"
-        '500':
+        "500":
           description: Erro ao buscar álbuns
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   # ==================== MÚSICAS ====================
   /albumTracks/{id}:
@@ -343,12 +345,12 @@ paths:
             type: string
           example: "1To7kv722A8SpZF7M07D4p"
       responses:
-        '200':
+        "200":
           description: Lista de faixas
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TracksResponse'
+                $ref: "#/components/schemas/TracksResponse"
               example:
                 total_tracks: 12
                 items:
@@ -361,12 +363,12 @@ paths:
                       - id: "4Z8W4fKeB5YxbusRsdQVPb"
                         name: "Radiohead"
                         href: "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb"
-        '500':
+        "500":
           description: Erro ao buscar faixas
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   # ==================== HISTÓRICO ====================
   /history:
@@ -382,13 +384,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/HistoryCreateRequest'
+              $ref: "#/components/schemas/HistoryCreateRequest"
             example:
               artistId: "4Z8W4fKeB5YxbusRsdQVPb"
               artistName: "Radiohead"
               artistAvatar: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
       responses:
-        '200':
+        "200":
           description: Histórico criado com sucesso
           content:
             application/json:
@@ -396,7 +398,7 @@ paths:
                 type: object
                 properties:
                   history:
-                    $ref: '#/components/schemas/History'
+                    $ref: "#/components/schemas/History"
               example:
                 history:
                   id: 1
@@ -405,18 +407,18 @@ paths:
                   artistName: "Radiohead"
                   artistAvatar: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
                   searchedAt: "2024-01-15T10:30:00Z"
-        '400':
+        "400":
           description: Campos obrigatórios faltando
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Não autenticado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
     get:
       tags:
@@ -426,7 +428,7 @@ paths:
       security:
         - cookieAuth: []
       responses:
-        '200':
+        "200":
           description: Lista de histórico
           content:
             application/json:
@@ -436,7 +438,7 @@ paths:
                   histories:
                     type: array
                     items:
-                      $ref: '#/components/schemas/History'
+                      $ref: "#/components/schemas/History"
               example:
                 histories:
                   - id: 1
@@ -445,12 +447,12 @@ paths:
                     artistName: "Radiohead"
                     artistAvatar: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
                     searchedAt: "2024-01-15T10:30:00Z"
-        '401':
+        "401":
           description: Não autenticado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   # ==================== FAVORITOS ====================
   /favorites:
@@ -466,14 +468,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FavoriteCreateRequest'
+              $ref: "#/components/schemas/FavoriteCreateRequest"
             example:
               albumId: "1To7kv722A8SpZF7M07D4p"
               albumName: "OK Computer"
               albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
               albumTracks: ["track1", "track2", "track3"]
       responses:
-        '200':
+        "200":
           description: Favorito adicionado com sucesso
           content:
             application/json:
@@ -481,7 +483,7 @@ paths:
                 type: object
                 properties:
                   favorite:
-                    $ref: '#/components/schemas/Favorite'
+                    $ref: "#/components/schemas/Favorite"
                   message:
                     type: string
               example:
@@ -494,13 +496,13 @@ paths:
                   albumTracks: "3"
                   favoritedAt: "2024-01-15T10:30:00Z"
                 message: "Álbum favoritado com sucesso"
-        '400':
+        "400":
           description: Campos obrigatórios faltando
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
           description: Álbum já está nos favoritos
           content:
             application/json:
@@ -510,19 +512,19 @@ paths:
                   error:
                     type: string
                   favorite:
-                    $ref: '#/components/schemas/Favorite'
-        '401':
+                    $ref: "#/components/schemas/Favorite"
+        "401":
           description: Não autenticado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Erro interno do servidor
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
     get:
       tags:
@@ -532,7 +534,7 @@ paths:
       security:
         - cookieAuth: []
       responses:
-        '200':
+        "200":
           description: Lista de favoritos
           content:
             application/json:
@@ -542,7 +544,7 @@ paths:
                   favorites:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Favorite'
+                      $ref: "#/components/schemas/Favorite"
               example:
                 favorites:
                   - id: 1
@@ -552,18 +554,18 @@ paths:
                     albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
                     albumTracks: "12"
                     favoritedAt: "2024-01-15T10:30:00Z"
-        '401':
+        "401":
           description: Não autenticado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Erro interno do servidor
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
     delete:
       tags:
@@ -587,7 +589,7 @@ paths:
             example:
               albumId: "1To7kv722A8SpZF7M07D4p"
       responses:
-        '200':
+        "200":
           description: Favorito removido com sucesso
           content:
             application/json:
@@ -605,30 +607,30 @@ paths:
                 message: "Favorito removido com sucesso"
                 deleted:
                   count: 1
-        '400':
+        "400":
           description: albumId é obrigatório
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Não autenticado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Favorito não encontrado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Erro interno do servidor
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /favorites/check:
     post:
@@ -655,7 +657,7 @@ paths:
             example:
               albumIds: ["1To7kv722A8SpZF7M07D4p", "2To7kv722A8SpZF7M07D4p"]
       responses:
-        '200':
+        "200":
           description: Lista de IDs que estão nos favoritos
           content:
             application/json:
@@ -668,24 +670,259 @@ paths:
                       type: string
               example:
                 favoriteIds: ["1To7kv722A8SpZF7M07D4p"]
-        '400':
+        "400":
           description: albumIds é obrigatório e deve ser um array
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
           description: Não autenticado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Erro interno do servidor
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ==================== ÁLBUNS COMPLETOS ====================
+  /completedAlbums:
+    post:
+      tags:
+        - Álbuns Completos
+      summary: Adicionar Álbum Completo
+      description: Adiciona um álbum aos completos do usuário
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompletedAlbumsCreateRequest"
+            example:
+              albumId: "1To7kv722A8SpZF7M07D4p"
+              albumName: "OK Computer"
+              albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+              albumTracks: ["track1", "track2", "track3"]
+      responses:
+        "200":
+          description: Álbum completo adicionado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favorite:
+                    $ref: "#/components/schemas/CompletedAlbum"
+                  message:
+                    type: string
+              example:
+                favorite:
+                  id: 1
+                  userId: 1
+                  albumId: "1To7kv722A8SpZF7M07D4p"
+                  albumName: "OK Computer"
+                  albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                  albumTracks: "3"
+                  favoritedAt: "2024-01-15T10:30:00Z"
+                message: "Álbum marcado como completo com sucesso"
+        "400":
+          description: Campos obrigatórios faltando
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Álbum já está marcado como completo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  favorite:
+                    $ref: "#/components/schemas/CompletedAlbum"
+        "401":
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    get:
+      tags:
+        - Álbuns Completos
+      summary: Listar Álbuns Completos
+      description: Retorna todos os álbuns completos do usuário (últimos 50)
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Lista de Álbuns Completos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favorites:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CompletedAlbum"
+              example:
+                favorites:
+                  - id: 1
+                    userId: 1
+                    albumId: "1To7kv722A8SpZF7M07D4p"
+                    albumName: "OK Computer"
+                    albumImage: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+                    albumTracks: "12"
+                    favoritedAt: "2024-01-15T10:30:00Z"
+        "401":
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    delete:
+      tags:
+        - Álbuns Completos
+      summary: Remover álbum completo
+      description: Remove um álbum dos álbuns completos do usuário
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - albumId
+              properties:
+                albumId:
+                  type: string
+                  description: ID do álbum no Spotify
+            example:
+              albumId: "1To7kv722A8SpZF7M07D4p"
+      responses:
+        "200":
+          description: Álbum removido com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  deleted:
+                    type: object
+                    properties:
+                      count:
+                        type: number
+              example:
+                message: "Álbum removido com sucesso"
+                deleted:
+                  count: 1
+        "400":
+          description: albumId é obrigatório
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Favorito não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /completedAlbums/check:
+    post:
+      tags:
+        - Álbuns Completos
+      summary: Verificar Álbuns Completos
+      description: Verifica quais álbuns de uma lista estão nos completos do usuário
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - albumIds
+              properties:
+                albumIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Lista de IDs de álbuns para verificar
+            example:
+              albumIds: ["1To7kv722A8SpZF7M07D4p", "2To7kv722A8SpZF7M07D4p"]
+      responses:
+        "200":
+          description: Lista de IDs que estão nos álbuns completos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favoriteIds:
+                    type: array
+                    items:
+                      type: string
+              example:
+                favoriteIds: ["1To7kv722A8SpZF7M07D4p"]
+        "400":
+          description: albumIds é obrigatório e deve ser um array
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   securitySchemes:
@@ -765,7 +1002,7 @@ components:
           description: Mensagem de resposta
           example: "Login bem-sucedido"
         user:
-          $ref: '#/components/schemas/PublicUser'
+          $ref: "#/components/schemas/PublicUser"
         error:
           type: string
           description: Mensagem de erro (se houver)
@@ -913,7 +1150,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Album'
+            $ref: "#/components/schemas/Album"
           description: Lista de álbuns ordenados por data de lançamento
 
     # Músicas
@@ -966,7 +1203,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Track'
+            $ref: "#/components/schemas/Track"
           description: Lista de faixas do álbum
 
     # Histórico
@@ -1084,6 +1321,69 @@ components:
           description: Data e hora em que foi favoritado
           example: "2024-01-15T10:30:00Z"
 
+    # Completed Albums
+    CompletedAlbumsCreateRequest:
+      type: object
+      required:
+        - albumId
+        - albumName
+      properties:
+        albumId:
+          type: string
+          description: ID do álbum no Spotify
+          example: "1To7kv722A8SpZF7M07D4p"
+        albumName:
+          type: string
+          description: Nome do álbum
+          example: "OK Computer"
+        albumImage:
+          type: string
+          nullable: true
+          description: URL da imagem do álbum
+          example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+        albumTracks:
+          oneOf:
+            - type: array
+              items:
+                type: string
+            - type: string
+          description: Lista de faixas ou número de faixas
+          example: ["track1", "track2", "track3"]
+
+    CompletedAlbum:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do álbum completo
+          example: 1
+        userId:
+          type: integer
+          description: ID do usuário
+          example: 1
+        albumId:
+          type: string
+          description: ID do álbum no Spotify
+          example: "1To7kv722A8SpZF7M07D4p"
+        albumName:
+          type: string
+          description: Nome do álbum
+          example: "OK Computer"
+        albumImage:
+          type: string
+          nullable: true
+          description: URL da imagem do álbum
+          example: "https://i.scdn.co/image/ab67616d0000b273c5649add07ed3720be9d5526"
+        albumTracks:
+          type: string
+          description: Número de faixas (armazenado como string)
+          example: "12"
+        favoritedAt:
+          type: string
+          format: date-time
+          description: Data e hora em que foi marcado como completo
+          example: "2024-01-15T10:30:00Z"
+
     # Erros
     ErrorResponse:
       type: object
@@ -1096,4 +1396,3 @@ components:
           type: string
           description: Mensagem de erro alternativa
           example: "Erro ao processar requisição"
-
