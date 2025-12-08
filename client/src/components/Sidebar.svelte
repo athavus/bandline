@@ -76,4 +76,20 @@
         padding: 20px 0;
         overflow-y: auto;
     }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            box-shadow: var(--shadow-xl);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .sidebar {
+            width: 100%;
+            max-width: 320px;
+        }
+        .sidebar-content {
+            padding: 16px 0;
+        }
+    }
 </style>

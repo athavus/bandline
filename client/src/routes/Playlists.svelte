@@ -306,9 +306,21 @@
         padding: 40px 20px;
     }
 
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .playlists-container {
+            padding: 32px 18px;
+        }
+    }
+
     @media (max-width: 768px) {
         .playlists-container {
             padding: 24px 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .playlists-container {
+            padding: 20px 12px;
         }
     }
 </style>

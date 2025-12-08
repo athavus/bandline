@@ -120,4 +120,26 @@
         width: 20px;
         height: 20px;
     }
+
+    @media (max-width: 768px) {
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+        }
+        .icon svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .theme-toggle {
+            width: 32px;
+            height: 32px;
+        }
+        .icon svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
 </style>

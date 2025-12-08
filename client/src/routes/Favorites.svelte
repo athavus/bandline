@@ -318,9 +318,21 @@
         padding: 40px 20px;
     }
 
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .favorites-container {
+            padding: 32px 18px;
+        }
+    }
+
     @media (max-width: 768px) {
         .favorites-container {
             padding: 24px 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .favorites-container {
+            padding: 20px 12px;
         }
     }
 </style>

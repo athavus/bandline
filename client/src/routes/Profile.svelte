@@ -500,6 +500,25 @@
         padding: 40px 20px;
     }
 
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .profile-container {
+            padding: 32px 18px;
+        }
+
+        .profile-header {
+            gap: 20px;
+        }
+
+        .profile-avatar {
+            width: 160px;
+            height: 160px;
+        }
+
+        .profile-username {
+            font-size: 56px;
+        }
+    }
+
     /* Profile Header */
     .profile-header {
         display: flex;
@@ -997,6 +1016,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            gap: 16px;
         }
 
         .profile-avatar {
@@ -1012,6 +1032,22 @@
             max-width: 100%;
         }
 
+        .profile-edit-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .username-input,
+        .avatar-input {
+            width: 100%;
+            margin-left: 0;
+        }
+
+        .url-photo {
+            margin-left: 0 !important;
+        }
+
         .albums-grid,
         .history-grid {
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -1020,10 +1056,63 @@
 
         .bio-display {
             flex-direction: column;
+            gap: 12px;
+        }
+
+        .bio-section {
+            padding: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
         }
 
         .avatar-placeholder {
             font-size: 48px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-container {
+            padding: 20px 12px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+        }
+
+        .profile-username {
+            font-size: 36px;
+        }
+
+        .profile-stats {
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .albums-grid,
+        .history-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+        }
+
+        .avatar-placeholder {
+            font-size: 40px;
+        }
+
+        .bio-section {
+            padding: 16px;
+        }
+
+        .bio-text,
+        .bio-empty {
+            font-size: 14px;
         }
     }
 </style>

@@ -78,4 +78,11 @@
             gap: 16px;
         }
     }
+
+    @media (max-width: 480px) {
+        .playlists-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+    }
 </style>

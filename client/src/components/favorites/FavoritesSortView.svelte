@@ -116,24 +116,95 @@
         color: white;
     }
 
+    /* Tablet */
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .view-controls {
+            width: 100%;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .sort-dropdown {
+            flex: 1;
+            min-width: 0;
+            padding: 11px 15px;
+        }
+
+        .view-mode-buttons {
+            flex-shrink: 0;
+        }
+    }
+
     @media (max-width: 968px) {
         .view-controls {
+            width: 100%;
             justify-content: space-between;
+        }
+
+        .sort-dropdown {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .view-mode-buttons {
+            flex-shrink: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .view-controls {
+            gap: 10px;
+        }
+
+        .sort-dropdown {
+            padding: 10px 14px;
+        }
+
+        .view-btn {
+            padding: 6px 10px;
         }
     }
 
     @media (max-width: 480px) {
+        .view-controls {
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
         .sort-dropdown {
-            flex: 1;
+            width: 100%;
+            justify-content: center;
+            padding: 10px 14px;
+            box-sizing: border-box;
         }
 
         .sort-select {
             width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .sort-dropdown :global(svg) {
+            width: 16px;
+            height: 16px;
         }
 
         .view-mode-buttons {
             width: 100%;
             justify-content: center;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+        .view-btn {
+            flex: 1;
+            padding: 8px;
+        }
+
+        .view-btn :global(svg) {
+            width: 18px;
+            height: 18px;
         }
     }
 </style>

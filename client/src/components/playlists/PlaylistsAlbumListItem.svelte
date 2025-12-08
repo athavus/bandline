@@ -303,11 +303,6 @@
             gap: 4px;
         }
 
-        .meta-item svg {
-            width: 14px;
-            height: 14px;
-        }
-
         .list-item-actions {
             gap: 8px;
         }
@@ -315,11 +310,6 @@
         .action-btn {
             width: 40px;
             height: 40px;
-        }
-
-        .action-btn svg {
-            width: 18px;
-            height: 18px;
         }
     }
 </style>

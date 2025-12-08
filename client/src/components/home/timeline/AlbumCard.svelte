@@ -453,6 +453,15 @@
         .album-year {
             font-size: 0.85rem;
         }
+        .album-actions {
+            bottom: 50px;
+            gap: 10px;
+        }
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            padding: 5px;
+        }
         .album-item.active .album-cover::before {
             left: -15px;
             width: 35px;
@@ -490,6 +499,15 @@
             font-size: 0.65rem;
             padding: 3px 10px;
         }
+        .album-actions {
+            bottom: 45px;
+            gap: 8px;
+        }
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            padding: 4px;
+        }
         .album-item.active .album-cover::before {
             left: -12px;
             width: 30px;
@@ -526,6 +544,15 @@
         .album-badge {
             font-size: 0.6rem;
             padding: 2px 8px;
+        }
+        .album-actions {
+            bottom: 40px;
+            gap: 6px;
+        }
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            padding: 3px;
         }
         .album-item.active .album-cover::before {
             left: -5px;

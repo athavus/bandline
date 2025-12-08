@@ -197,11 +197,19 @@
 
     @media (max-width: 480px) {
         .language-button {
-            padding: 6px 8px;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            justify-content: center;
         }
 
         .flag {
             font-size: 1rem;
+        }
+
+        .dropdown-arrow {
+            display: none;
         }
     }
 </style>

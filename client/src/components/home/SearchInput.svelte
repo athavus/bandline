@@ -84,4 +84,11 @@
             border-radius: 8px;
         }
     }
+
+    @media (max-width: 480px) {
+        .search-input {
+            padding: 12px 14px;
+            font-size: 16px;
+        }
+    }
 </style>

@@ -53,6 +53,7 @@
         .controls-bar {
             flex-direction: column;
             align-items: stretch;
+            gap: 12px;
         }
     }
 
@@ -60,6 +61,13 @@
         .controls-bar {
             gap: 12px;
             margin-bottom: 24px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .controls-bar {
+            gap: 10px;
+            margin-bottom: 20px;
         }
     }
 </style>

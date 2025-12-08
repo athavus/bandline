@@ -110,14 +110,52 @@
 
     @media (max-width: 968px) {
         .view-controls {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .sort-dropdown {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .view-mode-buttons {
+            flex-shrink: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .view-controls {
+            gap: 10px;
+        }
+
+        .sort-dropdown {
+            padding: 10px 14px;
+        }
+
+        .sort-select {
+            font-size: 0.9rem;
+        }
+
+        .view-btn {
+            padding: 10px 14px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .view-controls {
             flex-direction: column;
             gap: 8px;
-            width: 100%;
         }
 
         .sort-dropdown {
             width: 100%;
             justify-content: center;
+        }
+
+        .sort-select {
+            width: 100%;
+            text-align: center;
         }
 
         .view-mode-buttons {

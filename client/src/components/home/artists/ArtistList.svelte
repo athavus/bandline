@@ -66,6 +66,15 @@
             transform: none;
             margin: 8px 20px 0;
             border-radius: 8px;
+            max-width: calc(100% - 40px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .overlay {
+            margin: 8px 16px 0;
+            max-width: calc(100% - 32px);
+            max-height: 350px;
         }
     }
 </style>

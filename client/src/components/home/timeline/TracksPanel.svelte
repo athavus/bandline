@@ -200,31 +200,6 @@
         gap: 16px;
     }
 
-    @media (max-width: 1024px) {
-        .tracks-panel {
-            margin: 40px 20px 0;
-            padding: 30px;
-            border-radius: 8px;
-        }
-
-        .tracks-header h3 {
-            font-size: 1.6rem;
-        }
-
-        .tracks-content {
-            gap: 30px;
-        }
-
-        .album-cover-section {
-            width: 250px;
-        }
-
-        .album-cover-large,
-        .no-image-large {
-            height: 250px;
-        }
-    }
-
     @media (max-width: 768px) {
         .tracks-panel {
             margin: 30px 16px 0;

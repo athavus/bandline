@@ -600,11 +600,41 @@
         }
     }
 
+    @media (max-width: 768px) {
+        .auth-card {
+            padding: 32px;
+            max-width: 90%;
+        }
+
+        .auth-header h2 {
+            font-size: 1.5rem;
+        }
+    }
+
     @media (max-width: 480px) {
         .auth-card {
             padding: 24px;
             border-radius: 12px;
             max-height: 95vh;
+            max-width: 95%;
+        }
+
+        .auth-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .auth-header p {
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .auth-submit-btn,
+        .google-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
         }
     }
 

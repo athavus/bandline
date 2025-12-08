@@ -279,14 +279,6 @@
     }
 
     /* Responsividade */
-    @media (max-width: 1024px) {
-        .artist-layout {
-            grid-template-columns: 1fr;
-            gap: 24px;
-            max-width: 100%;
-        }
-    }
-
     @media (max-width: 768px) {
         .artist-layout {
             margin: 20px auto;
@@ -325,6 +317,7 @@
         }
 
         h2 {
+            font-size: 1.6rem;
             text-align: center;
         }
 
@@ -345,8 +338,12 @@
         }
 
         .artist-image-wrapper {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
+        }
+
+        .info-item {
+            padding: 16px 20px;
         }
     }
 
@@ -369,12 +366,12 @@
         }
 
         .artist-image-wrapper {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
         }
 
         h2 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
 
         .description-content {
@@ -383,6 +380,18 @@
 
         .description-content p {
             font-size: 0.8rem;
+        }
+
+        .info-item {
+            padding: 12px 16px;
+        }
+
+        .label {
+            font-size: 0.8rem;
+        }
+
+        .value {
+            font-size: 0.9rem;
         }
     }
 </style>

@@ -39,4 +39,19 @@
             justify-content: center;
         }
     }
+
+    @media (max-width: 480px) {
+        .favorites-stats {
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            width: 100%;
+            box-sizing: border-box;
+            justify-content: center;
+        }
+
+        .favorites-stats :global(svg) {
+            width: 16px;
+            height: 16px;
+        }
+    }
 </style>

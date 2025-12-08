@@ -58,11 +58,11 @@
     .favorites-search-input {
         flex: 1;
         border: none;
-        width: 50%;
         background: transparent;
         color: var(--text-primary);
         font-size: 0.95rem;
         outline: none;
+        min-width: 0;
     }
 
     .favorites-search-input::placeholder {
@@ -90,6 +90,24 @@
     @media (max-width: 968px) {
         .search-bar {
             width: 100%;
+            min-width: 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .search-bar {
+            padding: 10px 14px;
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+        .favorites-search-input {
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        .search-bar :global(svg) {
+            width: 18px;
+            height: 18px;
         }
     }
 </style>

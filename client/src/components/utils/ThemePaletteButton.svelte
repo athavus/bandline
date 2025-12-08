@@ -191,4 +191,30 @@
     .backdrop.show {
         display: block;
     }
+
+    @media (max-width: 768px) {
+        .palette-toggle {
+            width: 36px;
+            height: 36px;
+        }
+        .swatch {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .palette-toggle {
+            width: 32px;
+            height: 32px;
+        }
+        .swatch {
+            width: 16px;
+            height: 16px;
+        }
+        .palette-popover {
+            left: auto;
+            right: 0;
+        }
+    }
 </style>

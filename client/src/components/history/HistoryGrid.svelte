@@ -22,6 +22,13 @@
     @media (max-width: 768px) {
         .history-grid {
             grid-template-columns: 1fr;
+            gap: 12px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .history-grid {
+            gap: 10px;
         }
     }
 </style>

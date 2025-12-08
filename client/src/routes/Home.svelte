@@ -318,10 +318,6 @@
     }
 
     @media (max-width: 768px) {
-        main.sidebar-open {
-            margin-left: 0;
-        }
-
         .search-container {
             padding: 16px 20px 30px;
         }

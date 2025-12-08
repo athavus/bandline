@@ -113,6 +113,8 @@
         gap: 16px;
         min-width: 0;
         justify-self: start;
+        margin: 0;
+        padding: 0;
     }
     .header-center {
         display: flex;
@@ -120,6 +122,8 @@
         justify-content: center;
         justify-self: center;
         width: 100%;
+        margin: 0;
+        padding: 0;
     }
     .header-right {
         display: flex;
@@ -127,6 +131,9 @@
         gap: 16px;
         min-width: 0;
         justify-self: end;
+        flex-shrink: 0;
+        margin: 0;
+        padding: 0;
     }
     .menu-toggle {
         background: var(--bg-card);
@@ -141,6 +148,9 @@
         transition: all 0.3s ease;
         color: var(--text-primary);
         box-shadow: var(--shadow-sm);
+        margin: 0;
+        padding: 0;
+        flex-shrink: 0;
     }
     .menu-toggle:hover {
         background: var(--bg-hover);
@@ -180,21 +190,258 @@
         background: var(--bg-hover);
         transform: scale(1.1);
     }
+    /* Tablet */
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .app-header {
+            padding: 14px 18px;
+            min-height: 66px;
+            grid-template-columns: max-content 1fr max-content;
+            gap: 10px;
+            align-items: center;
+        }
+        .header-spacer {
+            height: 66px;
+        }
+        .header-left {
+            gap: 10px;
+            flex-shrink: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .header-right {
+            gap: 10px;
+            flex-shrink: 0;
+            justify-self: end;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        .menu-toggle {
+            width: 38px;
+            height: 38px;
+            margin: 0;
+            padding: 0;
+        }
+        .user-indicator {
+            padding: 7px 12px;
+            margin: 0;
+        }
+        .user-welcome {
+            font-size: 0.8rem;
+            margin-right: 8px;
+        }
+        .header-center {
+            flex: 1;
+            min-width: 0;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+        .header-center :global(.brand-title) {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100%;
+        }
+        .header-center :global(.title-container) {
+            justify-content: center !important;
+            margin: 0;
+            padding: 0;
+        }
+        .header-center :global(.title) {
+            font-size: 0.9rem !important;
+            margin: 0 !important;
+            padding: 0;
+        }
+        .header-center :global(.title-band),
+        .header-center :global(.title-line) {
+            font-size: 0.9rem !important;
+        }
+        .header-left :global(button),
+        .header-right :global(button),
+        .header-right :global(.language-button) {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
     @media (max-width: 768px) {
         .app-header {
-            padding: 16px 20px;
+            padding: 12px 16px;
+            min-height: 64px;
+            grid-template-columns: max-content 1fr max-content;
+            gap: 12px;
+            align-items: center;
+        }
+        .header-spacer {
+            height: 64px;
+        }
+        .header-left {
+            gap: 8px;
+            flex-shrink: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .header-right {
+            gap: 8px;
+            flex-shrink: 0;
+            justify-self: end;
+            align-items: center;
+            margin: 0;
+            padding: 0;
         }
         .menu-toggle {
             width: 36px;
             height: 36px;
+            margin: 0;
+            padding: 0;
         }
         .user-indicator {
-            padding: 6px 12px;
+            padding: 6px 10px;
+            margin: 0;
+        }
+        .user-welcome {
+            font-size: 0.75rem;
+            margin-right: 6px;
+        }
+        .header-center {
+            flex: 1;
+            min-width: 0;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+        .header-center :global(.brand-title) {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100%;
+        }
+        .header-center :global(.title-container) {
+            justify-content: center !important;
+            margin: 0;
+            padding: 0;
+        }
+        .header-center :global(.title) {
+            font-size: 0.85rem !important;
+            margin: 0 !important;
+            padding: 0;
+        }
+        .header-center :global(.title-band),
+        .header-center :global(.title-line) {
+            font-size: 0.85rem !important;
+        }
+        .header-left :global(button),
+        .header-right :global(button),
+        .header-right :global(.language-button) {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
+
     @media (max-width: 480px) {
         .app-header {
-            padding: 12px 16px;
+            padding: 10px 12px;
+            min-height: 60px;
+            grid-template-columns: max-content 1fr max-content;
+            gap: 6px;
+            align-items: center;
+        }
+        .header-spacer {
+            height: 60px;
+        }
+        .header-left {
+            gap: 6px;
+            flex-shrink: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .header-right {
+            gap: 6px;
+            flex-shrink: 0;
+            justify-self: end;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        .user-welcome {
+            display: none;
+        }
+        .menu-toggle {
+            width: 32px;
+            height: 32px;
+            margin: 0;
+            padding: 0;
+        }
+        .user-indicator {
+            padding: 6px 8px;
+            min-width: auto;
+            margin: 0;
+        }
+        .logout-btn {
+            padding: 4px;
+            margin: 0;
+        }
+        .header-center {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+            justify-content: center;
+        }
+        .header-center :global(.brand-title) {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100%;
+        }
+        .header-center :global(.title-container) {
+            justify-content: center !important;
+            margin: 0;
+            padding: 0;
+        }
+        .header-center :global(.title) {
+            font-size: 0.7rem !important;
+            margin: 0 !important;
+            padding: 0;
+        }
+        .header-center :global(.title-band),
+        .header-center :global(.title-line) {
+            font-size: 0.7rem !important;
+        }
+        .header-center :global(.music-wave) {
+            display: none !important;
+        }
+        .header-left :global(button),
+        .header-right :global(button),
+        .header-right :global(.language-button) {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-right :global(.language-button) {
+            padding: 0;
+            margin: 0;
+        }
+        .header-right :global(.flag) {
+            font-size: 0.9rem;
+        }
+        .header-right :global(.dropdown-arrow) {
+            display: none;
         }
     }
 </style>

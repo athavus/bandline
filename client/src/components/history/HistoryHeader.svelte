@@ -46,4 +46,10 @@
             justify-content: center;
         }
     }
+
+    @media (max-width: 480px) {
+        .history-header {
+            gap: 12px;
+        }
+    }
 </style>

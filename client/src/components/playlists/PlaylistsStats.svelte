@@ -38,4 +38,11 @@
             justify-content: center;
         }
     }
+
+    @media (max-width: 480px) {
+        .playlists-stats {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+        }
+    }
 </style>

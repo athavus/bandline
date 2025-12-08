@@ -220,6 +220,16 @@
         margin-top: 8px;
     }
 
+    @media (max-width: 768px) {
+        .related-artists-minimal {
+            padding: 14px;
+        }
+
+        .artist-button {
+            padding: 9px 11px;
+        }
+    }
+
     @media (max-width: 480px) {
         .related-artists-minimal {
             max-width: 100%;

@@ -58,11 +58,11 @@
     .playlists-search-input {
         flex: 1;
         border: none;
-        width: 50%;
         background: transparent;
         color: var(--text-primary);
         font-size: 0.95rem;
         outline: none;
+        min-width: 0;
     }
 
     .playlists-search-input::placeholder {
@@ -90,6 +90,16 @@
     @media (max-width: 968px) {
         .search-bar {
             width: 100%;
+            min-width: 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .search-bar {
+            padding: 10px 14px;
+        }
+        .playlists-search-input {
+            font-size: 0.9rem;
         }
     }
 </style>

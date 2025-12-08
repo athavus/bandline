@@ -243,13 +243,13 @@
         padding: 40px 20px 80px;
     }
 
-    @media (max-width: 768px) {
-        main.sidebar-open {
-            margin-left: 0;
-            width: 100%;
-            max-width: 100vw;
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .history-container {
+            padding: 32px 18px 60px;
         }
+    }
 
+    @media (max-width: 768px) {
         .history-container {
             padding: 30px 16px 60px;
         }
