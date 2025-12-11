@@ -1,4 +1,4 @@
-# Bandline - Backend Server
+# Bandline
 
 Guia rápido para configurar e rodar o projeto (Todo o projeto foi feito no ambiente linux e configurado para também ser compatível nativamente com o Windows).
 
