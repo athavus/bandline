@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+
 import { Router } from "express";
 import getSpotifyToken from "../config/spotifyToken.ts";
 import type {
@@ -7,7 +7,6 @@ import type {
 } from "../types/artists-types.ts";
 
 const router = Router();
-const token = await getSpotifyToken();
 
 router.get("", async (req, res) => {
   try {
@@ -24,7 +23,7 @@ router.get("", async (req, res) => {
 
     const response = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${await getSpotifyToken()}`,
       },
     });
 

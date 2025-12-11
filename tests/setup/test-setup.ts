@@ -23,12 +23,16 @@ vi.mock("../../server/src/config/prisma", () => ({
 }));
 
 // Limpar banco antes de cada teste
+
+// Limpar banco antes de cada teste
 beforeEach(async () => {
-  // Deletar em ordem para respeitar constraints de foreign key
-  await testPrisma.history.deleteMany();
-  await testPrisma.favorites.deleteMany();
-  await testPrisma.completedAlbums.deleteMany();
-  await testPrisma.user.deleteMany();
+  // Deletar em ordem para respeitar constraints de foreign key via transação
+  await testPrisma.$transaction([
+    testPrisma.history.deleteMany(),
+    testPrisma.favorites.deleteMany(),
+    testPrisma.completedAlbums.deleteMany(),
+    testPrisma.user.deleteMany(),
+  ]);
 });
 
 // Fechar conexão após todos os testes

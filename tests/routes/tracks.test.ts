@@ -1,12 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-// 1. PRIMEIRO: Defina o mock do fetch
-const mockFetch = vi.fn();
-
 // 2. SEGUNDO: Configure os mocks ANTES de importar qualquer módulo que os use
-vi.mock("node-fetch", () => ({
-  default: mockFetch,
-}));
+const mockFetch = vi.fn();
+vi.stubGlobal("fetch", mockFetch);
 
 vi.mock("../../server/src/config/spotifyToken", () => ({
   default: vi.fn(async () => "mock_test_token"),
@@ -40,7 +36,7 @@ describe("GET /albumTracks/:id", () => {
 
     const response = await request(app)
       .get(`/albumTracks/${albumId}`)
-      .expect(500);
+      .expect(200);
   });
 
   it("deve mapear corretamente as propriedades das faixas", async () => {
@@ -54,7 +50,7 @@ describe("GET /albumTracks/:id", () => {
 
     const response = await request(app)
       .get(`/albumTracks/${albumId}`)
-      .expect(500);
+      .expect(200);
   });
 
   it("deve retornar erro 500 quando há erro na API do Spotify", async () => {

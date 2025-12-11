@@ -1,15 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mockSpotifyArtistsSearchResponse } from "../setup/mocks";
 
-vi.mock("node-fetch", () => ({
-  default: vi.fn(),
-}));
+const mockFetch = vi.fn();
+vi.stubGlobal("fetch", mockFetch);
 
 vi.mock("../../server/src/config/spotifyToken", () => ({
   default: async () => "mock_test_token",
 }));
 
-import fetch from "node-fetch";
+
 import request from "supertest";
 import { createTestApp } from "../setup/test-app";
 
@@ -32,7 +31,7 @@ describe("GET /searchArtists", () => {
     expect(response.body.artists).toEqual([]);
   });
 
-  it("deve buscar artistas com sucesso", async () => {
+  it("deve buscar artistas com sucesso e retornar uma mensagem de status 200", async () => {
     (fetch as any).mockResolvedValueOnce({
       ok: true,
       json: async () => mockSpotifyArtistsSearchResponse,
@@ -40,7 +39,7 @@ describe("GET /searchArtists", () => {
 
     const response = await request(app)
       .get("/searchArtists?q=Radiohead")
-      .expect(500);
+      .expect(200);
   });
 
   it("deve retornar erro 500 quando há erro na API do Spotify", async () => {
