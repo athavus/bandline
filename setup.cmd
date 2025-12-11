@@ -29,6 +29,12 @@ SET DATABASE_URL=postgresql://%DB_USER%:%DB_PASS%@%DB_HOST%:%DB_PORT%/%DB_NAME%
 
 echo Iniciando setup completo para o banco real...
 
+node -v > temp_node_version.txt
+set /p NODE_VER=<temp_node_version.txt
+del temp_node_version.txt
+echo Node version: %NODE_VER% (Recomendado: v20)
+
+
 where psql
 IF %ERRORLEVEL% NEQ 0 (
     echo Erro: psql nao encontrado
@@ -58,10 +64,15 @@ psql -U postgres -d %DB_NAME% -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRAN
 REM -------------------------------------------------------------------------------
 REM 2. DEPENDÊNCIAS
 REM -------------------------------------------------------------------------------
-where pnpm
+REM Verificar pnpm
+where pnpm >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
-    echo Erro: pnpm nao encontrado
-    exit /b 1
+    echo pnpm nao encontrado. Instalando via npm...
+    npm install -g pnpm
+    IF %ERRORLEVEL% NEQ 0 (
+        echo Falha ao instalar pnpm. Instale manualmente.
+        exit /b 1
+    )
 )
 
 echo Instalando dependencias via pnpm...

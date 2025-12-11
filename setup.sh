@@ -12,6 +12,18 @@ DB_PORT="5432"
 DATABASE_URL="postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 export DATABASE_URL
 
+# Verificar Node.js
+NODE_VERSION=$(node -v | cut -d. -f1 | tr -d 'v')
+if [ "$NODE_VERSION" -ne 20 ]; then
+    echo "⚠️  AVISO: Recomenda-se usar Node.js v20. Versão atual: $(node -v). Versões mais recentes podem ter incompatibilidade com Prisma."
+fi
+
+# Verificar e instalar pnpm se necessário
+if ! command -v pnpm &> /dev/null; then
+    echo "pnpm não encontrado. Instalando..."
+    npm install -g pnpm
+fi
+
 # instalando dependências
 pnpm install --ignore-scripts=false
 
