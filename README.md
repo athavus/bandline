@@ -1,57 +1,90 @@
-# Bandline
+# 🎸 Bandline: The Tour
 
-Guia rápido para configurar e rodar o projeto (Todo o projeto foi feito no ambiente linux e configurado para também ser compatível nativamente com o Windows).
+> **"Code loud, commit proud."**
 
-## Requisitos do Sistema
-- **Node.js**: Versão 20 (LTS) recomendada.
-- **PostgreSQL**: Instalado e rodando.
-- **Gestor de Pacotes**: O projeto usa `pnpm`. Os scripts tentarão instalar se não tiver.
+Welcome to **Bandline**, your backstage pass to managing the ultimate musical project. This repository isn't just code; it's a setlist of features designed to rock your workflow.
 
-## Como Configurar e Rodar o Projeto (Server)
+---
 
-Para configurar o banco de dados principal e instalar dependências, execute o script de setup na **raiz do projeto**:
+## 💿 The Album (Overview)
 
-### Windows
+Bandline is a full-stack application composed to deliver a seamless experience. Whether you're a frontman (client) or holding down the rhythm section (server), this project keeps everyone in sync.
+
+### 🎶 Greatest Hits (Features)
+- **Multi-Track Performance**: Simultaneous client and server operations.
+- **Killer Riffs**: Optimized endpoints for high performance.
+- **Solid Baseline**: Robust database integration with PostgreSQL.
+- **Cross-Platform Tour**: Compatible with Linux and Windows.
+
+---
+
+## 🎤 Soundcheck (Prerequisites)
+
+Before we can start the show, make sure your gear is tuned:
+
+1.  **Node.js**: Version 20 (LTS) - *The vocal mic.*
+2.  **PostgreSQL**: Installed & Running - *The drum kit.*
+3.  **pnpm**: Package Manager - *The guitar pick.*
+
+---
+
+## 🎛️ Stage Setup (Installation)
+
+Get all the instruments plugged in. Run the setup script in the **root directory**:
+
+### 🐧 Linux / Mac
+```bash
+./setup.sh
+```
+*(Don't forget to give it some gain: `chmod +x setup.sh`)*
+
+### 🪟 Windows
 ```cmd
 .\setup.cmd
 ```
 
-### Linux / Mac
-```bash
-./setup.sh
-```
-*(Se precisar, dê permissão de execução: `chmod +x setup.sh`)*
-
 ---
 
-### Rodando o Servidor
-Após o setup, entre na pasta do servidor e inicie:
+## 🚀 The Gig (Running the App)
+
+Time to hit the stage!
+
+### 🥁 The Rhythm Section (Server)
+Navigate to the server details and start the beat:
 
 ```bash
 cd server
 pnpm dev
 ```
-O servidor rodará em `http://localhost:3000`.
+*Live at: `http://localhost:3000`*
+
+### 🎸 The Frontman (Client)
+(See `client/README.md` for specific venue details!)
 
 ---
 
-## Como Rodar os Testes
+## 🎟️ Backstage Pass (Documentation)
 
-Para rodar a suíte de testes automatizados:
+Want to know how the magic happens? Check out our detailed liner notes:
 
-1. Entre na pasta de testes:
-   ```bash
-   cd tests
-   ```
+- **[Join the Band (Contributing)](./CONTRIBUTING.md)**: Rules of the road for new members.
+- **[Stage Setup (Architecture)](./ARCHITECTURE.md)**: Technical diagrams and deep dives.
+- **[Setlist (API)](./server/README.md)**: The list of every song we play.
 
-2. Execute o script de configuração de testes (cria um banco separado para não limpar seus dados reais):
-   - **Windows**: `.\setup-tests.cmd`
-   - **Linux**: `./setup-tests.sh`
+---
 
-3. Rode os testes:
-   ```bash
-   pnpm test
-   ```
+## 🧪 Rehearsals (Testing)
 
-## Notas para Avaliação
-- Se encontrar erros de "File Parallelism" nos testes, o script de teste já está configurado para evitá-los (`--no-file-parallelism`).
+Don't go live without a practice run.
+
+1.  **Enter the Studio**: `cd tests`
+2.  **Prep the Room**:
+    - Windows: `.\setup-tests.cmd`
+    - Linux: `./setup-tests.sh`
+3.  **Jam Session**: `pnpm test`
+
+> **Note**: If you hear feedback (errors), check your "File Parallelism" settings. We've optimized the mix to handle it.
+
+---
+
+Made with 🤘 by the Bandline Crew.
