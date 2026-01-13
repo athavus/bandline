@@ -1,32 +1,32 @@
-# 🎸 Join the Band (Contributing)
+# Contributing Guidelines
 
-So, you want to join the **Bandline** tour? We love guest appearances and new members! But like any great band, we have a few rules to keep the rhythm tight.
+Thank you for your interest in contributing to **Bandline**. We welcome contributions from the community to help improve this project.
 
-## 🚫 No Divas (Code of Conduct)
+## Code of Conduct
 
-1.  **Respect the Crew**: Treat everyone with respect. No egos on the tour bus.
-2.  **Harmonize**: Your code should blend well with the existing style. Don't solo over the vocals.
-3.  **Keep it Tuned**: Ensure your code passes all tests before soundcheck.
+1.  **Respect**: Treat all contributors and maintainers with respect.
+2.  **Consistency**: Ensure your code aligns with the existing project structure and style guidelines.
+3.  **Quality**: All contributions must pass the automated test suite before being merged.
 
-## 🎸 Auditions (Pull Requests)
+## Pull Request Process
 
-Ready to show us what you've got?
+To propose changes:
 
-1.  **Fork the Playlist**: Create your own fork of the repo.
-2.  **Pick a Song**: Create a branch for your feature (`feat/cool-riff`) or fix (`fix/broken-string`).
-3.  **Rehearse**: Run `pnpm test` locally.
-4.  **Send the Demo**: Open a Pull Request.
-5.  **Code Review**: Wait for a band member to review your solo.
+1.  **Fork the Repository**: Create your own copy of the project.
+2.  **Create a Branch**: Use a descriptive name for your branch (e.g., `feat/new-feature` or `fix/bug-fix`).
+3.  **Implement Changes**: Write clean, maintainable code.
+4.  **Test**: Run `pnpm test` locally to ensure no regressions.
+5.  **Submit PR**: Open a Pull Request detailing your changes.
+6.  **Review**: A maintainer will review your code. Be prepared to make adjustments based on feedback.
 
-## 🎼 Jamming (Development Workflow)
+## Development Workflow
 
-- **Issues**: Found a broken string? Open an Issue on GitHub.
-- **Commits**: Use semantic messages.
-    - `feat:` A new song.
-    - `fix:` Tuning a string.
-    - `docs:` Writing liner notes.
-    - `style:` Polishing the instruments.
+- **Issues**: Please use GitHub Issues to report bugs or request features.
+- **Commit Messages**: We follow semantic commit messages:
+    - `feat:` for new features.
+    - `fix:` for bug fixes.
+    - `docs:` for documentation updates.
+    - `style:` for formatting changes.
+    - `refactor:` for code restructuring without changing behavior.
 
-## 🤘 Let's Rock!
-
-We can't wait to hear your contribution. Grab an instrument and let's make some noise!
+We look forward to collaborating with you.

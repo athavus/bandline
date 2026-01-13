@@ -1,47 +1,42 @@
-# 🥁 The Rhythm Section (Server)
+# Server Documentation
 
-This is the engine room, keeping the beat for the whole band.
+This directory contains the backend application for Bandline.
 
-## 🥁 The Kit (Stack)
+## Technology Stack
 
-- **Drummer**: Node.js + Express
-- **Bass Player**: PostgreSQL + Prisma
-- **Manager**: Passport.js (Auth)
+- **Runtime**: Node.js
+- **Framework**: Express
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Authentication**: Passport.js
 
-## 📑 The Setlist (API Endpoints)
+## API Endpoints
 
-Here are the tracks we play every night:
+### Authentication
+- `POST /auth/register`: User registration.
+- `POST /auth/login`: User login.
+- `GET /auth/me`: Session validation.
+- `POST /auth/logout`: User logout.
 
-### 🎫 Box Office (Auth)
-- `POST /auth/register`: Sell a new ticket (Sign up).
-- `POST /auth/login`: Check the ticket (Sign in).
-- `GET /auth/me`: Verify the VIP pass (Session check).
-- `POST /auth/logout`: End the show (Sign out).
+### Artists
+- `GET /searchArtists`: Search for artists.
+- `GET /artists/:id`: Get artist details.
+- `GET /artistAlbums/:id`: Get artist albums.
 
-### 🎸 The Stars (Artists)
-- `GET /searchArtists`: Find a band.
-- `GET /artists/:id`: Get the band's bio.
-- `GET /artistAlbums/:id`: Discography.
+### Albums & Tracks
+- `GET /albumTracks/:id`: Get album tracklist.
 
-### 💿 The Records (Albums & Tracks)
-- `GET /albumTracks/:id`: Tracklist.
+### User Data
+- `GET /history`: User search history.
+- `GET /favorites`: User favorite albums.
+- `GET /completedAlbums`: User completed albums collection.
+- `GET /profile`: User profile information.
 
-### 🌟 Fan Club (User Features)
-- `GET /history`: What you've been listening to.
-- `GET /favorites`: Your top picks.
-- `GET /completedAlbums`: The full collection.
-- `GET /profile`: Your fan ID.
+## API Documentation
 
-## 🛠️ Tech Specs
+- **OpenAPI Spec**: The raw OpenAPI specification is available at `server/openapi.yaml`.
+- **Interactive Docs**: Available at `/docs` when the server is running.
 
-- **OpenAPI**: The official lyric sheet is at `server/openapi.yaml`.
-- **Docs**: View interactive docs at `/docs` when the server is running.
-- **Database**: We use Prisma to keep our records straight.
+## Database
 
-## 🧪 Soundcheck (Testing)
-
-The backend has a dedicated test suite in the `tests/` folder of the root.
-
----
-
-*Keep the tempo steady!*
+We use Prisma for database schema management and migrations.

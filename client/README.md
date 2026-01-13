@@ -1,36 +1,32 @@
-# 🎸 The Frontman (Client)
+# Client Documentation
 
-Welcome to the front of the stage. This is where the users (the fans) interact with the show.
+This directory contains the frontend application for Bandline.
 
-## 🎤 The Gear (Stack)
+## Technology Stack
 
-- **Instrument**: Svelte (SPA mode)
-- **Amplifier**: Vite
-- **Pedalboard**: TailwindCSS (or custom CSS, depending on the vibe)
-- **Setlist Manager**: Custom Router
+- **Framework**: Svelte (SPA mode)
+- **Build Tool**: Vite
+- **Styling**: TailwindCSS
+- **Routing**: Custom Router implementation
 
-## 🎼 Rehearsal (Development)
+## Development
 
-To practice your solos specifically for the frontend:
+To start the development server for the client:
 
 ```bash
 cd client
 pnpm dev
 ```
 
-## 📂 Sheet Music (Structure)
+## detailed Structure
 
-- `src/routes`: The different songs in our set (Pages).
-- `src/components`: Reusable riffs (UI Components).
-- `src/lib`: Backing tracks and utilities.
+- `src/routes`: Application pages and routing logic.
+- `src/components`: Reusable UI components.
+- `src/lib`: Utility functions and shared libraries.
 
-## 🌟 Key Features (Hits)
+## Main Features
 
-- **Artist Search**: Find the stars.
-- **Album Browser**: Flip through the discography.
-- **Favorites**: Save the best tracks.
-- **Profile**: Customize your backstage pass.
-
----
-
-*Keep the interface loud and clear!*
+- **Artist Search**: Interface for searching artists.
+- **Album Browser**: Navigation for artist discographies.
+- **Favorites**: User management for favorite albums.
+- **Profile**: User profile settings and customization.

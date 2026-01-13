@@ -1,53 +1,50 @@
-# 🏗️ Stage Setup (Architecture)
+# Architecture Overview
 
-Every great show needs a solid stage setup. Here's how **Bandline** is wired up.
+This document provides a high-level overview of the **Bandline** system architecture.
 
-## 🗺️ The Stage Layout (System Overview)
+## System Layout
 
-We rock a classic **Client-Server** formation, backed by a powerful **Database** rhythm section.
+Bandline follows a standard **Client-Server** architecture, supported by a relational **Database**.
 
 ```mermaid
 graph TD
-    User((🎤 Audience))
-    Client[🎸 Frontman (Client)]
-    Server[🥁 Rhythm Section (Server)]
-    DB[(💽 The Vault (PostgreSQL))]
+    User((User))
+    Client[Client (Frontend)]
+    Server[Server (Backend)]
+    DB[(PostgreSQL)]
 
     User -->|Interacts| Client
-    Client -->|Requests (HTTP/REST)| Server
+    Client -->|HTTP/REST| Server
     Server -->|Queries| DB
     DB -->|Data| Server
     Server -->|Response| Client
 ```
 
-## 🔌 The Gear (Tech Stack)
+## Technology Stack
 
-### 🎸 Lead Guitar (Frontend)
-- **Framework**: Svelte/React (Check `client/package.json`)
-- **Styling**: Tailored for the spotlight.
+### Frontend
+- **Framework**: Svelte/React (See `client/package.json`)
+- **Styling**: TailwindCSS
 
-### 🥁 Drums (Backend)
+### Backend
 - **Runtime**: Node.js
-- **Framework**: Express/Fastify (Check `server/package.json`)
-- **API**: The setlist users interact with.
+- **Framework**: Express/Fastify (See `server/package.json`)
+- **API**: RESTful API
 
-### 💽 Bass (Database)
+### Database
 - **System**: PostgreSQL
-- **ORM**: Prisma (The bridge between the music and the recording).
+- **ORM**: Prisma
 
-## 📂 Tour Bus (Directory Structure)
+## Directory Structure
 
-- `/client` - Where the visual magic happens.
-- `/server` - The engine room.
-- `/docs` - The archive of old lyrics and technical riders.
-- `/tests` - The rehearsal studio.
+- `/client`: Frontend source code and assets.
+- `/server`: Backend source code, API logic, and database schema.
+- `/docs`: Project documentation and requirements.
+- `/tests`: Automated integration and unit tests.
 
-## 🔄 The Flow (Data Cycle)
+## Data Flow
 
-1.  **Intro**: User logs in.
-2.  **Verse**: Client requests data.
-3.  **Chorus**: Server processes logic & talks to DB.
-4.  **Outro**: Data returned to user.
-
----
-*Keep the cables organized and the stage clean!*
+1.  **Request**: User initiates an action via the Client.
+2.  **Processing**: Client sends an HTTP request to the Server.
+3.  **Logic & Persistence**: Server processes the request, interacting with the Database via Prisma as needed.
+4.  **Response**: Server returns the data or confirmation to the Client.

@@ -1,56 +1,50 @@
-# 📋 Technical Rider (Requirements & Specs)
+# Technical Rider (Requirements & Specifications)
 
-This document outlines the specific technical requirements for the **Bandline** tour. All venues (environments) must adhere to these specs.
+This document outlines the functional and non-functional requirements for the **Bandline** project.
 
-## 1. Setlist Requirements (Functional)
+## 1. Functional Requirements
 
-### 🎫 Box Office (Auth)
-- **RF01**: User registration (username, email, password) - *No scalpers allowed.*
-- **RF02**: Login & Session via cookie (HTTP Only).
-- **RF03**: Google OAuth support - *VIP Entry.*
+### Authentication
+- **RF01**: User registration (username, email, password).
+- **RF02**: Login & Session management via HTTP-only cookies.
+- **RF03**: Google OAuth support.
 
-### 🎸 The Performance (Features)
-- **RF04**: Artist Search (Spotify Integration).
-- **RF05**: Artist Details (with Last.fm bio & similar artists).
-- **RF06**: Discography (Albums sorted by release date).
-- **RF07**: Tracklist (Album details).
+### Features
+- **RF04**: Artist Search (Integration with Spotify).
+- **RF05**: Artist Details (Enriched with Last.fm data).
+- **RF06**: Discography Listing (Albums sorted by release date).
+- **RF07**: Tracklist View.
 
-### 🌟 Fan Engagement (User Data)
+### User Management
 - **RF08**: Search History (Last 50 searches).
-- **RF09**: Favorites (Albums).
-- **RF10**: Completed Albums (The "I was there" badge).
-- **RF11**: Profile Management (Update bio, avatar).
+- **RF09**: Favorites Management (Albums).
+- **RF10**: Completed Albums Collection.
+- **RF11**: Profile Management (Bio, avatar updates).
 
 ---
 
-## 2. Venue Specs (Non-Functional)
+## 2. Non-Functional Requirements
 
-- **RNF01**: **Node.js 20** & **TypeScript** platform.
+- **RNF01**: **Node.js 20** & **TypeScript**.
 - **RNF02**: **PostgreSQL** database with **Prisma ORM**.
-- **RNF03**: Secure sessions (Passport + express-session).
-- **RNF04**: Rate limiting & Input validation (Defensive playing).
-- **RNF05**: Error handling (The show must go on).
-- **RNF06**: Testing suite (Vitest).
+- **RNF03**: Secure session handling (Passport + express-session).
+- **RNF04**: Rate limiting & clear input validation.
+- **RNF05**: Standardized error handling.
+- **RNF06**: Automated testing suite (Vitest).
 
 ---
 
-## 3. Legal & Safety (Compliance)
+## 3. Compliance & Security
 
-- **RL01**: LGPD Compliance (Privacy first).
+- **RL01**: LGPD Compliance.
 - **RL02**: Secure password hashing (Bcrypt).
-- **RL03**: Spotify & Last.fm Terms of Service adherance.
-- **RL04**: Google OAuth policies.
+- **RL03**: Compliance with Spotify & Last.fm Terms of Service.
+- **RL04**: Compliance with Google OAuth policies.
 
 ---
 
-## 👷 Roadies (Scripts & Utils)
+## Deployment Scripts
 
-Our crew keeps the show running:
-
-- `setup.sh` / `setup.cmd`: Initial stage construction (Install & DB setup).
-- `deploy.sh` / `deploy.cmd`: Production deployment.
-- `tests/setup-tests.sh` / `.cmd`: isolating the soundcheck environment.
-
----
-
-*This rider is non-negotiable. Good luck with the show!*
+- `setup.sh` / `setup.cmd`: Initial project setup (Dependences & Database).
+- `deploy.sh` / `deploy.cmd`: Production deployment scripts.
+- `tests/setup-tests.sh` / `.cmd`: Test environment setup.

@@ -1,90 +1,89 @@
-# 🎸 Bandline: The Tour
+# Bandline
 
 > **"Code loud, commit proud."**
 
-Welcome to **Bandline**, your backstage pass to managing the ultimate musical project. This repository isn't just code; it's a setlist of features designed to rock your workflow.
+Welcome to **Bandline**. This repository hosts a full-stack application designed for managing music projects, artists, and collections.
 
 ---
 
-## 💿 The Album (Overview)
+## Overview
 
-Bandline is a full-stack application composed to deliver a seamless experience. Whether you're a frontman (client) or holding down the rhythm section (server), this project keeps everyone in sync.
+Bandline is a comprehensive solution that bridges the gap between client interfaces and server-side management. It provides a robust set of features for artists and managers to keep their projects in sync.
 
-### 🎶 Greatest Hits (Features)
+### Key Features
 - **Multi-Track Performance**: Simultaneous client and server operations.
-- **Killer Riffs**: Optimized endpoints for high performance.
-- **Solid Baseline**: Robust database integration with PostgreSQL.
-- **Cross-Platform Tour**: Compatible with Linux and Windows.
+- **High Performance**: Optimized endpoints for speed and reliability.
+- **Robust Persistence**: Integrated database management with PostgreSQL.
+- **Cross-Platform**: Fully compatible with Linux and Windows environments.
 
 ---
 
-## 🎤 Soundcheck (Prerequisites)
+## Prerequisites
 
-Before we can start the show, make sure your gear is tuned:
+Ensure the following dependencies are installed before setting up the project:
 
-1.  **Node.js**: Version 20 (LTS) - *The vocal mic.*
-2.  **PostgreSQL**: Installed & Running - *The drum kit.*
-3.  **pnpm**: Package Manager - *The guitar pick.*
+1.  **Node.js**: Version 20 (LTS) is required.
+2.  **PostgreSQL**: Must be installed and running.
+3.  **pnpm**: The specific package manager used for this project.
 
 ---
 
-## 🎛️ Stage Setup (Installation)
+## Installation
 
-Get all the instruments plugged in. Run the setup script in the **root directory**:
+To configure the project, including database setup and dependencies, run the setup script located in the **root directory**.
 
-### 🐧 Linux / Mac
+### Linux / Mac
 ```bash
 ./setup.sh
 ```
-*(Don't forget to give it some gain: `chmod +x setup.sh`)*
+*Note: Ensure the script has execution permissions (`chmod +x setup.sh`)*
 
-### 🪟 Windows
+### Windows
 ```cmd
 .\setup.cmd
 ```
 
 ---
 
-## 🚀 The Gig (Running the App)
+## Running the Application
 
-Time to hit the stage!
-
-### 🥁 The Rhythm Section (Server)
-Navigate to the server details and start the beat:
+### Server (Backend)
+Navigate to the server directory to start the backend services:
 
 ```bash
 cd server
 pnpm dev
 ```
-*Live at: `http://localhost:3000`*
+The server will be accessible at `http://localhost:3000`.
 
-### 🎸 The Frontman (Client)
-(See `client/README.md` for specific venue details!)
-
----
-
-## 🎟️ Backstage Pass (Documentation)
-
-Want to know how the magic happens? Check out our detailed liner notes:
-
-- **[Join the Band (Contributing)](./CONTRIBUTING.md)**: Rules of the road for new members.
-- **[Stage Setup (Architecture)](./ARCHITECTURE.md)**: Technical diagrams and deep dives.
-- **[Setlist (API)](./server/README.md)**: The list of every song we play.
+### Client (Frontend)
+For details on running the client application, please refer to the [Client Documentation](./client/README.md).
 
 ---
 
-## 🧪 Rehearsals (Testing)
+## Documentation
 
-Don't go live without a practice run.
+For a deeper dive into the project's structure and guidelines:
 
-1.  **Enter the Studio**: `cd tests`
-2.  **Prep the Room**:
+- **[Contributing Guidelines](./CONTRIBUTING.md)**: Standards and protocols for collaboration.
+- **[Architecture Overview](./ARCHITECTURE.md)**: System design and technical diagrams.
+- **[API Reference](./server/README.md)**: Detailed endpoint documentation.
+- **[Technical Rider](./docs/TECHNICAL_RIDER.md)**: Functional and non-functional requirements.
+
+---
+
+## Testing
+
+To run the automated test suite:
+
+1.  Navigate to the tests directory: `cd tests`
+2.  Prepare the test environment:
     - Windows: `.\setup-tests.cmd`
     - Linux: `./setup-tests.sh`
-3.  **Jam Session**: `pnpm test`
+3.  Execute tests: `pnpm test`
 
-> **Note**: If you hear feedback (errors), check your "File Parallelism" settings. We've optimized the mix to handle it.
+> **Note**: The test suite is pre-configured to handle file parallelism issues.
 
 ---
 
-Made with 🤘 by the Bandline Crew.
+Developed by the Bandline Team.
