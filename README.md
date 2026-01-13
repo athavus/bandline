@@ -83,7 +83,3 @@ To run the automated test suite:
 3.  Execute tests: `pnpm test`
 
 > **Note**: The test suite is pre-configured to handle file parallelism issues.
-
----
-
-Developed by the Bandline Team.

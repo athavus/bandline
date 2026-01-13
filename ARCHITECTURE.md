@@ -9,9 +9,9 @@ Bandline follows a standard **Client-Server** architecture, supported by a relat
 ```mermaid
 graph TD
     User((User))
-    Client[Client (Frontend)]
-    Server[Server (Backend)]
-    DB[(PostgreSQL)]
+    Client["Client (Frontend)"]
+    Server["Server (Backend)"]
+    DB[("PostgreSQL")]
 
     User -->|Interacts| Client
     Client -->|HTTP/REST| Server
